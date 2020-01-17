@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
+  title: 'sapa-jds',
 
   /**
    * @type {boolean} true | false
