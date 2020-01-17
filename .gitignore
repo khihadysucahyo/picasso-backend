@@ -1,5 +1,7 @@
 .idea/
 .vscode/
 node_modules/
+tests/unit/coverage/
+tests/unit/image-files/
 .DS_Store
 /.env
