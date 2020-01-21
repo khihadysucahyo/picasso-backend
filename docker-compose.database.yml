@@ -1,0 +1,49 @@
+version: '3.6'
+
+services:
+  # nats:
+  #   image : nats
+  #   networks:
+  #     - nats
+  #   # restart: "always"
+  #   ports:
+  #     - 4222:4222
+
+  mongo:
+    image : mongo:latest
+    networks:
+      - mongo
+    volumes:
+      - ./data/mongodb_data:/data/db
+    ports:
+      - 27017:27017
+
+  postgres:
+    image : postgres:12-alpine
+    networks:
+      - postgres
+    volumes:
+      - ./data/pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  redis:
+    image : redis:latest
+    networks:
+      - redis
+    ports:
+      - 6379:6379
+
+networks:
+  # nats:
+  #   external:
+  #     name: gateway
+  mongo:
+    external:
+      name: gateway
+  postgres:
+    external:
+      name: gateway
+  redis:
+    external:
+      name: gateway

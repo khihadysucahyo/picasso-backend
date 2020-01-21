@@ -1,0 +1,52 @@
+{
+  "name": "service-nodejs",
+  "private": true,
+  "scripts": {
+    "dev": "lerna exec --no-bail yarn dev",
+    "test": "nyc --reporter=html --reporter=text mocha --exit --require babel-register ./**/__tests__/*.spec.js",
+    "bootstrap": "lerna bootstrap",
+    "coverage": "nyc report --reporter=text-lcov | coveralls && nyc report --reporter=lcov",
+    "build": "lerna exec NODE_ENV=production yarn build",
+    "prestart": "yarn build",
+    "start": "lerna exec --no-bail NODE_ENV=development yarn start"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "coveralls": "^3.0.6",
+    "eslint": "5.16.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "2.18.2",
+    "express": "^4.17.1",
+    "lerna": "^3.4.3",
+    "mongoose": "^5.7.3",
+    "nats": "^1.3.2",
+    "nodemon": "^1.19.2",
+    "nyc": "^14.1.1"
+  },
+  "dependencies": {
+    "accesscontrol": "^2.2.1",
+    "bcrypt": "^3.0.7",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "compression": "^1.7.4",
+    "connect-redis": "4.0.0",
+    "dotenv": "^8.1.0",
+    "express-gateway": "^1.16.10",
+    "express-gateway-plugin-example": "^1.0.1",
+    "express-session": "1.16.2",
+    "helmet": "^3.21.1",
+    "http": "^0.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "mocha": "^6.2.0",
+    "raven": "^2.6.4",
+    "redis": "^2.8.0",
+    "winston": "^3.2.1"
+  }
+}

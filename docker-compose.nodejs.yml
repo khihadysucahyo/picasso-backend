@@ -1,0 +1,30 @@
+version: '3.6'
+
+services:
+  apigateway:
+    build:
+      context: ./service-nodejs
+    command: npm start
+    volumes:
+      - ./services-nodejs/apiGateway:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - apigateway
+    ports:
+      - 8080:8080
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.apigateway.rule=Host(`apigateway.localhost`)"
+    #   - "traefik.http.routers.apigateway.entrypoints=web"
+    environment:
+      SENTRY_DSN: "https://9e6969ce6e2e4983822bb4d628e47a35@sentry.io/1784511"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SECRET_KEY: 'cobaaja'
+      AUTHENTICATION_SERVICE_URI: "http://authserver"
+
+
+networks:
+  apigateway:
+    external:
+      name: gateway

@@ -1,0 +1,44 @@
+FROM python:3.6-alpine
+
+LABEL maintainer="<Arif Wicaksono> arifboyz16@gmail.com"
+
+RUN apk update
+RUN apk add bash \
+	git \
+	openssh \
+	py-pip \
+	jpeg-dev \
+	zlib-dev \
+	gcc \
+	build-base \
+	linux-headers \
+	pcre-dev \
+	postgresql-dev \
+	musl-dev \
+	libxml2-dev \
+	libxslt-dev \
+	nginx \
+	curl \
+	supervisor && \
+    pip3 install --upgrade pip setuptools && \
+    rm -r /root/.cache && \
+    pip3 install --upgrade pip setuptools && \
+    rm -r /root/.cache
+
+# install uwsgi now because it takes a little while
+RUN pip3 install uwsgi
+
+# COPY SOURCE TO IMAGE
+ADD . /opt/authServer
+WORKDIR /opt/authServer
+
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+COPY /conf/nginx/nginx-app.conf /etc/nginx/sites-available/default
+COPY /conf/supervisord/supervisord-app.conf /etc/supervisor/conf.d/
+
+RUN pip3 install -r requirements.txt
+
+EXPOSE 80
+
+#CMD ["supervisord", "-n"]
+CMD ["supervisord", "-n", "-c", "/opt/authServer/conf/supervisord/supervisord.conf"]

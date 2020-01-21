@@ -1,0 +1,24 @@
+version: '3.6'
+
+services:
+  authserver:
+    build:
+      context: ./service-python/authserver
+    networks:
+      - authserver
+    environment:
+      SECRET_KEY: 'cobaaja'
+      TOKEN_KEY: 'iyalagidicoba'
+      CLIENT_ID: ''
+      CLIENT_SECRET: ''
+      POSTGRESQL_HOST: postgres
+      POSTGRESQL_PORT: 5432
+      # REDIS_HOST: ''
+      # REDIS_PORT: ''
+    ports:
+      - "8200:80"
+
+networks:
+  authserver:
+    external:
+      name: gateway
