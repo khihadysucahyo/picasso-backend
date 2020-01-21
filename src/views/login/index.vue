@@ -205,7 +205,6 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
-
   .box-card {
   width: 400px;
   display: block;
