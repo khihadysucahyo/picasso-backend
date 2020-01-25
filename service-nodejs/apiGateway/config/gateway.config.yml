@@ -19,13 +19,13 @@ apiEndpoints:
 
 serviceEndpoints:
   authentication:
-    url: '${AUTHENTICATION_SERVICE_URI}/auth/'
+    url: '${AUTHENTICATION_PY_SERVICE_URI}/auth/'
 
   userlist:
-    url: '${AUTHENTICATION_SERVICE_URI}/api/'
+    url: '${AUTHENTICATION_PY_SERVICE_URI}/api/'
 
   helloworld:
-    url: '${HELLOWORLD_SERVICE_URI}/hello-world/'
+    url: '${SATUANKERJA_GO_SERVICE_URI}/hello-world/'
 
 policies:
   - cors
