@@ -7,6 +7,13 @@ make start-all
 make stop-all
 ```
 
+
+### Create network
+
+```bash
+make create-network
+```
+
 ### Start/Stop services one by one
 
 #### services-database

@@ -1,5 +1,5 @@
 http:
-  port: 8080
+  port: ${API_GATEWAY_PORT}
 
 apiEndpoints:
   authentication:
@@ -12,10 +12,10 @@ apiEndpoints:
     paths: /user-list/*
     methods: ["GET","OPTIONS"]
 
-  helloworld:
+  mockserver:
     host: '*'
-    paths: /hello/*
-    methods: ["GET","OPTIONS"]
+    paths: /mock/*
+    methods: ["GET","POST","PUT","OPTIONS"]
 
 serviceEndpoints:
   authentication:
@@ -24,8 +24,8 @@ serviceEndpoints:
   userlist:
     url: '${AUTHENTICATION_PY_SERVICE_URI}/api/'
 
-  helloworld:
-    url: '${SATUANKERJA_GO_SERVICE_URI}/hello-world/'
+  mockserver:
+    url: '${MOCKSERVER_SERVICE_URI}/api/'
 
 policies:
   - cors
@@ -39,6 +39,9 @@ pipelines:
     apiEndpoints:
       - authentication
     policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
       - proxy:
           - action:
               serviceEndpoint: authentication
@@ -57,15 +60,15 @@ pipelines:
               serviceEndpoint: userlist
               changeOrigin: true
 
-  helloworld:
+  mockserver:
     apiEndpoints:
-      - helloworld
+      - mockserver
     policies:
-      # - jwt:
-      #   - action:
-      #       secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
-      #       checkCredentialExistence: false
+      - jwt:
+        - action:
+            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+            checkCredentialExistence: false
       - proxy:
           - action:
-              serviceEndpoint: helloworld
+              serviceEndpoint: mockserver
               changeOrigin: true

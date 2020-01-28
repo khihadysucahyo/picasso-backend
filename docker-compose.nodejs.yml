@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3.3'
 
 services:
   apigateway:
@@ -6,25 +6,36 @@ services:
       context: ./service-nodejs
     command: npm start
     volumes:
-      - ./services-nodejs/apiGateway:/usr/src/app
+      - ./service-nodejs/apiGateway:/usr/src/app
       - /usr/src/app/node_modules
     networks:
       - apigateway
     ports:
       - 8080:8080
-    # labels:
-    #   - "traefik.enable=true"
-    #   - "traefik.http.routers.apigateway.rule=Host(`apigateway.localhost`)"
-    #   - "traefik.http.routers.apigateway.entrypoints=web"
     environment:
+      API_GATEWAY_PORT: 8080
       SENTRY_DSN: "https://9e6969ce6e2e4983822bb4d628e47a35@sentry.io/1784511"
       REDIS_HOST: redis
       REDIS_PORT: 6379
       SECRET_KEY: 'cobaaja'
-      AUTHENTICATION_SERVICE_URI: "http://authserver"
+      AUTHENTICATION_PY_SERVICE_URI: "http://authserver"
+      MOCKSERVER_SERVICE_URI: "http://mockserver:3000"
 
+  mockserver:
+    build:
+      context: ./service-nodejs
+    command: npm start
+    volumes:
+      - ./service-nodejs/mockserver:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - mockserver
 
 networks:
   apigateway:
+    external:
+      name: gateway
+
+  mockserver:
     external:
       name: gateway

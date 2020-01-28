@@ -1,4 +1,4 @@
-module github.com/NotStops/kepegawaian-apps/service-golang
+module github.com/jabardigitalservice/picasso-backend
 
 go 1.12
 
