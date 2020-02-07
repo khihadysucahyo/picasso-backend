@@ -51,6 +51,9 @@ pipelines:
     apiEndpoints:
       - userlist
     policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
       - jwt:
         - action:
             secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
@@ -64,6 +67,9 @@ pipelines:
     apiEndpoints:
       - mockserver
     policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
       - jwt:
         - action:
             secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
