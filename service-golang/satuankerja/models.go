@@ -12,14 +12,15 @@ type SatuanKerjaPage struct {
 
 //satuan kerja models
 type SatuanKerja struct {
-  id                 int
-	parent_id          int
-	nama_satuan_kerja  string
-	deskripsi          string
-	created_at         time.Time
-	created_by         string
-  updated_at         time.Time
-	updated_by         string
+  id                 	int
+	parent_id          	int
+	name_parent         string
+	name_satuan_kerja  	string
+	description         string
+	created_at         	time.Time
+	created_by         	string
+  updated_at         	time.Time
+	updated_by         	string
 }
 
 type ErrorPage struct {

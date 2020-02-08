@@ -9,7 +9,7 @@ import (
 var db *sql.DB
 
 func init() {
-	tmpDB, err := sql.Open("postgres", "dbname=masterdata user=postgres password=postgres host=localhost sslmode=disable")
+	tmpDB, err := sql.Open("postgres", "dbname=masterdata user=adminpostgre password=plokijuh host=localhost sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
 	}
