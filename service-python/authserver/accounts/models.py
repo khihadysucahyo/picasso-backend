@@ -38,7 +38,7 @@ path_and_rename = PathAndRename("profiles/")
 
 class ImageField(models.ImageField):
 	def save_form_data(self, instance, data):
-		if data is not None: 
+		if data is not None:
 			file = getattr(instance, self.attname)
 			if file != data:
 				file.delete(save=False)
@@ -76,6 +76,7 @@ class AccountManager(BaseUserManager):
 			# first_name=first_name,
 			# last_name=last_name,
 		)
+		user.is_superuser = True
 		user.is_admin = True
 		user.save(using=self._db)
 		return user
@@ -86,7 +87,7 @@ class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 	username = models.CharField(max_length=40, unique=True, db_index=True)
 	first_name = models.CharField("Nama Depan", max_length=100, db_index=True)
 	last_name = models.CharField("Nama Belakang", max_length=100, db_index=True)
-	
+
 	tempat_lahir = models.CharField(max_length=30, verbose_name='Tempat Lahir', null=True, blank=True)
 	tanggal_lahir = models.DateField(verbose_name='Tanggal Lahir', null=True, blank=True)
 	telephone = models.CharField(verbose_name='Telepon', max_length=50, null=True, blank=True)
@@ -96,7 +97,7 @@ class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 	lg = models.CharField(max_length=50, verbose_name='lg', blank=True, null=True)
 
 	foto = ImageField(upload_to=path_and_rename, max_length=255, null=True, blank=True)
-	sv = pg_search.SearchVectorField(null=True, blank=True) 
+	sv = pg_search.SearchVectorField(null=True, blank=True)
 
 	is_active = models.BooleanField(default=True)
 	is_admin = models.BooleanField(default=False)
@@ -142,7 +143,7 @@ class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 		if self.tanggal_lahir:
 			rdelta = relativedelta(date.today(), self.tanggal_lahir)
 			months = rdelta.months
-			return months			 
+			return months
 		return months
 
 	def get_day_birthday(self):
@@ -150,7 +151,7 @@ class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 		if self.tanggal_lahir:
 			rdelta = relativedelta(date.today(), self.tanggal_lahir)
 			days = rdelta.days
-			return days			 
+			return days
 		return days
 
 	def is_staff(self):
@@ -190,7 +191,7 @@ class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 		akhir_2 = akhir[-3:]
 
 		gabung = awal +" "+tengah_1+" "+akhir_1+" "+akhir_2
-		
+
 		return gabung
 
 	def __str__(self):

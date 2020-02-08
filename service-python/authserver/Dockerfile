@@ -27,6 +27,15 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 COPY /conf/nginx/nginx-app.conf /etc/nginx/sites-available/default
 COPY /conf/supervisord/supervisord-app.conf /etc/supervisor/conf.d/
 
+ARG SECRET_KEY
+ARG TOKEN_KEY
+ARG POSTGRESQL_HOST
+ARG POSTGRESQL_PORT
+ARG DJANGO_DB_NAME
+ARG DJANGO_SU_NAME
+ARG DJANGO_SU_EMAIL
+ARG DJANGO_SU_PASSWORD
+
 # COPY SOURCE TO IMAGE
 RUN pip3 install -r requirements.txt
 

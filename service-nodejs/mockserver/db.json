@@ -1,0 +1,39 @@
+{
+  "satuan-kerja": [
+    {
+      "id": 1,
+      "nama_satuan_kerja": "Analisis",
+      "deskripsi": ""
+    },
+    {
+      "id": 2,
+      "nama_satuan_kerja": "IT-Dev",
+      "deskripsi": ""
+    },
+    {
+      "id": 3,
+      "nama_satuan_kerja": "Data",
+      "deskripsi": ""
+    }
+  ],
+  "jabatan": [
+    {
+      "id": 1,
+      "nama_jabatan": "Koordinator",
+      "satuan_kerja_id": 2,
+      "deskripsi": ""
+    },
+    {
+      "id": 2,
+      "nama_jabatan": "Backend Enginer",
+      "satuan_kerja_id": 2,
+      "deskripsi": ""
+    },
+    {
+      "id": 3,
+      "nama_jabatan": "Frontend Enginer",
+      "satuan_kerja_id": 2,
+      "deskripsi": ""
+    }
+  ]
+}

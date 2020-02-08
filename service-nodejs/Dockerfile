@@ -1,12 +1,11 @@
 FROM arf95/npm-alpine:latest as build
 WORKDIR /usr/src/app
 RUN apk update && apk upgrade && \
-    apk add --update --no-cache \
-    gcc g++ make autoconf python2
+    apk add --update --no-cache
 
 COPY package*.json ./
 COPY package-lock*.json ./
-COPY lerna*.json ./
+COPY lerna-prod*.json ./lerna*.json
 COPY . ./
 
 RUN npm ci --production && \

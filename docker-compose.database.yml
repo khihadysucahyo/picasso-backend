@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3.3'
 
 services:
   # nats:
@@ -9,23 +9,26 @@ services:
   #   ports:
   #     - 4222:4222
 
-  mongo:
-    image : mongo:latest
-    networks:
-      - mongo
-    volumes:
-      - ./data/mongodb_data:/data/db
-    ports:
-      - 27017:27017
+  # mongo:
+  #   image : mongo:latest
+  #   networks:
+  #     - mongo
+  #   volumes:
+  #     - ./data/mongodb_data:/data/db
+  #   ports:
+  #     - 27017:27017
 
   postgres:
-    image : postgres:12-alpine
+    build:
+      context: ./database/postgre
     networks:
       - postgres
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    environment:
+      - POSTGRES_MULTIPLE_DATABASES=authserver,datamaster
 
   redis:
     image : redis:latest
@@ -38,9 +41,9 @@ networks:
   # nats:
   #   external:
   #     name: gateway
-  mongo:
-    external:
-      name: gateway
+  # mongo:
+  #   external:
+  #     name: gateway
   postgres:
     external:
       name: gateway

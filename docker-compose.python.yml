@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3.3'
 
 services:
   authserver:
@@ -9,12 +9,9 @@ services:
     environment:
       SECRET_KEY: 'cobaaja'
       TOKEN_KEY: 'iyalagidicoba'
-      CLIENT_ID: ''
-      CLIENT_SECRET: ''
       POSTGRESQL_HOST: postgres
       POSTGRESQL_PORT: 5432
-      # REDIS_HOST: ''
-      # REDIS_PORT: ''
+
     ports:
       - "8200:80"
 
