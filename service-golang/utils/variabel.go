@@ -8,7 +8,6 @@ const (
 )
 
 const (
-
     StatusOK                   = 200
     StatusCreated              = 201
     StatusAccepted             = 202

@@ -11,6 +11,7 @@ services:
       TOKEN_KEY: 'iyalagidicoba'
       POSTGRESQL_HOST: postgres
       POSTGRESQL_PORT: 5432
+
     ports:
       - "8200:80"
 
