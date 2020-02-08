@@ -1,23 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"database/sql"
 	"log"
+	"os"
 	"net/http"
+	"github.com/joho/godotenv"
 )
 
-var db *sql.DB
-
-func init() {
-	tmpDB, err := sql.Open("postgres", "dbname=masterdata user=adminpostgre password=plokijuh host=localhost sslmode=disable")
-	if err != nil {
-		log.Fatal(err)
-	}
-	db = tmpDB
-}
-
 func main() {
+	err := godotenv.Load("../../.env")
+  if err != nil {
+    log.Fatal("Error loading .env file")
+		godotenv.Load(".env")
+  }
 
-	http.HandleFunc("/satker/create", handleCreate)
+  s3Bucket := os.Getenv("POSTGRESQL_HOST")
+	fmt.Println(s3Bucket)
+	// http.HandleFunc("/satker/create", handleCreate)
 	log.Fatal(http.ListenAndServe(":8301", nil))
 }
