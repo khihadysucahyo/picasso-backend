@@ -5,4 +5,4 @@ tests/unit/coverage/
 tests/unit/image-files/
 .DS_Store
 /.env
-/data
+data/

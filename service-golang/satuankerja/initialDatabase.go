@@ -8,9 +8,15 @@ import (
   "strconv"
 
 	"github.com/joho/godotenv"
+	"github.com/jinzhu/gorm"
 	"github.com/jabardigitalservice/picasso-backend/service-golang/db_host"
 	"github.com/jabardigitalservice/picasso-backend/service-golang/retry"
+	"github.com/jabardigitalservice/picasso-backend/service-golang/models"
 )
+
+func Migrate(db *gorm.DB) {
+	db.AutoMigrate(&models.SatuanKerja{})
+}
 
 func Initialize() {
 	err := godotenv.Load("../../.env")
@@ -27,7 +33,6 @@ func Initialize() {
 
   if err != nil {
 		log.Println(err)
-		return
 	}
   addr := fmt.Sprintf("host=%s port=%d user=%s "+
     "password=%s dbname=%s sslmode=disable",
@@ -35,14 +40,9 @@ func Initialize() {
 
   // Connect to PostgreSQL
 	retry.ForeverSleep(2*time.Second, func(attempt int) error {
-
-		repo, err := db.PostgresConnect(addr)
-		if err != nil {
-			log.Println(err)
-			return err
-		}
-		db.SetRepository(repo)
+		db := db.Init(addr)
+		Migrate(db)
+		defer db.Close()
 		return nil
 	})
-	defer db.Close()
 }
