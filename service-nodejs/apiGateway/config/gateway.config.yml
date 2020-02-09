@@ -12,6 +12,11 @@ apiEndpoints:
     paths: /user-list/*
     methods: ["GET","OPTIONS"]
 
+  satuankerja:
+    host: '*'
+    paths: /satuan-kerja/*
+    methods: ["GET","POST","PUT","OPTIONS"]
+
   mockserver:
     host: '*'
     paths: /mock/*
@@ -23,6 +28,9 @@ serviceEndpoints:
 
   userlist:
     url: '${AUTHENTICATION_PY_SERVICE_URI}/api/'
+
+  satuankerja:
+    url: 'http://localhost:8301/api/'
 
   mockserver:
     url: '${MOCKSERVER_SERVICE_URI}/api/'
@@ -61,6 +69,22 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: userlist
+              changeOrigin: true
+
+  satuankerja:
+    apiEndpoints:
+      - satuankerja
+    policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
+      - jwt:
+        - action:
+            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+            checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: satuankerja
               changeOrigin: true
 
   mockserver:
