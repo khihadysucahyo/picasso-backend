@@ -17,7 +17,7 @@ func newRouter() (router *mux.Router) {
 
 func main() {
 
-	InitializeDatabase()
+	Initialize()
 
 	// Run HTTP server
 	router := newRouter()

@@ -3,7 +3,9 @@ package main
 import (
 	// "context"
 	// "log"
+	// "fmt"
 	"net/http"
+	"strings"
 	// "strconv"
 
   // "github.com/jabardigitalservice/picasso-backend/service-golang/db_host"
@@ -13,6 +15,10 @@ import (
 
 func listSatuanKerjaHandler(w http.ResponseWriter, r *http.Request) {
 	// ctx := r.Context()
+	reqToken := r.Header.Get("Authorization")
+	splitToken := strings.Split(reqToken, "Bearer")
+	reqToken = splitToken[1]
+
 	// var err error
 
 	// Read parameters
@@ -22,10 +28,10 @@ func listSatuanKerjaHandler(w http.ResponseWriter, r *http.Request) {
 	// takeStr := r.FormValue("take")
 	// if len(skipStr) != 0 {
 	// 	skip, err = strconv.ParseUint(skipStr, 10, 64)
-	// 	if err != nil {
-	// 		utils.ResponseError(w, http.StatusBadRequest, "Invalid skip parameter")
-	// 		return
-	// 	}
+		// if err != nil {
+		// 	utils.ResponseError(w, http.StatusBadRequest, "Invalid skip parameter")
+		// 	return
+		// }
 	// }
 	// if len(takeStr) != 0 {
 	// 	take, err = strconv.ParseUint(takeStr, 10, 64)
@@ -42,6 +48,5 @@ func listSatuanKerjaHandler(w http.ResponseWriter, r *http.Request) {
 	// 	util.ResponseError(w, http.StatusInternalServerError, "Could not fetch meows")
 	// 	return
 	// }
-  const list = "{ response: ok }"
-	utils.ResponseOk(w, list)
+	utils.ResponseOk(w, reqToken)
 }
