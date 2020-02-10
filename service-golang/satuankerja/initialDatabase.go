@@ -18,7 +18,11 @@ func Migrate(db *gorm.DB) {
 	db.AutoMigrate(&models.SatuanKerja{})
 }
 
-func Initialize() {
+type Config struct {
+  db *gorm.DB
+}
+
+func Initialize() (*Config, error){
 	err := godotenv.Load("../../.env")
   if err != nil {
     log.Fatal("Error loading .env file")
@@ -38,11 +42,15 @@ func Initialize() {
     "password=%s dbname=%s sslmode=disable",
     postgresHost, postgresPort, postgresUser, postgresPassword, postgresDB)
 
+	config := Config{}
+
   // Connect to PostgreSQL
 	retry.ForeverSleep(2*time.Second, func(attempt int) error {
 		db := db.Init(addr)
 		Migrate(db)
-		defer db.Close()
+
+		config.db = db
 		return nil
 	})
+	return &config, nil
 }

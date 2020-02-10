@@ -9,18 +9,20 @@ import (
 	"github.com/jabardigitalservice/picasso-backend/service-golang/middleware"
 )
 
-func newRouter() (router *mux.Router) {
+func newRouter(config *Config) (router *mux.Router) {
 	router = mux.NewRouter()
-	router.HandleFunc("/api/satuan-kerja/", 	listSatuanKerjaHandler).Methods("GET")
+	router.HandleFunc("/api/satuan-kerja/", config.listSatuanKerjaHandler).Methods("GET")
 	return
 }
 
 func main() {
 
-	Initialize()
-
+	configuration, err := Initialize()
+	if err != nil {
+		log.Println(err)
+	}
 	// Run HTTP server
-	router := newRouter()
+	router := newRouter(configuration)
 	if err := http.ListenAndServe(":8301", auth.AuthMiddleware(router)); err != nil {
 		log.Fatal(err)
 	}
