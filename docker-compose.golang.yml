@@ -6,7 +6,7 @@ services:
       context: ./service-golang
     command: "satuankerja"
     networks:
-      - authserver
+      - satuankerja
     ports:
       - "8301"
     environment:
