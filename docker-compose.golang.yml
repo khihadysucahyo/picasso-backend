@@ -8,10 +8,11 @@ services:
     networks:
       - satuankerja
     ports:
-      - "8301"
+      - 8301:8301
     environment:
-      POSTGRESQL_HOST: "127.0.0.1"
-      POSTGRESQL_PORT: "5432"
+      SECRET_KEY: cobaaja
+      POSTGRESQL_HOST: postgres
+      POSTGRESQL_PORT: 5432
       POSTGRESQL_USER: "adminpostgre"
       POSTGRESQL_PASSWORD: "plokijuh"
       POSTGRESQL_DB_MASTER: "datamaster"

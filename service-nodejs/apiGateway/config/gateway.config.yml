@@ -30,7 +30,7 @@ serviceEndpoints:
     url: '${AUTHENTICATION_PY_SERVICE_URI}/api/'
 
   satuankerja:
-    url: 'http://localhost:8301/api/'
+    url: '${SATUANKERJA_GO_SERVICE_URI}/api/'
 
   mockserver:
     url: '${MOCKSERVER_SERVICE_URI}/api/'
