@@ -1,0 +1,22 @@
+version: "3.6"
+
+services:
+  satuankerja:
+    build:
+      context: ./service-golang
+    command: "satuankerja"
+    networks:
+      - authserver
+    ports:
+      - "8301"
+    environment:
+      POSTGRESQL_HOST: "127.0.0.1"
+      POSTGRESQL_PORT: "5432"
+      POSTGRESQL_USER: "adminpostgre"
+      POSTGRESQL_PASSWORD: "plokijuh"
+      POSTGRESQL_DB_MASTER: "datamaster"
+
+networks:
+  satuankerja:
+    external:
+      name: gateway

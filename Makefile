@@ -15,7 +15,7 @@ remove-network:
 build:
 	@docker-compose build
 
-# ==================================== SERVICE DB ======================================================
+# ==================================== SERVICE DB =========================================================
 compose-service-database=docker-compose -f docker-compose.database.yml -p service_database
 start-service-database:
 	@$(compose-service-database) up -d
@@ -36,9 +36,16 @@ start-service-nodejs:
 stop-service-nodejs:
 	@$(compose-service-nodejs) stop
 
-start-all: start-service-database start-service-python start-service-nodejs
+	# ==================================== SERVICE GOLANG ====================================================
+	compose-service-golang=docker-compose -f docker-compose.golang.yml -p service_golang
+	start-service-golang:
+		@$(compose-service-golang) up -d
+	stop-service-golang:
+		@$(compose-service-golang) stop
 
-stop-all: stop-service-database stop-service-python stop-service-nodejs
+start-all: start-service-database start-service-python start-service-nodejs start-service-golang
+
+stop-all: stop-service-database stop-service-python stop-service-nodejs stop-service-golang
 
 clean:
 	@./scripts/clean.sh
