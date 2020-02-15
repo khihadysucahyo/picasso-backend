@@ -22,13 +22,6 @@ start-service-database:
 stop-service-database:
 	@$(compose-service-database) stop
 
-# ==================================== SERVICE NODEJS ======================================================
-compose-service-nodejs=docker-compose -f docker-compose.nodejs.yml -p service_nodejs
-start-service-nodejs:
-	@$(compose-service-nodejs) up -d
-stop-service-nodejs:
-	@$(compose-service-nodejs) stop
-
 # ==================================== SERVICE PYTHON ======================================================
 compose-service-python=docker-compose -f docker-compose.python.yml -p service_python
 start-service-python:
@@ -36,9 +29,16 @@ start-service-python:
 stop-service-python:
 	@$(compose-service-python) stop
 
-start-all: start-service-database start-service-nodejs start-service-python
+# ==================================== SERVICE NODEJS ======================================================
+compose-service-nodejs=docker-compose -f docker-compose.nodejs.yml -p service_nodejs
+start-service-nodejs:
+	@$(compose-service-nodejs) up -d
+stop-service-nodejs:
+	@$(compose-service-nodejs) stop
 
-stop-all: stop-service-database stop-service-nodejs stop-service-python
+start-all: start-service-database start-service-python start-service-nodejs
+
+stop-all: stop-service-database stop-service-python stop-service-nodejs
 
 clean:
 	@./scripts/clean.sh
