@@ -14,6 +14,7 @@ func newRouter(config *ConfigDB) (router *mux.Router) {
 	router.HandleFunc("/api/satuan-kerja/list", config.listSatuanKerja).Methods("GET")
 	router.HandleFunc("/api/satuan-kerja/create", config.postSatuanKerja).Methods("POST")
 	router.HandleFunc("/api/satuan-kerja/update/{id}", config.putSatuanKerja).Methods("PUT")
+	router.HandleFunc("/api/satuan-kerja/detail/{id}", config.detailSatuanKerja).Methods("GET")
 	router.HandleFunc("/api/satuan-kerja/delete/{id}", config.deleteSatuanKerja).Methods("DELETE")
 	return
 }

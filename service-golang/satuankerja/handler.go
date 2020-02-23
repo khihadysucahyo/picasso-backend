@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 
@@ -23,31 +22,33 @@ func (config *ConfigDB)listSatuanKerja(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 				limit = 20
 		}
-		var total uint
+		var total int
 
 		var satker []models.SatuanKerja
 
-		config.db.Model(&models.SatuanKerja{}).
+		response := config.db.Model(&models.SatuanKerja{}).
 		Where("name_satuan_kerja LIKE ?", "%"+search+"%").
 		Order("created_at DESC").
 		Count(&total).
 		Limit(limit).
 		Offset(offset).
 		Find(&satker)
-		result := &models.Results{
-			status: http.StatusOK,
-			success: true,
-			result: satker,
-			_meta: {
-				totalCount: total,
-	      pageCount: 5,
-	      currentPage: offset,
-	      perPage: limit,
-			},
-		}
-		fmt.Println(result)
 
-		utils.ResponseOk(w, satker)
+		metaData := models.MetaData{
+			TotalCount: total,
+			TotalPage: utils.PageCount(total, limit),
+			CurrentPage: utils.CurrentPage(offset, limit),
+			PerPage: limit,
+		}
+
+		result := models.ResultsData{
+			Status: http.StatusOK,
+			Success: true,
+			Results: response.Value,
+			Meta: metaData,
+		}
+
+		utils.ResponseOk(w, result)
 	} else {
 		utils.ResponseError(w, http.StatusBadRequest, "Invalid body")
 	}
@@ -65,15 +66,24 @@ func (config *ConfigDB)postSatuanKerja(w http.ResponseWriter, r *http.Request) {
 			}
 			strSession := sessionUser["email"]
 			userSession := strSession.(string)
+			var parent models.SatuanKerja
+			parentID := ""
+			if payload.ParentID != "" {
+				config.db.Where("ID = ?", payload.ParentID).Find(&parent)
+				if parent.NameSatuanKerja != "" {
+					parentID = payload.ParentID
+				}
+			}
+
 			create := models.SatuanKerja{
-				ParentID: payload.ParentID,
-				NameParent: payload.NameParent,
+				ParentID: parentID,
+				NameParent: parent.NameSatuanKerja,
 				NameSatuanKerja: payload.NameSatuanKerja,
 				Description: payload.Description,
 				CreatedBy: userSession,
 			}
 			response := config.db.Create(&create)
-			utils.ResponseOk(w, response.Value)
+			utils.ResponseOk(w, response)
 	} else {
 		utils.ResponseError(w, http.StatusBadRequest, "Invalid body")
 	}
@@ -93,15 +103,43 @@ func (config *ConfigDB)putSatuanKerja(w http.ResponseWriter, r *http.Request) {
 			}
 			strSession := sessionUser["email"]
 			userSession := strSession.(string)
+
+			var parent models.SatuanKerja
+			parentID := ""
+			if payload.ParentID != "" {
+				config.db.Where("ID = ?", payload.ParentID).Find(&parent)
+				if parent.NameSatuanKerja != "" {
+					parentID = payload.ParentID
+				}
+			}
+
 			create := models.SatuanKerja{
-				ParentID: payload.ParentID,
-				NameParent: payload.NameParent,
+				ParentID: parentID,
+				NameParent: parent.NameSatuanKerja,
 				NameSatuanKerja: payload.NameSatuanKerja,
 				Description: payload.Description,
-				UpdatedBy: userSession,
+				CreatedBy: userSession,
 			}
+
 			response := config.db.Model(&payload).Where("ID = ?", params["id"]).Update(&create)
 			utils.ResponseOk(w, response.Value)
+	} else {
+		utils.ResponseError(w, http.StatusBadRequest, "Invalid body")
+	}
+}
+
+func (config *ConfigDB)detailSatuanKerja(w http.ResponseWriter, r *http.Request) {
+	if r.Method == utils.MethodGet {
+			w.Header().Set("Content-Type", "application/json")
+			params := mux.Vars(r)
+			var response models.SatuanKerja
+			config.db.Where("ID = ?", params["id"]).Find(&response)
+			result := models.ResultsData{
+				Status: http.StatusOK,
+				Success: true,
+				Results: response,
+			}
+			utils.ResponseOk(w, result)
 	} else {
 		utils.ResponseError(w, http.StatusBadRequest, "Invalid body")
 	}
