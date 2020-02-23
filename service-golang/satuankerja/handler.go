@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 
@@ -12,36 +13,48 @@ import (
 )
 
 func (config *ConfigDB)listSatuanKerja(w http.ResponseWriter, r *http.Request) {
-	search := r.URL.Query()["search"][0]
-	offset := r.URL.Query()["offset"][0]
-	limit := r.URL.Query()["limit"][0]
-	var total uint
+	if r.Method == utils.MethodGet {
+		search := string(r.URL.Query().Get("search"))
+		offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
+		if err != nil {
+				 offset = 0
+		}
+		limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+		if err != nil {
+				limit = 20
+		}
+		var total uint
 
-	offset_int, err := strconv.Atoi(offset)
-	if err != nil {
-	  offset_int = 0
+		var satker []models.SatuanKerja
+
+		config.db.Model(&models.SatuanKerja{}).
+		Where("name_satuan_kerja LIKE ?", "%"+search+"%").
+		Order("created_at DESC").
+		Count(&total).
+		Limit(limit).
+		Offset(offset).
+		Find(&satker)
+		result := &models.Results{
+			status: http.StatusOK,
+			success: true,
+			result: satker,
+			_meta: {
+				totalCount: total,
+	      pageCount: 5,
+	      currentPage: offset,
+	      perPage: limit,
+			},
+		}
+		fmt.Println(result)
+
+		utils.ResponseOk(w, satker)
+	} else {
+		utils.ResponseError(w, http.StatusBadRequest, "Invalid body")
 	}
-
-	limit_int, err := strconv.Atoi(limit)
-	if err != nil {
-	  limit_int = 20
-	}
-
-	var satker []models.SatuanKerja
-
-	config.db.Model(&models.SatuanKerja{}).
-	Where("name_satuan_kerja LIKE ?", search).
-	Order("created_at DESC").
-	Count(&total).
-	Limit(limit_int).
-	Offset(offset_int).
-	Find(&satker)
-
-	utils.ResponseOk(w, satker)
 }
 
 func (config *ConfigDB)postSatuanKerja(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
+	if r.Method == utils.MethodPost {
 			ctx := r.Context().Value("user")
 			sessionUser := ctx.(*jwt.Token).Claims.(jwt.MapClaims)
 			decoder := json.NewDecoder(r.Body)
@@ -67,7 +80,7 @@ func (config *ConfigDB)postSatuanKerja(w http.ResponseWriter, r *http.Request) {
 }
 
 func (config *ConfigDB)putSatuanKerja(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "PUT" {
+	if r.Method == utils.MethodPut {
 			w.Header().Set("Content-Type", "application/json")
 			params := mux.Vars(r)
 			ctx := r.Context().Value("user")
@@ -95,7 +108,7 @@ func (config *ConfigDB)putSatuanKerja(w http.ResponseWriter, r *http.Request) {
 }
 
 func (config *ConfigDB)deleteSatuanKerja(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "DELETE" {
+	if r.Method == utils.MethodDelete {
 			w.Header().Set("Content-Type", "application/json")
 			params := mux.Vars(r)
 			payload := models.SatuanKerja{}

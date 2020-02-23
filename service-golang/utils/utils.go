@@ -27,7 +27,6 @@ func ResponseError(w http.ResponseWriter, code int, message string) {
 	json.NewEncoder(w).Encode(body)
 }
 
-
 func GetEnv(key string) string {
   // load .env file
 	switch godotenv.Load() {
