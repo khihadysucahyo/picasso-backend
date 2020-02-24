@@ -20,7 +20,7 @@ services:
       SECRET_KEY: 'cobaaja'
       AUTHENTICATION_PY_SERVICE_URI: "http://authserver"
       MOCKSERVER_SERVICE_URI: "http://mockserver:3000"
-      SATUANKERJA_GO_SERVICE_URI: "http://satuankerja"
+      SATUANKERJA_GO_SERVICE_URI: "http://satuankerja:8301"
 
   mockserver:
     build:
