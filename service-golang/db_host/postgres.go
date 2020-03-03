@@ -1,30 +1,29 @@
 package db
 
 import (
-	"context"
-	"database/sql"
+	"log"
 
-	_ "github.com/lib/pq"
+	"github.com/jinzhu/gorm"
+  _ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type PostgresRepository struct {
-	db *sql.DB
+type Database struct {
+	*gorm.DB
 }
 
-func NewPostgres(url string) (*PostgresRepository, error) {
-	db, err := sql.Open("postgres", url)
+var DB *gorm.DB
+
+func Init(url string) *gorm.DB {
+	db, err := gorm.Open("postgres", url)
 	if err != nil {
-		return nil, err
+		log.Println("db err: ", err)
 	}
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
-	return &PostgresRepository{
-		db,
-	}, nil
+	db.DB().SetMaxIdleConns(10)
+	DB = db
+	return DB
 }
 
-func (r *PostgresRepository) Close() {
-	r.db.Close()
+// Using this function to get a connection, you can create your connection pool here.
+func GetDB() *gorm.DB {
+	return DB
 }

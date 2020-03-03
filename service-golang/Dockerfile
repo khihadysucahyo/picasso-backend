@@ -1,12 +1,23 @@
-FROM golang:1.10.2-alpine3.7 AS build
-RUN apk --no-cache add gcc g++ make ca-certificates
-WORKDIR /go/src/
+FROM golang:1.12.17-alpine3.11 AS build
+RUN apk --no-cache add gcc g++ make ca-certificates git
+RUN mkdir /app
+WORKDIR /app
 
-COPY Gopkg.lock Gopkg.toml ./
-COPY helloworld helloworld
+COPY go.mod go.sum ./
+
+# Dependency install
+RUN go get -d
+
+COPY db_host db_host
+COPY middleware middleware
+COPY models models
+COPY retry retry
+COPY satuankerja satuankerja
+COPY utils utils
 
 RUN go install ./...
 
 FROM alpine:3.7
 WORKDIR /usr/bin
+
 COPY --from=build /go/bin .

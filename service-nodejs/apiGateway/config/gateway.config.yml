@@ -12,10 +12,20 @@ apiEndpoints:
     paths: /user-list/*
     methods: ["GET","OPTIONS"]
 
+  satuankerja:
+    host: '*'
+    paths: /satuan-kerja/*
+    methods: ["GET","POST","PUT","DELETE","OPTIONS"]
+
+  jabatan:
+    host: '*'
+    paths: /jabatan/*
+    methods: ["GET","POST","PUT","DELETE","OPTIONS"]
+
   mockserver:
     host: '*'
     paths: /mock/*
-    methods: ["GET","POST","PUT","OPTIONS"]
+    methods: ["GET","POST","PUT","DELETE","OPTIONS"]
 
 serviceEndpoints:
   authentication:
@@ -23,6 +33,12 @@ serviceEndpoints:
 
   userlist:
     url: '${AUTHENTICATION_PY_SERVICE_URI}/api/'
+
+  satuankerja:
+    url: '${SATUANKERJA_GO_SERVICE_URI}/api/'
+
+  jabatan:
+    url: '${JABATAN_GO_SERVICE_URI}/api/'
 
   mockserver:
     url: '${MOCKSERVER_SERVICE_URI}/api/'
@@ -61,6 +77,38 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: userlist
+              changeOrigin: true
+
+  satuankerja:
+    apiEndpoints:
+      - satuankerja
+    policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
+      - jwt:
+        - action:
+            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+            checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: satuankerja
+              changeOrigin: true
+
+  jabatan:
+    apiEndpoints:
+      - jabatan
+    policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
+      - jwt:
+          - action:
+              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+              checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: jabatan
               changeOrigin: true
 
   mockserver:
