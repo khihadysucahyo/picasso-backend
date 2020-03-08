@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from rest_framework import viewsets, permissions
+from rest_framework import status, viewsets, permissions
 from django.db.models import Q
 # pagination, generics
 from rest_framework.decorators import (
@@ -11,7 +11,6 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.response import Response
 from authServer.AESEncryption import AESCipher
 from authServer.settings import TOKEN_KEY
-from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope, TokenHasScope
 from .utils import get_client_ip
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -19,14 +18,13 @@ class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     # pagination_class = LargeResultsSetPagination
     permission_classes = [permissions.IsAuthenticated]
-    http_method_names = ['get', 'head']
+    http_method_names = ['get', 'post', 'put', 'delete', 'head']
 
     def get_queryset(self):
         """
         This view should return a list of all the purchases for
         the user as determined by the username portion of the URL.
         """
-        # queryset = Komentar.objects.all()
         q = self.request.query_params.get('q', None)
         blank = ""
         if q is not None and q is not blank:
@@ -36,6 +34,13 @@ class AccountViewSet(viewsets.ModelViewSet):
                 (Q(nama_depan__icontains=q))|
                 (Q(nama_belakang__icontains=q)))
         return self.queryset
+
+    def post(self, request, format=None):
+        serializer = AccountSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @permission_classes(
     (permissions.AllowAny,))
@@ -55,11 +60,5 @@ class AccountLogin(APIView):
                             'key': AESCipher(TOKEN_KEY).encrypt(serializer.data["token"]),
                             'ip' : ip
                         }
-            # if has_permission is not None:
-            #      return Response("akun sudah digunakan", status=HTTP_400_BAD_REQUEST)
-            # else:
-                # email = request.data['email']
-
             return Response(new_data, status=HTTP_200_OK)
-            # return Response(new_data, status=HTTP_200_OK, headers=headers)
         return Response(serializer.erors, status=HTTP_400_BAD_REQUEST)

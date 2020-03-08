@@ -3,6 +3,7 @@
 node_modules/
 tests/unit/coverage/
 tests/unit/image-files/
+service-python/**/migrations/*
 .DS_Store
 /.env
 data/
