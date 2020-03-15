@@ -1,22 +1,15 @@
 version: '3.3'
 
 services:
-  # nats:
-  #   image : nats
-  #   networks:
-  #     - nats
-  #   # restart: "always"
-  #   ports:
-  #     - 4222:4222
 
-  # mongo:
-  #   image : mongo:latest
-  #   networks:
-  #     - mongo
-  #   volumes:
-  #     - ./data/mongodb_data:/data/db
-  #   ports:
-  #     - 27017:27017
+  mongo:
+    image : mongo:4.2.3
+    networks:
+      - mongo
+    volumes:
+      - ./data/mongodb_data:/data/db
+    ports:
+      - 27017:27017
 
   postgres:
     build:
@@ -38,12 +31,9 @@ services:
       - 6379:6379
 
 networks:
-  # nats:
-  #   external:
-  #     name: gateway
-  # mongo:
-  #   external:
-  #     name: gateway
+  mongo:
+    external:
+      name: gateway
   postgres:
     external:
       name: gateway

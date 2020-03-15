@@ -6,6 +6,8 @@ services:
       context: ./service-python/authserver
     networks:
       - authserver
+    ports:
+      - 8081:80
     environment:
       SECRET_KEY: 'cobaaja'
       TOKEN_KEY: 'iyalagidicoba'
