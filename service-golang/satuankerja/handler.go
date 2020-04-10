@@ -46,7 +46,6 @@ func (config *ConfigDB)listSatuanKerja(w http.ResponseWriter, r *http.Request) {
 	result := models.ResultsData{
 		Status: http.StatusOK,
 		Success: true,
-		Message: '',
 		Results: satker,
 		Meta: metaData,
 	}
@@ -153,7 +152,7 @@ func (config *ConfigDB)deleteSatuanKerja(w http.ResponseWriter, r *http.Request)
 	result := models.ResultsData{
 		Status: http.StatusOK,
 		Success: true,
-		Message: `Data Berhasil Di Hapus`
+		Message: `Data Berhasil Di Hapus`,
 	}
 
 	utils.ResponseOk(w, result)
