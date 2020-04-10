@@ -57,8 +57,8 @@ class AccountManager(BaseUserManager):
 class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 	email = models.EmailField(unique=True, blank=True, null=True)
 	username = models.CharField(max_length=40, unique=True, db_index=True)
-	first_name = models.CharField("Nama Depan", max_length=100, db_index=True)
-	last_name = models.CharField("Nama Belakang", max_length=100, db_index=True)
+	first_name = models.CharField("Nama Depan", max_length=100, null=True, blank=True, db_index=True)
+	last_name = models.CharField("Nama Belakang", max_length=100, null=True, blank=True, db_index=True)
 
 	tempat_lahir = models.CharField(max_length=30, verbose_name='Tempat Lahir', null=True, blank=True)
 	tanggal_lahir = models.DateField(verbose_name='Tanggal Lahir', null=True, blank=True)
