@@ -10,6 +10,12 @@ class AccountSerializer(serializers.ModelSerializer):
     nama_lengkap = serializers.SerializerMethodField('get_nama_lengkap_')
     is_active = serializers.SerializerMethodField('get_status_')
 
+    def create(self, validated_data):
+        """
+        Create and return a new `Snippet` instance, given the validated data.
+        """
+        return Account.objects.create(**validated_data)
+
     class Meta:
         model = Account
         fields = ('email', 'nama_lengkap', 'username', 'is_active')
@@ -36,9 +42,8 @@ class AccountLoginSerializer(serializers.HyperlinkedModelSerializer):
     def validate(self, data):
         username = data.get("username", None)
         password = data["password"]
-        request = self.context.get('request')
         if not username:
-            raise ValidationError("Usernam/Email harus di isi")
+            raise ValidationError("Username/Email harus di isi")
 
         user = Account.objects.filter(Q(username=username)|Q(email=username)).distinct()
         if user.exists() and user.count() == 1:

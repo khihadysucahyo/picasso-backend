@@ -149,6 +149,11 @@ func (config *ConfigDB)deleteSatuanKerja(w http.ResponseWriter, r *http.Request)
 		utils.ResponseError(w, http.StatusBadRequest, "Data Not Found")
 		return
 	}
-	response := "Data Berhasil Di Hapus"
-	utils.ResponseOk(w, response)
+	result := models.ResultsData{
+		Status: http.StatusOK,
+		Success: true,
+		Message: `Data Berhasil Di Hapus`,
+	}
+
+	utils.ResponseOk(w, result)
 }

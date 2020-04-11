@@ -7,10 +7,20 @@ apiEndpoints:
     paths: /user-login/*
     methods: ["POST","OPTIONS"]
 
-  userlist:
+  user:
     host: '*'
-    paths: /user-list/*
-    methods: ["GET","OPTIONS"]
+    paths: /user/*
+    methods: ["GET","POST","PUT","DELETE","OPTIONS"]
+
+  oauth2_login:
+    host: '*'
+    paths: /social/google-oauth2/*
+    methods: ["POST","OPTIONS"]
+
+  fileupload:
+    host: '*'
+    paths: /file-upload/*
+    methods: ["POST","PUT","OPTIONS"]
 
   satuankerja:
     host: '*'
@@ -27,12 +37,16 @@ apiEndpoints:
     paths: /mock/*
     methods: ["GET","POST","PUT","DELETE","OPTIONS"]
 
+
 serviceEndpoints:
   authentication:
     url: '${AUTHENTICATION_PY_SERVICE_URI}/auth/'
 
-  userlist:
+  user:
     url: '${AUTHENTICATION_PY_SERVICE_URI}/api/'
+
+  fileupload:
+    url: '${FILEUPLOAD_NODEJS_SERVICE_URI}/api/'
 
   satuankerja:
     url: '${SATUANKERJA_GO_SERVICE_URI}/api/'
@@ -63,9 +77,21 @@ pipelines:
               serviceEndpoint: authentication
               changeOrigin: true
 
-  userlist:
+  oauth2_login:
     apiEndpoints:
-      - userlist
+      - oauth2_login
+    policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
+      - proxy:
+          - action:
+              serviceEndpoint: user
+              changeOrigin: true
+
+  user:
+    apiEndpoints:
+      - user
     policies:
       - cors:
           - action:
@@ -76,7 +102,7 @@ pipelines:
             checkCredentialExistence: false
       - proxy:
           - action:
-              serviceEndpoint: userlist
+              serviceEndpoint: user
               changeOrigin: true
 
   satuankerja:
@@ -109,6 +135,22 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: jabatan
+              changeOrigin: true
+
+  fileupload:
+    apiEndpoints:
+      - fileupload
+    policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
+      - jwt:
+          - action:
+              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+              checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: fileupload
               changeOrigin: true
 
   mockserver:

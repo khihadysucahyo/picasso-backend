@@ -7,6 +7,8 @@ services:
     command: "satuankerja"
     networks:
       - satuankerja
+    ports:
+      - 8301:8301
     environment:
       SECRET_KEY: cobaaja
       POSTGRESQL_HOST: postgres
@@ -21,6 +23,8 @@ services:
     command: "jabatan"
     networks:
       - jabatan
+    ports:
+      - 8302:8302
     environment:
       SECRET_KEY: cobaaja
       POSTGRESQL_HOST: postgres
