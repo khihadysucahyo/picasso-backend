@@ -39,7 +39,7 @@ services:
       context: ./service-nodejs
     command: npm start
     volumes:
-      - ./service-nodejs/uploadfile:/usr/src/app
+      - ./service-nodejs/UploadFile:/usr/src/app
       - /usr/src/app/node_modules
     networks:
       - uploadfile
