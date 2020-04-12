@@ -20,6 +20,9 @@ services:
       SECRET_KEY: 'cobaaja'
       AUTHENTICATION_PY_SERVICE_URI: "http://authserver"
       MOCKSERVER_SERVICE_URI: "http://mockserver:3000"
+      SATUANKERJA_GO_SERVICE_URI: "http://satuankerja:8301"
+      JABATAN_GO_SERVICE_URI: "http://jabatan:8302"
+      FILEUPLOAD_NODEJS_SERVICE_URI: "http://uploadfile:8201"
 
   mockserver:
     build:
@@ -31,11 +34,25 @@ services:
     networks:
       - mockserver
 
+  uploadfile:
+    build:
+      context: ./service-nodejs
+    command: npm start
+    volumes:
+      - ./service-nodejs/UploadFile:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - uploadfile
+
 networks:
   apigateway:
     external:
       name: gateway
 
   mockserver:
+    external:
+      name: gateway
+
+  uploadfile:
     external:
       name: gateway

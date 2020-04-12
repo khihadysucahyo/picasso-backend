@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+  satuankerja:
+    build:
+      context: ./service-golang
+    command: "satuankerja"
+    networks:
+      - satuankerja
+    ports:
+      - 8301:8301
+    environment:
+      SECRET_KEY: cobaaja
+      POSTGRESQL_HOST: postgres
+      POSTGRESQL_PORT: 5432
+      POSTGRESQL_USER: "adminpostgre"
+      POSTGRESQL_PASSWORD: "plokijuh"
+      POSTGRESQL_DB_MASTER: "datamaster"
+
+  jabatan:
+    build:
+      context: ./service-golang
+    command: "jabatan"
+    networks:
+      - jabatan
+    ports:
+      - 8302:8302
+    environment:
+      SECRET_KEY: cobaaja
+      POSTGRESQL_HOST: postgres
+      POSTGRESQL_PORT: 5432
+      POSTGRESQL_USER: "adminpostgre"
+      POSTGRESQL_PASSWORD: "plokijuh"
+      POSTGRESQL_DB_MASTER: "datamaster"
+
+networks:
+  satuankerja:
+    external:
+      name: gateway
+
+  jabatan:
+    external:
+      name: gateway

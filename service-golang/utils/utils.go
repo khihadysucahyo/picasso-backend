@@ -3,6 +3,18 @@ package utils
 import (
 	"encoding/json"
 	"net/http"
+	"log"
+	"os"
+
+	"github.com/joho/godotenv"
+)
+
+const (
+	// DefaultLimit defines the default number of items per page for API responses
+	DefaultLimit int = 25
+
+	// DefaultOffset defines the default offset for API responses
+	DefaultOffset int = 0
 )
 
 
@@ -23,24 +35,34 @@ func ResponseError(w http.ResponseWriter, code int, message string) {
 	json.NewEncoder(w).Encode(body)
 }
 
-const (
-    MethodGet     = "GET"
-    MethodHead    = "HEAD"
-    MethodPost    = "POST"
-    MethodPut     = "PUT"
-    MethodDelete  = "DELETE"
-    MethodOptions = "OPTIONS"
+func PageCount(total int, limit int) int {
+	if limit == 0 {
+		limit = DefaultLimit
+	}
+	pages := total / limit
 
-    StatusOK                   = 200
-    StatusCreated              = 201
-    StatusAccepted             = 202
-    StatusNonAuthoritativeInfo = 203
-    StatusNoContent            = 204
+	if total%limit > 0 {
+		pages++
+	}
 
-    StatusBadRequest           = 400
-    StatusUnauthorized         = 401
-    StatusForbidden            = 403
-    StatusNotFound             = 404
-    StatusMethodNotAllowed     = 405
-    StatusInternalServerError  = 500
-)
+	return pages
+}
+
+func CurrentPage(offset int, limit int) int {
+	if limit == 0 {
+		return 0
+	}
+
+	return (offset + limit) / limit
+}
+
+func GetEnv(key string) string {
+  // load .env file
+	switch godotenv.Load() {
+	case godotenv.Load("../.env"):
+		log.Println("Error loading .env file")
+	case godotenv.Load("../../.env"):
+		log.Println("Error loading .env file")
+	}
+  return os.Getenv(key)
+}

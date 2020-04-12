@@ -6,14 +6,13 @@ services:
       context: ./service-python/authserver
     networks:
       - authserver
+    ports:
+      - 8081:80
     environment:
       SECRET_KEY: 'cobaaja'
       TOKEN_KEY: 'iyalagidicoba'
       POSTGRESQL_HOST: postgres
       POSTGRESQL_PORT: 5432
-
-    ports:
-      - "8200:80"
 
 networks:
   authserver:

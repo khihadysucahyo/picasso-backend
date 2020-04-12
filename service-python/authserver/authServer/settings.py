@@ -70,6 +70,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'authServer.urls'
@@ -85,6 +87,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -223,6 +228,7 @@ STATICFILES_DIRS = (
 
 # digunakan setelah di run untuk menyimpan  hasil python manage.py collectstatic : menyimpan CSS , JS, image/gambar.
 STATIC_ROOT = os.path.join(BASE_DIR, 'files/static-collected/')
+CLIENT_SECRETS = os.path.join(BASE_DIR, 'files/client_secrets.py')
 
 MEDIA_URL = '/media/'
 
