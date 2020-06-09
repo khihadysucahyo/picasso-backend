@@ -1,10 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { errors, APIError } = require('../utils/exceptions')
 
-const {
-    SECRET_KEY = 'SECRET_KEY',
-} = process.env;
-
 module.exports = async (req, res, next) => { // eslint-disable-line
     try {
         let token
@@ -14,7 +10,7 @@ module.exports = async (req, res, next) => { // eslint-disable-line
 
         if (!token) throw new APIError(errors.tokenNotFound)
 
-        const authenticated = await jwt.verify(token, SECRET_KEY)
+        const authenticated = await jwt.verify(token, process.env.SECRET_KEY)
 
         if (!authenticated) throw new APIError(errors.wrongCredentials)
 
