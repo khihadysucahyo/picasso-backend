@@ -23,7 +23,7 @@ services:
       SATUANKERJA_GO_SERVICE_URI: "http://satuankerja:8301"
       JABATAN_GO_SERVICE_URI: "http://jabatan:8302"
       FILEUPLOAD_NODEJS_SERVICE_URI: "http://uploadfile:8201"
-      LOGBOOK_NODEJS_SERVICE_URI: "http://uploadfile:8202"
+      LOGBOOK_NODEJS_SERVICE_URI: "http://logbook:8202"
 
   mockserver:
     build:
