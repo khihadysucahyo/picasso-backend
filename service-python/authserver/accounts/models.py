@@ -147,7 +147,10 @@ class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 
 	def get_full_name(self):
 		# The user is identified by their nama
-		return self.first_name +' '+ self.last_name
+		if self.first_name:
+			return self.first_name +' '+ self.last_name
+		else:
+			return ''
 
 	def get_alamat(self):
 		a = "-"
