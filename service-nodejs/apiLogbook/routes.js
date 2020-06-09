@@ -5,7 +5,7 @@ const router = express.Router()
 const create = require('./controllers/create')
 const list = require('./controllers/list')
 
-router.post('/', create)
+// router.post('/', create)
 router.get('/', list)
 
 module.exports = router

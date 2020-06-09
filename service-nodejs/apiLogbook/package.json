@@ -17,12 +17,11 @@
     "cors": "^2.8.5",
     "jsonwebtoken": "^8.5.1",
     "express-fileupload": "^1.1.6",
-    "dotenv": "^8.2.0",
-    "uuid": "^7.0.2",
-    "mongoose": "^5.7.3"
+    "dotenv": "^8.2.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.639.0",
+    "@grpc/proto-loader": "^0.5.4",
+    "firebase": "^7.15.0",
     "helmet": "^3.21.1"
   }
 }

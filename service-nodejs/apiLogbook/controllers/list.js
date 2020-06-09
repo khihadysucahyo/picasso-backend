@@ -2,17 +2,14 @@ const fire = require('../utils/firebase')
 const db = fire.firestore()
 
 module.exports = async (req, res) => {
-    db.settings({
-        timestampsInSnapshots: true
-    })
+    const db = fire.firestore()
     const allData = []
-    db.collection('logbook')
-        .orderBy('createdAt', 'desc').get()
+    db.collection('users')
+        .orderBy('created_at', 'desc').get()
         .then(snapshot => {
             snapshot.forEach((hasil)=>{
                 allData.push(hasil.data())
             })
-            console.log(allData)
             res.send(allData)
         }).catch((error)=>{
         console.log(error)
