@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const { v4 } = require('uuid')
 const uuid4 = v4()
 const Schema = mongoose.Schema
-const attributes = require('./attributes')
+const attributes = require('./Attributes')
 
 const LogBook = new Schema({
     _id: {
