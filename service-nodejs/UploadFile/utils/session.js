@@ -3,6 +3,7 @@ module.exports = {
         updatedAt: Date.now(),
         updatedBy: {
             _id : session ? session.sub : null,
+            email: session ? session.email : null,
             name: session ? session.name : null,
         },
         modifiedBy: session || null,
@@ -10,6 +11,7 @@ module.exports = {
     onCreated : (session) => ({
         createdBy: {
             _id : session ? session.sub : null,
+            email: session ? session.email : null,
             name: session ? session.name : null,
         },
         modifiedBy: session || null,
