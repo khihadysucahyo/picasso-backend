@@ -1,26 +1,30 @@
-defaultEntryPoints = ["http"]
 
-# logLevel = "DEBUG"
+[global]
+  sendAnonymousUsage = false
 
-[web]
-  address = ":8088"
-  [web.statistics]
+[log]
+  # If something goes wrong, changing this to `DEBUG` might help you finding
+  # out what happens.
+  level = "INFO" #DEBUG, INFO, WARN, ERROR, FATAL, PANIC
+  format = "common"
+  filePath = "/var/log/traefik.log"
+
 
 [entryPoints]
-[entryPoints.http]
-address = ":80"
+  [entryPoints.http]
+    address = ":80"
+  [entryPoints.https]
+    address = ":443"
 
-################################################################
-# Docker configuration backend
-################################################################
-[docker]
+[providers]
+  # This is how you tell traefik that it has to get the dynamic config from a config file
+  # Note that the path is the path to the file inside Docker, not insider your machine!
+  # If you want do use Docker itself for this check traefik docs!
+  [providers.file]
+    filename = "/etc/traefik/traefik.config.toml"
+    watch = true
 
-endpoint = "unix:///var/run/docker.sock"
-domain = "docker.localhost"
-watch = true
-
-# Expose containers by default in traefik
-exposedbydefault = false
-
-# Use Swarm Mode services as data provider
-swarmmode = false
+[api]
+  # With this you enable the web UI
+  insecure = true
+  dashboard = true
