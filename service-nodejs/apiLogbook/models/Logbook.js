@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const { v4 } = require('uuid')
 const uuid4 = v4()
 const Schema = mongoose.Schema
+const attributes = require('./attributes')
 
 const LogBook = new Schema({
     _id: {
@@ -9,45 +10,56 @@ const LogBook = new Schema({
         default: uuid4,
     },
     date_task: {
-        type: String,
-        require: true
+        type: Date,
+        required: false,
+        default: null
     },
     name_task: {
         type: String,
-        require: true
+        required: false,
+        default: null
     },
     start_time_task: {
-        type: String,
-        require: false
+        type: Date,
+        required: false,
+        default: null
     },
     end_time_task: {
-        type: String,
-        require: false
+        type: Date,
+        required: false,
+        default: null
     },
     urgency_task: {
         type: Number,
-        require: false
+        required: false,
+        default: null
     },
     difficulty_task: {
         type: Number,
-        require: false
+        required: false,
+        default: null
     },
     evidence: {
         type: String,
-        require: false
+        required: false,
+        default: null
     },
     document: {
         type: String,
-        require: false
+        required: false,
+        default: null
     },
     organizer_task: {
         type: String,
-        require: false
+        required: false,
+        default: null
     },
     other_information: {
         type: String,
-        require: false
-    }
+        required: false,
+        default: null
+    },
+    ...attributes
 })
 
 LogBook.index({ createByID: 1 })

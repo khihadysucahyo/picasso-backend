@@ -2,11 +2,16 @@ const mongoose = require('mongoose')
 const { v4 } = require('uuid')
 const uuid4 = v4()
 const Schema = mongoose.Schema
+const attributes = require('./attributes')
 
 const Filepath = new Schema({
     _id: {
         type: String,
         default: uuid4,
+    },
+    fileType: {
+        type: String,
+        require: true
     },
     filePath: {
         type: String,
@@ -16,14 +21,7 @@ const Filepath = new Schema({
         type: String,
         require: true
     },
-    createByID: {
-        type: String,
-        require: false
-    },
-    createByName: {
-        type: String,
-        require: false
-    }
+    ...attributes
 })
 
 Filepath.index({ createByID: 1 })

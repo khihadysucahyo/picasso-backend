@@ -56,9 +56,10 @@ class AccountLogin(APIView):
         if serializer.is_valid(raise_exception=True):
             ip = get_client_ip(request)
             new_data = {
-                            'auth_token': serializer.data["token"],
-                            'key': AESCipher(TOKEN_KEY).encrypt(serializer.data["token"]),
-                            'ip' : ip
-                        }
+                'auth_token': serializer.data["token"],
+                'email': serializer.data["email"],
+                'key': AESCipher(TOKEN_KEY).encrypt(serializer.data["token"]),
+                'ip' : ip
+            }
             return Response(new_data, status=HTTP_200_OK)
         return Response(serializer.erors, status=HTTP_400_BAD_REQUEST)

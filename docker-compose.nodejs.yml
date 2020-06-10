@@ -11,9 +11,9 @@ services:
     networks:
       - apigateway
     ports:
-      - 8080:8080
+      - 80:80
     environment:
-      API_GATEWAY_PORT: 8080
+      API_GATEWAY_PORT: 80
       SENTRY_DSN: "https://9e6969ce6e2e4983822bb4d628e47a35@sentry.io/1784511"
       REDIS_HOST: redis
       REDIS_PORT: 6379
