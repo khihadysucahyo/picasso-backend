@@ -34,7 +34,7 @@ class AccountLoginSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('username','password','token')
+        fields = ('username','password','email','token')
         extra_kwargs = {'password':
                             {'write_only': True},
                             }
@@ -55,5 +55,6 @@ class AccountLoginSerializer(serializers.HyperlinkedModelSerializer):
                 raise ValidationError("Password yang anda masukkan salah")
             token = create_token(user_obj)
 
+        data["email"] = user_obj.email
         data["token"] = token
         return data

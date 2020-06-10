@@ -12,6 +12,7 @@
 // });
 
 const { errors } = require('../utils/exceptions')
+const { onUpdated } = require('../utils/session')
 
 // Import Model
 const Filepath = require('../models/Filepath')
@@ -19,6 +20,7 @@ const Filepath = require('../models/Filepath')
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const { id: _id } = req.params
+        const session = req.session.user
 
         const {
             filePath = null,
@@ -27,7 +29,8 @@ module.exports = async (req, res) => { // eslint-disable-line
 
         const data = {
             filePath,
-            fileURL
+            fileURL,
+            ...onUpdated(session)
         }
 
         await Filepath.findOneAndUpdate({ _id }, data)

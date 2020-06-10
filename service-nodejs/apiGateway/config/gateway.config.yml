@@ -4,7 +4,7 @@ http:
 apiEndpoints:
   authentication:
     host: '*'
-    paths: /user-login/*
+    paths: /auth/login/*
     methods: ["POST","OPTIONS"]
 
   user:
@@ -45,7 +45,7 @@ apiEndpoints:
 
 serviceEndpoints:
   authentication:
-    url: '${AUTHENTICATION_PY_SERVICE_URI}/auth/'
+    url: '${AUTHENTICATION_PY_SERVICE_URI}/api/'
 
   user:
     url: '${AUTHENTICATION_PY_SERVICE_URI}/api/'

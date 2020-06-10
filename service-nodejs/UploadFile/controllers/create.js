@@ -1,11 +1,12 @@
 const { errors, APIError } = require('../utils/exceptions')
-const path = require('path')
+const { onCreated } = require('../utils/session')
 // Import Model
 const Filepath = require('../models/Filepath')
 const { s3 } = require('../utils/aws')
 
 module.exports = async (req, res) => { // eslint-disable-line
     try {
+        const session = req.session.user
         if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.serverError)
         let params = {
             Bucket: process.env.AWS_S3_BUCKET,
@@ -25,18 +26,17 @@ module.exports = async (req, res) => { // eslint-disable-line
                     fileURL = data.Location
                 } = req.body
 
-                const dataUpload = {
+                const data = {
                     filePath,
                     fileURL,
-                    createByID: req.user.user_id,
-                    createByName: req.user.username
+                    ...onCreated(session)
                 }
 
-                await Filepath.create(dataUpload)
+                await Filepath.create(data)
 
                 await res.status(201).send({
                     message: 'Input data successfull',
-                    dataUpload,
+                    data,
                 })
             }
         })
