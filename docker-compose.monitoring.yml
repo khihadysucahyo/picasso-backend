@@ -13,14 +13,18 @@ services:
   grafana:
     image: grafana/grafana:6.6.2
     container_name: 'grafana'
+    restart: unless-stopped
     networks:
       - grafana
     ports:
       - '3000:3000'
     volumes:
       - ./config/grafana/provisioning/:/etc/grafana/provisioning/
-    env_file:
-      - ./config/grafana/config.monitoring
+    environment:
+      - GF_SECURITY_ADMIN_USER=example
+      - GF_SECURITY_ADMIN_PASSWORD=example
+#    env_file:
+#      - ./config/grafana/config.monitoring
 
 networks:
   prometheus:

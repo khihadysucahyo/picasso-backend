@@ -18,7 +18,6 @@ module.exports = async (req, res, next) => { // eslint-disable-line
 
         next()
     } catch (error) {
-        console.error(error)
         const { name, code, message, data } = error
         if (name === 'TokenExpiredError') {
             res.status(401).send(errors.tokenExpired)

@@ -1,31 +1,37 @@
+
 const { errors } = require('../utils/exceptions')
 const { onUpdated } = require('../utils/session')
 const { s3 } = require('../utils/aws')
+
 // Import Model
 const Filepath = require('../models/Filepath')
 
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const { id: _id } = req.params
-        const session = req.user
 
-        const {
-            filePath = null,
-            fileURL = null
-        } = req.body
+        const file = await Filepath.findById({ _id })
 
-        const data = {
-            filePath,
-            fileURL,
-            ...onUpdated(session)
-        }
+        var deleteParam = {
+            Bucket: process.env.AWS_S3_BUCKET,
+            Delete: {
+                Objects: [
+                    {Key: file.filePath}
+                ]
+            }
+        };
+        s3.deleteObjects(deleteParam, function(err, data) {
+          if (err) {
+              throw new APIError(errors.serverError)
+          }
+          if (data) {
+            res.status(201).send({
+                message: 'Delete data successfull',
+                data,
+            })
+          }
+        });
 
-        await Filepath.findOneAndUpdate({ _id }, data)
-
-        res.status(201).send({
-            message: 'Update data successfull',
-            data,
-        })
     } catch (error) {
         const { code, message, data } = error
 

@@ -1,17 +1,11 @@
 const mongoose = require('mongoose')
-const { v4 } = require('uuid')
-const uuid4 = v4()
 const Schema = mongoose.Schema
 const attributes = require('./Attributes')
 
 const Filepath = new Schema({
-    _id: {
-        type: String,
-        default: uuid4,
-    },
     fileType: {
         type: String,
-        require: true
+        require: false
     },
     filePath: {
         type: String,
