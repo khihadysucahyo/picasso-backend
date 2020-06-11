@@ -16,9 +16,9 @@ build:
 # ==================================== SERVICE MONITORING ======================================
 compose-service-monitoring=docker-compose -f docker-compose.monitoring.yml -p service_monitoring
 start-service-monitoring:
-    @$(compose-service-monitoring) up -d
+	@$(compose-service-monitoring) up -d
 stop-service-monitoring:
-    @$(compose-service-monitoring) stop
+	@$(compose-service-monitoring) stop
 
 # ==================================== SERVICE DB ==============================================
 compose-service-database=docker-compose -f docker-compose.database.yml -p service_database
@@ -44,21 +44,21 @@ stop-service-nodejs:
 # ==================================== SERVICE GOLANG ==========================================
 compose-service-golang=docker-compose -f docker-compose.golang.yml -p service_golang
 start-service-golang:
-    @$(compose-service-golang) up -d
+	@$(compose-service-golang) up -d
 stop-service-golang:
-    @$(compose-service-golang) stop
+	@$(compose-service-golang) stop
 
 # ==================================== SERVICE TRAEFIK =========================================
 compose-service-traefik=docker-compose -f docker-compose.traefik.yml -p service_traefik
 start-service-traefik:
-    @$(compose-service-traefik) up -d
+	@$(compose-service-traefik) up -d
 stop-service-traefik:
-    @$(compose-service-traefik) stop
+	@$(compose-service-traefik) stop
 
 
-start-all: start-service-database start-service-python start-service-nodejs start-service-golang start-service-monitoring
+start-all: start-service-database start-service-python start-service-golang start-service-nodejs start-service-monitoring
 
-stop-all: stop-service-database stop-service-python stop-service-nodejs stop-service-golang stop-service-monitoring
+stop-all: stop-service-database stop-service-python stop-service-golang stop-service-nodejs stop-service-monitoring
 
 clean:
 	@./scripts/clean.sh

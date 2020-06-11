@@ -4,7 +4,7 @@ const mongooseLogs = require('mongoose-activitylogs')
 module.exports = {
     createdBy: {
         _id: {
-            type: mongoose.Schema.ObjectId,
+            type: String,
             required: false,
             default: null,
         },
@@ -13,7 +13,7 @@ module.exports = {
             required: false,
             default: null,
         },
-        name: {
+        username: {
             type: String,
             required: false,
             default: null,
@@ -25,7 +25,7 @@ module.exports = {
     },
     updatedBy: {
         _id: {
-            type: mongoose.Schema.ObjectId,
+            type: String,
             required: false,
             default: null,
         },
@@ -34,7 +34,7 @@ module.exports = {
             required: false,
             default: null,
         },
-        name: {
+        username: {
             type: String,
             required: false,
             default: null,

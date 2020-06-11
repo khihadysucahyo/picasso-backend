@@ -1,17 +1,26 @@
 const { errors, APIError } = require('../utils/exceptions')
 const { onCreated } = require('../utils/session')
+const { getRandomString } = require('../utils/randomString')
+
 // Import Model
 const Filepath = require('../models/Filepath')
 const { s3 } = require('../utils/aws')
 
 module.exports = async (req, res) => { // eslint-disable-line
     try {
-        const session = req.session.user
+        const session = req.user
         if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.serverError)
+
+        const {
+          file_type = null
+        } = req.body
+        const fileName = req.files.file.name;
+        const file_ext = fileName.substr((Math.max(0, fileName.lastIndexOf(".")) || Infinity) + 1)
+        const newFileName = getRandomString(32) + '.' + file_ext;
         let params = {
             Bucket: process.env.AWS_S3_BUCKET,
             Body : req.files.file.data,
-            Key : "foto-profile/"+Date.now()+"_"+req.files.file.name
+            Key : file_type+"/"+Date.now()+"/"+newFileName
         }
 
         await s3.upload(params, async function (err, data) {
@@ -19,30 +28,25 @@ module.exports = async (req, res) => { // eslint-disable-line
             if (err) {
                 throw new APIError(errors.serverError)
             }
-            //success
-            if (data) {
-                const {
-                    filePath = data.key,
-                    fileURL = data.Location
-                } = req.body
-
-                const data = {
-                    filePath,
-                    fileURL,
-                    ...onCreated(session)
-                }
-
-                await Filepath.create(data)
-
-                await res.status(201).send({
-                    message: 'Input data successfull',
-                    data,
-                })
+            //handle success
+            const fileData = {
+                fileType: file_type,
+                filePath: data.key,
+                fileURL: data.Location,
+                ...onCreated(session)
             }
+
+            const results = await Filepath.create(fileData)
+
+            await res.status(201).send({
+                message: 'Input data successfull',
+                data: results
+            })
         })
 
     } catch (error) {
         const { code, message, data } = error
+        console.log(error)
 
         if (code && message) {
             res.status(code).send({

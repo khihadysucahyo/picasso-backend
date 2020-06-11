@@ -13,7 +13,7 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/letsencrypt:/data
+#      - /etc/letsencrypt:/data
       - ./log:/log
       - ./config/traefik/traefik.toml:/etc/traefik/traefik.toml               # Traefik static config
       - ./config/traefik/traefik.config.toml:/etc/traefik/traefik.config.toml # Traefik dynamic config

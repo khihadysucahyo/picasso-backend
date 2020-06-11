@@ -1,60 +1,54 @@
 const mongoose = require('mongoose')
-const { v4 } = require('uuid')
-const uuid4 = v4()
 const Schema = mongoose.Schema
 const attributes = require('./Attributes')
 
 const LogBook = new Schema({
-    _id: {
-        type: String,
-        default: uuid4,
-    },
-    date_task: {
+    dateTask: {
         type: Date,
         required: false,
         default: null
     },
-    name_task: {
+    nameTask: {
         type: String,
         required: false,
         default: null
     },
-    start_time_task: {
+    startTimeTask: {
         type: Date,
         required: false,
         default: null
     },
-    end_time_task: {
+    endTimeTask: {
         type: Date,
         required: false,
         default: null
     },
-    urgency_task: {
+    urgencyTask: {
         type: Number,
         required: false,
         default: null
     },
-    difficulty_task: {
+    difficultyTask: {
         type: Number,
         required: false,
         default: null
     },
-    evidence: {
+    evidenceTask: {
         type: String,
         required: false,
         default: null
     },
-    document: {
+    documentTask: {
         type: String,
         required: false,
         default: null
     },
-    organizer_task: {
+    organizerTask: {
         type: String,
         required: false,
         default: null
     },
-    other_information: {
+    otherInformation: {
         type: String,
         required: false,
         default: null

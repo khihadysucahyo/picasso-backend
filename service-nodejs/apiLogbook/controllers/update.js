@@ -6,6 +6,9 @@ const LogBook = require('../models/LogBook')
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const session = req.user
+        const { _id } = req.params
+        if (!_id) throw new APIError(errors.notFound)
+
         const {
             dateTask = null,
             nameTask = null,
@@ -33,10 +36,10 @@ module.exports = async (req, res) => { // eslint-disable-line
             ...onCreated(session)
         }
 
-        const results = await LogBook.create(data)
+        const results = await LogBook.findByIdAndUpdate(_id, data)
 
         await res.status(201).send({
-            message: 'Input data successfull',
+            message: 'Update data successfull',
             data: results,
         })
 
