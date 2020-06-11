@@ -68,12 +68,15 @@ module.exports = async (req, res, next) => {
       .sort(sort)
 
     res.status(200).json({
-      count,
       filtered: filtered.length > 0 ? filtered[0].rows : 0,
-      page,
-      totalPage,
       pageSize,
       results,
+      _meta: {
+        totalCount: count,
+        totalPage: totalPage,
+        currentPage: page,
+        perPage: pageSize
+      }
     })
   } catch (error) {
     const { code, message, data } = error
