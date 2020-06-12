@@ -8,6 +8,16 @@ const LogBook = new Schema({
         required: false,
         default: null
     },
+    projectId: {
+      type: String,
+      required: true,
+      default: null
+    },
+    projectName: {
+      type: String,
+      required: false,
+      default: null
+    },
     nameTask: {
         type: String,
         required: false,
@@ -56,6 +66,6 @@ const LogBook = new Schema({
     ...attributes
 })
 
-LogBook.index({ createByID: 1 })
+LogBook.index({ nameTask: 1 })
 
 module.exports = mongoose.models.LogBook || mongoose.model('LogBook', LogBook)

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { errors, APIError } = require('../utils/exceptions')
-const LogBook = require('../models/LogBook')
+// Import Model
+const Project = require('../models/Project')
 
 // eslint-disable-next-line
 module.exports = async (req, res, next) => {
@@ -17,11 +18,6 @@ module.exports = async (req, res, next) => {
     const _sort = req.query.sort
 
     const rules = [
-      {
-        $match: {
-          'createdBy.email': session.email,
-        },
-      },
     ]
 
     if (_sort) {
@@ -36,7 +32,7 @@ module.exports = async (req, res, next) => {
 
       rules.push({
         '$match': {
-          'nameTask': {
+          'projectName': {
             '$regex': terms,
           },
         },
@@ -45,8 +41,8 @@ module.exports = async (req, res, next) => {
     }
 
     // Get page count
-    const count = await LogBook.countDocuments({'createdBy.email': session.email})
-    const filtered = await LogBook.aggregate([
+    const count = await Project.countDocuments({'createdBy.email': session.email})
+    const filtered = await Project.aggregate([
       ...rules,
       {
         '$group': { _id: null, rows: { '$sum': 1 } },
@@ -61,7 +57,7 @@ module.exports = async (req, res, next) => {
     const totalPage = Math.ceil((filtered.length > 0 ? filtered[0].rows : 0) / pageSize)
 
     // Get results
-    const results = await LogBook
+    const results = await Project
       .aggregate(rules)
       .skip(skip)
       .limit(pageSize)

@@ -7,20 +7,52 @@ global:
     monitor: 'bootifull-monitoring'
 
 scrape_configs:
-  - job_name:       'monitoring-authserver'
+  - job_name: 'monitoring-authserver'
 
     # Override the global default and scrape targets from this job every 10 seconds.
     scrape_interval: 10s
     metrics_path: '/actuator/prometheus'
 
     static_configs:
+      - targets: ['mongo']
+        labels:
+          application: 'mongo'
+
+      - targets: ['postgres']
+        labels:
+          application: 'postgres'
+
       - targets: ['authserver']
         labels:
           application: 'authserver'
 
+      - targets: ['satuankerja']
+        labels:
+          application: 'satuankerja'
+
+      - targets: ['jabatan']
+        labels:
+          application: 'jabatan'
+
+      - targets: ['apigateway']
+        labels:
+          application: 'apigateway'
+
+      - targets: ['mockserver']
+        labels:
+          application: 'mockserver'
+
+      - targets: ['uploadfile']
+        labels:
+          application: 'uploadfile'
+
+      - targets: ['logbook']
+        labels:
+          application: 'logbook'
+          
   - job_name: 'prometheus'
 
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ['prometheus:9090']

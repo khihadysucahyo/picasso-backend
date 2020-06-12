@@ -18,6 +18,6 @@ const Filepath = new Schema({
     ...attributes
 })
 
-Filepath.index({ createByID: 1 })
+Filepath.index({ filePath: 1 })
 
 module.exports = mongoose.models.Filepath || mongoose.model('Filepath', Filepath)
