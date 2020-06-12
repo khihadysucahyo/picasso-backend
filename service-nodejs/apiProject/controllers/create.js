@@ -1,43 +1,23 @@
 const { errors, APIError } = require('../utils/exceptions')
 const { onCreated } = require('../utils/session')
 // Import Model
-const LogBook = require('../models/LogBook')
+const Project = require('../models/Project')
 
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const session = req.user
         const {
-            dateTask = null,
-            projectId = null,
-            projectName= null,
-            nameTask = null,
-            startTimeTask = null,
-            endTimeTask = null,
-            urgencyTask = null,
-            difficultyTask = null,
-            evidenceTask = null,
-            documentTask = null,
-            organizerTask = null,
-            otherInformation = null
+            projectName = null,
+            projectDescription = null
         } = req.body
 
         const data = {
-          dateTask,
-          projectId,
           projectName,
-          nameTask,
-          startTimeTask,
-          endTimeTask,
-          urgencyTask,
-          difficultyTask,
-          evidenceTask,
-          documentTask,
-          organizerTask,
-          otherInformation,
+          projectDescription,
             ...onCreated(session)
         }
 
-        const results = await LogBook.create(data)
+        const results = await Project.create(data)
 
         await res.status(201).send({
             message: 'Input data successfull',

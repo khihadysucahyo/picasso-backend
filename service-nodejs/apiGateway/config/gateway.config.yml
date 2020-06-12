@@ -37,6 +37,11 @@ apiEndpoints:
     paths: /logbook/*
     methods: ["GET","POST","PUT","DELETE","OPTIONS"]
 
+  project:
+    host: '*'
+    paths: /project/*
+    methods: ["GET","POST","PUT","DELETE","OPTIONS"]
+
   mockserver:
     host: '*'
     paths: /mock/*
@@ -61,6 +66,9 @@ serviceEndpoints:
 
   logbook:
     url: '${LOGBOOK_NODEJS_SERVICE_URI}/api/'
+
+  project:
+    url: '${PROJECT_NODEJS_SERVICE_URI}/api/'
 
   mockserver:
     url: '${MOCKSERVER_NODEJS_SERVICE_URI}/api/'
@@ -191,4 +199,20 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: logbook
+              changeOrigin: true
+
+  project:
+    apiEndpoints:
+      - project
+    policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
+      - jwt:
+          - action:
+              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+              checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: project
               changeOrigin: true

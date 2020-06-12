@@ -70,6 +70,21 @@ services:
       MONGO_DB_LOGBOOK: "example"
       SECRET_KEY: 'example'
 
+  project:
+    build:
+      context: ./service-nodejs
+    command: npm start
+    volumes:
+      - ./service-nodejs/apiProject:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - logbook
+    environment:
+      DB_MONGO_HOST: example
+      DB_MONGO_PORT: example
+      MONGO_DB_PROJECT: "example"
+      SECRET_KEY: 'example'
+
 networks:
   apigateway:
     external:
@@ -84,5 +99,9 @@ networks:
       name: gateway
 
   logbook:
+    external:
+      name: gateway
+
+  project:
     external:
       name: gateway
