@@ -33,7 +33,7 @@ try {
   Error('Error trying to run file');
 }
 
-Raven.config(process.env.SENTRY_DSN).install();
+Raven.config(process.env.SENTRY_URI).install();
 
 gateway().load(path.join(process.cwd(), 'config')).run();
 //# sourceMappingURL=index.js.map

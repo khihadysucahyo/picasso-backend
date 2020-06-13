@@ -21,4 +21,7 @@ RUN go install ./...
 FROM alpine:3.7
 WORKDIR /usr/bin
 
+ARG POSTGRESQL_HOST
+ARG POSTGRESQL_PORT
+
 COPY --from=build /go/bin .

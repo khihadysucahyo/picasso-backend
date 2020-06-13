@@ -113,9 +113,9 @@ pipelines:
           - action:
               allowedHeaders: '*'
       - jwt:
-        - action:
-            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
-            checkCredentialExistence: false
+          - action:
+              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+              checkCredentialExistence: false
       - proxy:
           - action:
               serviceEndpoint: user
@@ -129,9 +129,9 @@ pipelines:
           - action:
               allowedHeaders: '*'
       - jwt:
-        - action:
-            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
-            checkCredentialExistence: false
+          - action:
+              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+              checkCredentialExistence: false
       - proxy:
           - action:
               serviceEndpoint: satuankerja

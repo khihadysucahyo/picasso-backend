@@ -7,15 +7,8 @@ services:
     command: "satuankerja"
     networks:
       - satuankerja
-    ports:
-      - 8301:8301
-    environment:
-      SECRET_KEY: 'example'
-      POSTGRESQL_HOST: example
-      POSTGRESQL_PORT: example
-      POSTGRESQL_USER: "example"
-      POSTGRESQL_PASSWORD: "example"
-      POSTGRESQL_DB_MASTER: "example"
+    env_file: 
+      - .env-golang
 
   jabatan:
     build:
@@ -23,15 +16,8 @@ services:
     command: "jabatan"
     networks:
       - jabatan
-    ports:
-      - 8302:8302
-    environment:
-      SECRET_KEY: 'example'
-      POSTGRESQL_HOST: example
-      POSTGRESQL_PORT: example
-      POSTGRESQL_USER: "example"
-      POSTGRESQL_PASSWORD: "example"
-      POSTGRESQL_DB_MASTER: "example"
+    env_file: 
+      - .env-golang
 
 networks:
   satuankerja:
