@@ -66,6 +66,6 @@ const route = require('./routes');
 app.use('/api/project', route);
 
 app.listen(8203, () => {
-    console.log(`Data Master Product service listening on port 8203`);
+    console.log(`Data Master Project service listening on port 8203`);
 });
 //# sourceMappingURL=index.js.map

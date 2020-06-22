@@ -44,14 +44,28 @@ const LogBook = new Schema({
         default: null
     },
     evidenceTask: {
-        type: String,
-        required: false,
-        default: null
+        filePath: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        fileURL: {
+            type: String,
+            required: false,
+            default: null,
+        },
     },
     documentTask: {
-        type: String,
-        required: false,
-        default: null
+        filePath: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        fileURL: {
+            type: String,
+            required: false,
+            default: null,
+        },
     },
     organizerTask: {
         type: String,
