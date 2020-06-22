@@ -1,11 +1,22 @@
 const { errors, APIError } = require('../utils/exceptions')
-const { onCreated } = require('../utils/session')
+const {
+    onCreated,
+    onFileCreated
+} = require('../utils/session')
+const {
+    postFile
+} = require('../utils/requestFile')
+
 // Import Model
 const LogBook = require('../models/LogBook')
 
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const session = req.user
+        if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.serverError)
+        const evidenceResponse = await postFile('image', req.files.evidenceTask)
+        const documentResponse = await postFile('document', req.files.documentTask)
+
         const {
             dateTask = null,
             projectId = null,
@@ -15,8 +26,6 @@ module.exports = async (req, res) => { // eslint-disable-line
             endTimeTask = null,
             urgencyTask = null,
             difficultyTask = null,
-            evidenceTask = null,
-            documentTask = null,
             organizerTask = null,
             otherInformation = null
         } = req.body
@@ -30,11 +39,11 @@ module.exports = async (req, res) => { // eslint-disable-line
           endTimeTask,
           urgencyTask,
           difficultyTask,
-          evidenceTask,
-          documentTask,
+          evidenceTask: onFileCreated(evidenceResponse),
+          documentTask: onFileCreated(documentResponse),
           organizerTask,
           otherInformation,
-            ...onCreated(session)
+          ...onCreated(session)
         }
 
         const results = await LogBook.create(data)
@@ -45,6 +54,7 @@ module.exports = async (req, res) => { // eslint-disable-line
         })
 
     } catch (error) {
+      console.log(error)
       const { code, message, data } = error
 
       if (code && message) {

@@ -64,7 +64,7 @@ const route = require('./routes')
 app.use('/api/logbook', route)
 
 app.listen(8202, () => {
-    console.log(`File Upload service listening on port 8202`)
+    console.log(`Api Logbook service listening on port 8202`)
 })
 
 

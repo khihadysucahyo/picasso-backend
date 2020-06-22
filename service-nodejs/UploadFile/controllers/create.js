@@ -12,15 +12,16 @@ module.exports = async (req, res) => { // eslint-disable-line
         if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.serverError)
 
         const {
-          file_type = null
+          fileType = null
         } = req.body
+
         const fileName = req.files.file.name;
         const file_ext = fileName.substr((Math.max(0, fileName.lastIndexOf(".")) || Infinity) + 1)
         const newFileName = getRandomString(32) + '.' + file_ext;
         let params = {
             Bucket: process.env.AWS_S3_BUCKET,
             Body : req.files.file.data,
-            Key : file_type+"/"+Date.now()+"/"+newFileName
+            Key: fileType + "/" + Date.now() + "/" + newFileName
         }
 
         await s3.upload(params, async function (err, data) {
@@ -30,7 +31,7 @@ module.exports = async (req, res) => { // eslint-disable-line
             }
             //handle success
             const fileData = {
-                fileType: file_type,
+                fileType: fileType,
                 filePath: data.key,
                 fileURL: data.Location,
                 ...onCreated(session)
