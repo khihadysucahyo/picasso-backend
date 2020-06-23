@@ -4,7 +4,7 @@ node_modules/
 tests/unit/coverage/
 tests/unit/image-files/
 service-python/**/migrations/*
-build/
+service-nodejs/**/build/
 .DS_Store
 /.env
 data/
