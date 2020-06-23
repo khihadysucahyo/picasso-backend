@@ -1,5 +1,5 @@
 http:
-  port: ${API_GATEWAY_PORT}
+  port: 8001
 
 apiEndpoints:
   authentication:
@@ -75,9 +75,13 @@ serviceEndpoints:
 
 policies:
   - cors
+  - basic-auth
+  - expression
+  - key-auth
   - log
   - oauth2
   - proxy
+  - rate-limit
   - jwt
 
 pipelines:
@@ -193,9 +197,9 @@ pipelines:
           - action:
               allowedHeaders: '*'
       - jwt:
-          - action:
-              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
-              checkCredentialExistence: false
+        - action:
+            secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+            checkCredentialExistence: false
       - proxy:
           - action:
               serviceEndpoint: logbook

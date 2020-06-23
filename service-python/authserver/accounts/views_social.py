@@ -2,9 +2,10 @@ from django.db.models import Q
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from .models import Account
+from .serializers import AccountSerializer
 import requests
 from rest_framework.utils import json
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
@@ -37,6 +38,7 @@ def oauth2_signin(request):
             PARAMS = { 'access_token': credentials.access_token }
             r = requests.get("https://www.googleapis.com/oauth2/v2/userinfo", params=PARAMS)
             data = json.loads(r.text)
+            print(data)
             try:
                 user = Account.objects.filter(Q(username=data['given_name'])|Q(email=data['email'])).distinct()
                 if user.exists() and user.count() == 1:
@@ -46,7 +48,8 @@ def oauth2_signin(request):
                         data['email'],
                         data['given_name'],
                         data['given_name'],
-                        data['family_name']
+                        data['family_name'],
+                        data['picture']
                     )
                 ip = get_client_ip(request)
                 token = create_token(user_obj)
@@ -66,3 +69,20 @@ def oauth2_signin(request):
                 }},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def detailUser(request):
+    try:
+        akun = Account.objects.get(email=request.user)
+        serializer = AccountSerializer(akun)
+        responseData = {
+            'data': serializer.data
+        }
+        return Response(responseData, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+ 
+

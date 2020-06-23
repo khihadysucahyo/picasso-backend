@@ -18,7 +18,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('email', 'nama_lengkap', 'username', 'is_active')
+        fields = ('email', 'nama_lengkap', 'username', 'is_active', 'foto')
 
     def get_nama_lengkap_(self, obj):
         return obj.get_full_name()

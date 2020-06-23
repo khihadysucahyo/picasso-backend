@@ -16,10 +16,6 @@ crypto:
   algorithm: aes256
   saltRounds: 10
 
-# plugins:
-#   rewrite:
-#     package: express-gateway-plugin-rewrite
-
 # OAuth2 Settings
 session:
   # storeProvider: connect-redis

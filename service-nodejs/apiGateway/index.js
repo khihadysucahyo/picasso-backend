@@ -12,6 +12,7 @@
 const path = require('path');
 const gateway = require('express-gateway');
 const Raven = require('raven')
+const cors = require('cors')
 
 const env = process.env.NODE_ENV
 
@@ -34,6 +35,6 @@ try {
 
 Raven.config(process.env.SENTRY_URI).install();
 
-gateway()
+gateway(cors)
   .load(path.join(process.cwd(), 'config'))
   .run();
