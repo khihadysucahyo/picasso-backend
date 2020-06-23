@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status, viewsets, permissions
+from rest_framework.decorators import action
 from django.db.models import Q
 # pagination, generics
 from rest_framework.decorators import (
@@ -19,6 +20,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     # pagination_class = LargeResultsSetPagination
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'put', 'delete', 'head']
+    query = Account.objects.prefetch_related('groups', 'user_permissions')
 
     def get_queryset(self):
         """
