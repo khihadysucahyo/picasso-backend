@@ -67,6 +67,11 @@ const LogBook = new Schema({
             default: null,
         },
     },
+    isDocumentLink: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
     organizerTask: {
         type: String,
         required: false,

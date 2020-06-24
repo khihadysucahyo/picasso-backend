@@ -56,7 +56,8 @@ def oauth2_signin(request):
                 response = {
                     'auth_token': token,
                     'key': AESCipher(TOKEN_KEY).encrypt(token),
-                    'ip' : ip
+                    'ip' : ip,
+                    'time_expire': datetime.now() + timedelta(seconds=14420)
                 }
                 return Response(response, status=status.HTTP_200_OK)
             except:

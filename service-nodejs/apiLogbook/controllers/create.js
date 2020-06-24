@@ -15,8 +15,7 @@ module.exports = async (req, res) => { // eslint-disable-line
         const session = req.user
         if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.serverError)
         const evidenceResponse = await postFile('image', req.files.evidenceTask)
-        const documentResponse = await postFile('document', req.files.documentTask)
-
+        let documentResponse = {}
         const {
             dateTask = null,
             projectId = null,
@@ -27,9 +26,19 @@ module.exports = async (req, res) => { // eslint-disable-line
             urgencyTask = null,
             difficultyTask = null,
             organizerTask = null,
-            otherInformation = null
+            otherInformation = null,
+            isDocumentLink = null
         } = req.body
-
+        const isDocument = String(isDocumentLink) === 'true'
+        if (isDocument) {
+            if (req.body.documentTask.length > 0) throw new APIError(errors.serverError)
+            documentResponse = {
+                filePath: '',
+                fileURL: req.body.documentTask
+            }
+        } else {
+            documentResponse = await postFile('document', req.files.documentTask)
+        }
         const data = {
           dateTask,
           projectId,
