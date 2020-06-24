@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from authServer.AESEncryption import AESCipher
 from authServer.settings import TOKEN_KEY
 from .utils import get_client_ip
+from datetime import datetime, timedelta
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
@@ -61,7 +62,8 @@ class AccountLogin(APIView):
                 'auth_token': serializer.data["token"],
                 'email': serializer.data["email"],
                 'key': AESCipher(TOKEN_KEY).encrypt(serializer.data["token"]),
-                'ip' : ip
+                'ip' : ip,
+                'time_expire': datetime.now() + timedelta(seconds=14420)
             }
             return Response(new_data, status=HTTP_200_OK)
         return Response(serializer.erors, status=HTTP_400_BAD_REQUEST)
