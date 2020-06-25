@@ -12,6 +12,7 @@ from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 from .utils import get_client_ip, create_token
 from authServer.AESEncryption import AESCipher
 from authServer.settings import TOKEN_KEY, CLIENT_SECRETS
+from datetime import datetime, timedelta
 
 class SocialSerializer(serializers.Serializer):
     """
