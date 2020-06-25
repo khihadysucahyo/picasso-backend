@@ -23,15 +23,17 @@ module.exports = async (req, res) => { // eslint-disable-line
             nameTask = null,
             startTimeTask = null,
             endTimeTask = null,
-            urgencyTask = null,
             difficultyTask = null,
             organizerTask = null,
+            isMainTask = null,
             otherInformation = null,
             isDocumentLink = null
         } = req.body
-        const isDocument = String(isDocumentLink) === 'true'
-        if (isDocument) {
-            if (req.body.documentTask.length > 0) throw new APIError(errors.serverError)
+
+        const isTask = String(isMainTask) === 'true'
+        const isLink = String(isDocumentLink) === 'true'
+        if (isLink) {
+            if (req.body.documentTask.length < 0) throw new APIError(errors.serverError)
             documentResponse = {
                 filePath: '',
                 fileURL: req.body.documentTask
@@ -39,6 +41,7 @@ module.exports = async (req, res) => { // eslint-disable-line
         } else {
             documentResponse = await postFile('document', req.files.documentTask)
         }
+
         const data = {
           dateTask,
           projectId,
@@ -46,7 +49,7 @@ module.exports = async (req, res) => { // eslint-disable-line
           nameTask,
           startTimeTask,
           endTimeTask,
-          urgencyTask,
+          isMainTask: isTask,
           difficultyTask,
           evidenceTask: onFileCreated(evidenceResponse),
           documentTask: onFileCreated(documentResponse),
@@ -63,7 +66,6 @@ module.exports = async (req, res) => { // eslint-disable-line
         })
 
     } catch (error) {
-      console.log(error)
       const { code, message, data } = error
 
       if (code && message) {

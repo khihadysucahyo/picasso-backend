@@ -18,6 +18,16 @@ module.exports = {
             required: false,
             default: null,
         },
+        divisi: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        jabatan: {
+            type: String,
+            required: false,
+            default: null,
+        },
     },
     createdAt: {
         type: Date,
@@ -35,6 +45,16 @@ module.exports = {
             default: null,
         },
         username: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        divisi: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        jabatan: {
             type: String,
             required: false,
             default: null,
