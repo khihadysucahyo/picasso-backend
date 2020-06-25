@@ -2,65 +2,66 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gorilla/mux"
 
 	"github.com/jabardigitalservice/picasso-backend/service-golang/models"
 	"github.com/jabardigitalservice/picasso-backend/service-golang/utils"
 )
 
-func (config *ConfigDB)listJabatan(w http.ResponseWriter, r *http.Request) {
+func (config *ConfigDB) listJabatan(w http.ResponseWriter, r *http.Request) {
 	search := string(r.URL.Query().Get("search"))
 	offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
 	if err != nil {
-			 offset = 0
+		offset = 0
 	}
 	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
 	if err != nil {
-			limit = 20
+		limit = 20
 	}
 	var total int
 
 	var jabatan []models.Jabatan
 
 	if err := config.db.Model(&models.Jabatan{}).
-	Where("name_jabatan ILIKE ?", "%"+search+"%").
-	Order("created_at DESC").
-	Count(&total).
-	Limit(limit).
-	Offset(offset).
-	Find(&jabatan).Error; err != nil {
+		Where("name_jabatan ILIKE ?", "%"+search+"%").
+		Order("created_at DESC").
+		Count(&total).
+		Limit(limit).
+		Offset(offset).
+		Find(&jabatan).Error; err != nil {
 		utils.ResponseError(w, http.StatusBadRequest, "Invalid body")
 		return
 	}
 
 	metaData := models.MetaData{
-		TotalCount: total,
-		TotalPage: utils.PageCount(total, limit),
+		TotalCount:  total,
+		TotalPage:   utils.PageCount(total, limit),
 		CurrentPage: utils.CurrentPage(offset, limit),
-		PerPage: limit,
+		PerPage:     limit,
 	}
 
 	result := models.ResultsData{
-		Status: http.StatusOK,
+		Status:  http.StatusOK,
 		Success: true,
 		Results: jabatan,
-		Meta: metaData,
+		Meta:    metaData,
 	}
 
 	utils.ResponseOk(w, result)
 }
 
-func (config *ConfigDB)postJabatan(w http.ResponseWriter, r *http.Request) {
+func (config *ConfigDB) postJabatan(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context().Value("user")
 	sessionUser := ctx.(*jwt.Token).Claims.(jwt.MapClaims)
 	decoder := json.NewDecoder(r.Body)
 	payload := models.Jabatan{}
 	if err := decoder.Decode(&payload); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	strSession := sessionUser["email"]
 	userSession := strSession.(string)
@@ -71,11 +72,11 @@ func (config *ConfigDB)postJabatan(w http.ResponseWriter, r *http.Request) {
 	}
 
 	create := models.Jabatan{
-		SatuanKerjaID: payload.SatuanKerjaID,
+		SatuanKerjaID:   payload.SatuanKerjaID,
 		NameSatuanKerja: satuankerja.NameSatuanKerja,
-		NameJabatan: payload.NameJabatan,
-		Description: payload.Description,
-		CreatedBy: userSession,
+		NameJabatan:     payload.NameJabatan,
+		Description:     payload.Description,
+		CreatedBy:       userSession,
 	}
 
 	if err := config.db.Create(&create).Error; err != nil {
@@ -86,7 +87,7 @@ func (config *ConfigDB)postJabatan(w http.ResponseWriter, r *http.Request) {
 	utils.ResponseOk(w, create)
 }
 
-func (config *ConfigDB)putJabatan(w http.ResponseWriter, r *http.Request) {
+func (config *ConfigDB) putJabatan(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	ctx := r.Context().Value("user")
@@ -94,8 +95,8 @@ func (config *ConfigDB)putJabatan(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	payload := models.Jabatan{}
 	if err := decoder.Decode(&payload); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	strSession := sessionUser["email"]
 	userSession := strSession.(string)
@@ -113,11 +114,11 @@ func (config *ConfigDB)putJabatan(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	update := models.Jabatan{
-		SatuanKerjaID: payload.SatuanKerjaID,
+		SatuanKerjaID:   payload.SatuanKerjaID,
 		NameSatuanKerja: satuankerja.NameSatuanKerja,
-		NameJabatan: payload.NameJabatan,
-		Description: payload.Description,
-		CreatedBy: userSession,
+		NameJabatan:     payload.NameJabatan,
+		Description:     payload.Description,
+		CreatedBy:       userSession,
 	}
 
 	if err := config.db.Model(&payload).Where("ID = ?", params["id"]).Update(&update).Error; err != nil {
@@ -128,7 +129,7 @@ func (config *ConfigDB)putJabatan(w http.ResponseWriter, r *http.Request) {
 	utils.ResponseOk(w, update)
 }
 
-func (config *ConfigDB)detailJabatan(w http.ResponseWriter, r *http.Request) {
+func (config *ConfigDB) detailJabatan(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var response models.Jabatan
@@ -137,14 +138,14 @@ func (config *ConfigDB)detailJabatan(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	result := models.ResultsData{
-		Status: http.StatusOK,
+		Status:  http.StatusOK,
 		Success: true,
 		Results: response,
 	}
 	utils.ResponseOk(w, result)
 }
 
-func (config *ConfigDB)deleteJabatan(w http.ResponseWriter, r *http.Request) {
+func (config *ConfigDB) deleteJabatan(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	payload := models.Jabatan{}
@@ -153,7 +154,7 @@ func (config *ConfigDB)deleteJabatan(w http.ResponseWriter, r *http.Request) {
 		utils.ResponseError(w, http.StatusNotFound, "ID Not Found")
 		return
 	}
-	if err := config.db.Model(&payload).Where("ID = ?", params["id"]).Delete(&payload).Error;err != nil {
+	if err := config.db.Model(&payload).Where("ID = ?", params["id"]).Delete(&payload).Error; err != nil {
 		utils.ResponseError(w, http.StatusBadRequest, "Data Not Found")
 		return
 	}

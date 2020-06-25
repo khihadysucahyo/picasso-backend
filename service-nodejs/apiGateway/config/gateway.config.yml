@@ -1,5 +1,5 @@
 http:
-  port: 8001
+  port: ${API_GATEWAY_PORT}
 
 apiEndpoints:
   authentication:
