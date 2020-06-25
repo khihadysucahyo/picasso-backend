@@ -20,12 +20,12 @@ const LogBook = new Schema({
     },
     nameTask: {
         type: String,
-        required: false,
+        required: true,
         default: null
     },
     startTimeTask: {
         type: Date,
-        required: false,
+        required: true,
         default: null
     },
     endTimeTask: {
@@ -33,14 +33,9 @@ const LogBook = new Schema({
         required: false,
         default: null
     },
-    urgencyTask: {
-        type: Number,
-        required: false,
-        default: null
-    },
     difficultyTask: {
         type: Number,
-        required: false,
+        required: true,
         default: null
     },
     evidenceTask: {
@@ -68,6 +63,11 @@ const LogBook = new Schema({
         },
     },
     isDocumentLink: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
+    isMainTask: {
         type: Boolean,
         required: false,
         default: true

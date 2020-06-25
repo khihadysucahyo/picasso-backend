@@ -39,7 +39,6 @@ def oauth2_signin(request):
             PARAMS = { 'access_token': credentials.access_token }
             r = requests.get("https://www.googleapis.com/oauth2/v2/userinfo", params=PARAMS)
             data = json.loads(r.text)
-            print(data)
             try:
                 user = Account.objects.filter(Q(username=data['given_name'])|Q(email=data['email'])).distinct()
                 if user.exists() and user.count() == 1:
@@ -54,11 +53,13 @@ def oauth2_signin(request):
                     )
                 ip = get_client_ip(request)
                 token = create_token(user_obj)
+                dt = datetime.utcnow() + timedelta(seconds=14420)
+                expTime = int(round(dt.timestamp() * 1000))
                 response = {
                     'auth_token': token,
                     'key': AESCipher(TOKEN_KEY).encrypt(token),
                     'ip' : ip,
-                    'time_expire': datetime.now() + timedelta(seconds=14420)
+                    'exp': expTime
                 }
                 return Response(response, status=status.HTTP_200_OK)
             except:

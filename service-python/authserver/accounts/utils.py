@@ -3,8 +3,9 @@ from rest_framework_jwt.settings import api_settings
 def create_token(user):
     jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
     jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-
     payload = jwt_payload_handler(user)
+    payload['divisi'] = user.divisi
+    payload['jabatan'] = user.jabatan
     token = jwt_encode_handler(payload)
 
     return token
@@ -38,3 +39,14 @@ JENIS_KELAMIN = (
 	('Pria', 'Pria'),
 	('Wanita', 'Wanita')
 )
+
+def jwt_response_payload_handler(token, user=None, request=None):
+    print(token)
+    return {
+        'token': token,
+        'username': user.username,
+        'user_id' : user.id,
+        'email' : user.email,
+        'divisi' : user.divisi,
+        'jabatan' : user.jabatan
+    }

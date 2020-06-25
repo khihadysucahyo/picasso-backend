@@ -14,6 +14,7 @@ from authServer.AESEncryption import AESCipher
 from authServer.settings import TOKEN_KEY
 from .utils import get_client_ip
 from datetime import datetime, timedelta
+import time
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
@@ -56,6 +57,8 @@ class AccountLogin(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         serializer = AccountLoginSerializer(data=data)
+        dt = datetime.utcnow() + timedelta(seconds=14420)
+        expTime = int(round(dt.timestamp() * 1000))
         if serializer.is_valid(raise_exception=True):
             ip = get_client_ip(request)
             new_data = {
@@ -63,7 +66,7 @@ class AccountLogin(APIView):
                 'email': serializer.data["email"],
                 'key': AESCipher(TOKEN_KEY).encrypt(serializer.data["token"]),
                 'ip' : ip,
-                'time_expire': datetime.now() + timedelta(seconds=14420)
+                'exp': expTime
             }
             return Response(new_data, status=HTTP_200_OK)
         return Response(serializer.erors, status=HTTP_400_BAD_REQUEST)
