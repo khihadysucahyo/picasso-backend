@@ -33,6 +33,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get("SECRET_KEY")
 TOKEN_KEY = os.environ.get("TOKEN_KEY")
 
+DB_NAME_AUTH = os.environ.get("DB_NAME_AUTH")
+DB_USER_AUTH = os.environ.get("DB_USER_AUTH")
+DB_PASSWORD_AUTH = os.environ.get("DB_PASSWORD_AUTH")
 DATABASE_HOST = os.environ.get("POSTGRESQL_HOST")
 DATABASE_PORT = os.environ.get("POSTGRESQL_PORT")
 
@@ -104,9 +107,9 @@ WSGI_APPLICATION = 'authServer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'authserver',
-        'USER': 'adminpostgre',
-        'PASSWORD': 'plokijuh',
+        'NAME': DB_NAME_AUTH,
+        'USER': DB_USER_AUTH,
+        'PASSWORD': DB_PASSWORD_AUTH,
         'HOST': DATABASE_HOST,
         'PORT': DATABASE_PORT,
     }
