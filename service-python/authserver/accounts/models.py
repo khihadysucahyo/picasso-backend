@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from django.contrib.postgres.indexes import GinIndex
 import django.contrib.postgres.search as pg_search
 
-from master.models import JenisNomorIdentitas, Desa, MetaAtribut
+from master.models import JenisNomorIdentitas, MetaAtribut
 
 from datetime import datetime, date
 
@@ -15,7 +15,7 @@ from django.contrib.auth.models import (
 
 from django.contrib.auth.models import PermissionsMixin
 
-import os, re
+import os, re, uuid
 
 class AccountManager(BaseUserManager):
 	def create_user(self, email, username, first_name=None, last_name=None, foto=None, password=None):
@@ -55,6 +55,7 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4)
 	email = models.EmailField(unique=True, blank=True, null=True)
 	username = models.CharField(max_length=40, unique=True, db_index=True)
 	first_name = models.CharField("Nama Depan", max_length=100, null=True, blank=True, db_index=True)
