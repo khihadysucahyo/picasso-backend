@@ -13,7 +13,7 @@ import json,datetime
 
 # from admin_view.location_admin import NegaraAdmin
 
-from master.models import JenisNomorIdentitas,Settings,Negara,Provinsi,Kabupaten,Kecamatan,Desa,Agama,JenisKelamin,Berkas
+from master.models import JenisNomorIdentitas, Settings, Agama, JenisKelamin, Berkas
 
 # Register your models here.
 
@@ -163,11 +163,6 @@ class LogEntryAdmin(admin.ModelAdmin):
 admin.site.register(LogEntry, LogEntryAdmin)
 admin.site.register(JenisNomorIdentitas)
 admin.site.register(Settings)
-admin.site.register(Negara)
-admin.site.register(Provinsi)
-admin.site.register(Kabupaten)
-admin.site.register(Kecamatan)
-admin.site.register(Desa)
 admin.site.register(Agama)
 admin.site.register(JenisKelamin)
 admin.site.register(Berkas)

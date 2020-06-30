@@ -1,14 +1,31 @@
 const { errors, APIError } = require('../utils/exceptions')
-const { onUpdated } = require('../utils/session')
+const {
+    onUpdated,
+    filePath
+} = require('../utils/session')
+const {
+    updateFile
+} = require('../utils/requestFile')
+
 // Import Model
 const LogBook = require('../models/LogBook')
 
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const session = req.user
-        const { _id } = req.params
-        if (!_id) throw new APIError(errors.notFound)
-
+        const {
+            _id
+        } = req.params
+        const resultLogBook = await LogBook.findById({
+            _id: _id
+        }).lean()
+        if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.serverError)
+        const evidenceResponse = await updateFile(
+            resultLogBook.evidenceTask.filePath,
+            'image',
+            req.files.evidenceTask
+        )
+        let documentResponse = {}
         const {
             dateTask = null,
             projectId = null,
@@ -16,27 +33,42 @@ module.exports = async (req, res) => { // eslint-disable-line
             nameTask = null,
             startTimeTask = null,
             endTimeTask = null,
-            urgencyTask = null,
             difficultyTask = null,
-            evidenceTask = null,
-            documentTask = null,
             organizerTask = null,
-            otherInformation = null
+            isMainTask = null,
+            otherInformation = null,
+            isDocumentLink = null
         } = req.body
 
+        const isTask = String(isMainTask) === 'true'
+        const isLink = String(isDocumentLink) === 'true'
+        if (isLink) {
+            if (req.body.documentTask.length < 0) throw new APIError(errors.serverError)
+            documentResponse = {
+                filePath: '',
+                fileURL: req.body.documentTask
+            }
+        } else {
+            documentResponse = await updateFile(
+                resultLogBook.evidenceTask.filePath,
+                'document',
+                req.files.documentTask
+            )
+        }
+
         const data = {
-          dateTask,
-          projectId,
-          projectName,
-          nameTask,
-          startTimeTask,
-          endTimeTask,
-          urgencyTask,
-          difficultyTask,
-          evidenceTask,
-          documentTask,
-          organizerTask,
-          otherInformation,
+            dateTask,
+            projectId,
+            projectName,
+            nameTask,
+            startTimeTask,
+            endTimeTask,
+            isMainTask: isTask,
+            difficultyTask,
+            evidenceTask: filePath(evidenceResponse),
+            documentTask: filePath(documentResponse),
+            organizerTask,
+            otherInformation,
             ...onUpdated(session)
         }
 
@@ -44,10 +76,11 @@ module.exports = async (req, res) => { // eslint-disable-line
 
         await res.status(201).send({
             message: 'Update data successfull',
-            data: data,
+            data: results,
         })
 
     } catch (error) {
+      console.log(error)
       const { code, message, data } = error
 
       if (code && message) {

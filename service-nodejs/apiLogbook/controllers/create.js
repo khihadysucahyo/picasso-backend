@@ -1,7 +1,7 @@
 const { errors, APIError } = require('../utils/exceptions')
 const {
     onCreated,
-    onFileCreated
+    filePath
 } = require('../utils/session')
 const {
     postFile
@@ -51,8 +51,8 @@ module.exports = async (req, res) => { // eslint-disable-line
           endTimeTask,
           isMainTask: isTask,
           difficultyTask,
-          evidenceTask: onFileCreated(evidenceResponse),
-          documentTask: onFileCreated(documentResponse),
+          evidenceTask: filePath(evidenceResponse),
+          documentTask: filePath(documentResponse),
           organizerTask,
           otherInformation,
           ...onCreated(session)

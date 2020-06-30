@@ -20,12 +20,7 @@ module.exports = {
         },
         modifiedBy: session || null,
     }),
-
-    onFileUpdated: (file) => ({
-        filePath: file ? session.filePath : null,
-        fileURL: file ? session.fileURL : null,
-    }),
-    onFileCreated: (file) => ({
+    filePath: (file) => ({
         filePath: file ? file.filePath : null,
         fileURL: file ? file.fileURL : null,
     }),

@@ -52,7 +52,7 @@ connectWithRetry();
 mongoose.Promise = global.Promise
 
 // Authentications
-app.use(authenticate)
+// app.use(authenticate)
 
 // Import models
 app.set('models', mongoose.models)
@@ -61,7 +61,7 @@ app.set('models', mongoose.models)
 const route = require('./routes')
 
 //routes
-app.use('/api/file-upload', route)
+app.use('/api/file', route)
 
 app.listen(8201, () => {
     console.log(`File Upload service listening on port 8201`)

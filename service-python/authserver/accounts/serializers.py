@@ -23,7 +23,7 @@ class AccountSerializer(serializers.ModelSerializer):
             'nama_lengkap',
             'username',
             'is_active',
-            'foto',
+            'photo',
             'divisi',
             'jabatan'
         )
