@@ -18,7 +18,7 @@ from django.contrib.auth.models import PermissionsMixin
 import os, re, uuid
 
 class AccountManager(BaseUserManager):
-	def create_user(self, email, username, first_name=None, last_name=None, photo=None, password=None):
+	def create_user(self, email, username, firstName=None, lastName=None, photo=None, password=None):
 		"""
 			Creates and saves a User with the given email, date of
 			birth and password.
@@ -30,8 +30,8 @@ class AccountManager(BaseUserManager):
 		user = self.model(
 			email=email,
 			username=username,
-			first_name=first_name,
-			last_name=last_name,
+			firstName=firstName,
+			lastName=lastName,
 		)
 
 		user.set_password(password)
