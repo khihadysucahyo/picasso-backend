@@ -52,7 +52,7 @@ connectWithRetry();
 mongoose.Promise = global.Promise
 
 // Authentications
-app.use(authenticate)
+// app.use(authenticate)
 
 // Import models
 app.set('models', mongoose.models)

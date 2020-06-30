@@ -4,10 +4,10 @@ const router = express.Router()
 // Import methods
 const create = require('./controllers/create')
 const update = require('./controllers/update')
-// const detail = require('./controllers/detail')
+const detail = require('./controllers/detail')
 
 router.post('/', create)
 router.put('/:id', update)
-// router.get('/', detail)
+router.get('/:path/:name', detail)
 
 module.exports = router

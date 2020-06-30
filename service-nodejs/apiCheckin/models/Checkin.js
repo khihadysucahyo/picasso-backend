@@ -8,6 +8,11 @@ const Checkin = new Schema({
         required: false,
         default: null
     },
+    checkoutAt: {
+        type: Date,
+        required: false,
+        default: null
+    },
     location: {
         type: String,
         required: false,

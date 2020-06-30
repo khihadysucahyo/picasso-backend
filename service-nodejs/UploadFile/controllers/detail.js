@@ -14,12 +14,12 @@ const Filepath = require('../models/Filepath')
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const {
-            path
-        } = req.query
-
+            path,
+            name
+        } = req.params
         var options = {
             Bucket: process.env.AWS_S3_BUCKET,
-            Key: path,
+            Key: `image/${path}/${name}`,
         }
 
         s3.getObject(options, function (err, data) {
@@ -28,7 +28,6 @@ module.exports = async (req, res) => { // eslint-disable-line
             }
             res.send(data.Body)
         })
-
     } catch (error) {
         console.log(error)
        const {

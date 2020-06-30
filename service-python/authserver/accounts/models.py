@@ -18,7 +18,7 @@ from django.contrib.auth.models import PermissionsMixin
 import os, re, uuid
 
 class AccountManager(BaseUserManager):
-	def create_user(self, email, username, first_name=None, last_name=None, foto=None, password=None):
+	def create_user(self, email, username, first_name=None, last_name=None, photo=None, password=None):
 		"""
 			Creates and saves a User with the given email, date of
 			birth and password.
@@ -58,38 +58,39 @@ class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4)
 	email = models.EmailField(unique=True, blank=True, null=True)
 	username = models.CharField(max_length=40, unique=True, db_index=True)
-	first_name = models.CharField("Nama Depan", max_length=100, null=True, blank=True, db_index=True)
-	last_name = models.CharField("Nama Belakang", max_length=100, null=True, blank=True, db_index=True)
+	firstName = models.CharField("Nama Depan", max_length=100, null=True, blank=True, db_index=True)
+	lastName = models.CharField("Nama Belakang", max_length=100, null=True, blank=True, db_index=True)
 
-	tempat_lahir = models.CharField(max_length=30, verbose_name='Tempat Lahir', null=True, blank=True)
-	tanggal_lahir = models.DateField(verbose_name='Tanggal Lahir', null=True, blank=True)
+	birthPlace = models.CharField(max_length=30, verbose_name='Tempat Lahir', null=True, blank=True)
+	birthDate = models.DateField(verbose_name='Tanggal Lahir', null=True, blank=True)
 	telephone = models.CharField(verbose_name='Telepon', max_length=50, null=True, blank=True)
 
-	id_divisi = models.CharField(verbose_name='ID Divisi', max_length=40, null=True, blank=True)
+	idDivisi = models.CharField(verbose_name='ID Divisi', max_length=40, null=True, blank=True)
 	divisi = models.CharField(verbose_name='Divisi', max_length=50, null=True, blank=True)
-	id_jabatan = models.CharField(verbose_name='ID Jabatan', max_length=40, null=True, blank=True)
+	idJabatan = models.CharField(verbose_name='ID Jabatan', max_length=40, null=True, blank=True)
 	jabatan = models.CharField(verbose_name='Jabatan', max_length=50, null=True, blank=True)
 
-	status_pernikahan = models.CharField(verbose_name='Status Pernikahan', max_length=50, null=True, blank=True)
-	jumlah_anak = models.CharField(verbose_name='Jumlah Anak', max_length=50, null=True, blank=True)
-	agama = models.CharField(verbose_name='Agama', max_length=50, null=True, blank=True)
-	golongan_darah = models.CharField(verbose_name='Golongan Darah', max_length=50, null=True, blank=True)
+	maritalStatus = models.CharField(verbose_name='Status Pernikahan', max_length=50, null=True, blank=True)
+	numberChildren = models.CharField(verbose_name='Jumlah Anak', max_length=50, null=True, blank=True)
+	religion = models.CharField(verbose_name='Agama', max_length=50, null=True, blank=True)
+	bloodType = models.CharField(verbose_name='Golongan Darah', max_length=50, null=True, blank=True)
+	gender = models.CharField(verbose_name='Jenis Kelamin', max_length=50, null=True, blank=True)
 
-	id_provinsi = models.CharField(verbose_name="ID Provinsi", max_length=40, null=True, blank=True)
-	provinsi = models.CharField(verbose_name="Provinsi", max_length=80, null=True, blank=True)
-	id_kabupaten = models.CharField(verbose_name="ID Kabupaten", max_length=40, null=True, blank=True)
-	kabupaten = models.CharField(verbose_name="Kabupaten", max_length=100, null=True, blank=True)
-	id_kecamatan = models.CharField(verbose_name="ID Kecamatan", max_length=40, null=True, blank=True)
-	kecamatan = models.CharField(verbose_name="Kecamatan", max_length=100, null=True, blank=True)
-	id_desa = models.CharField(verbose_name="ID Desa", max_length=40, null=True, blank=True)
-	desa = models.CharField(verbose_name="Desa", max_length=150, null=True, blank=True)
+	idProvince = models.CharField(verbose_name="ID Provinsi", max_length=40, null=True, blank=True)
+	province = models.CharField(verbose_name="Provinsi", max_length=80, null=True, blank=True)
+	idDistricts = models.CharField(verbose_name="ID Kabupaten", max_length=40, null=True, blank=True)
+	districts = models.CharField(verbose_name="Kabupaten", max_length=100, null=True, blank=True)
+	idSubDistrict = models.CharField(verbose_name="ID Kecamatan", max_length=40, null=True, blank=True)
+	subDistrict = models.CharField(verbose_name="Kecamatan", max_length=100, null=True, blank=True)
+	idVillage = models.CharField(verbose_name="ID Desa", max_length=40, null=True, blank=True)
+	village = models.CharField(verbose_name="Desa", max_length=150, null=True, blank=True)
 
-	alamat = models.CharField(verbose_name="Alamat", max_length=255, null=True, blank=True)
+	address = models.CharField(verbose_name="Alamat", max_length=255, null=True, blank=True)
 
 	lt = models.CharField(max_length=50, verbose_name='lt', blank=True, null=True)
 	lg = models.CharField(max_length=50, verbose_name='lg', blank=True, null=True)
 
-	foto = models.CharField(verbose_name="Foto", max_length=150, null=True, blank=True)
+	photo = models.CharField(verbose_name="Foto", max_length=150, null=True, blank=True)
 	sv = pg_search.SearchVectorField(null=True, blank=True)
 
 	is_active = models.BooleanField(default=True)
@@ -101,41 +102,48 @@ class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 	REQUIRED_FIELDS = ['email',]
 
 	def get_complete_location_dictionary(self):
-		negara = ''
-		provinsi = ''
-		kabupaten = ''
-		kecamatan = ''
-		desa = ''
-		negara_id = ''
-		provinsi_id = ''
-		kabupaten_id = ''
-		kecamatan_id= ''
-		desa_id = ''
+		province = ''
+		districts = ''
+		subDistrict = ''
+		village = ''
+		idProvince = ''
+		idDistricts = ''
+		idSubDistrict= ''
+		idVillage = ''
 		if self.desa:
 			return self.desa.get_complete_location_dictionary()
-		return dict(negara=negara, negara_id=negara_id, provinsi=provinsi, provinsi_id=provinsi_id, kabupaten=kabupaten, kabupaten_id=kabupaten_id, kecamatan=kecamatan, kecamatan_id=kecamatan_id, desa=desa, desa_id=desa_id)
+		return dict(
+			province=province,
+			idProvince=idProvince,
+			districts=districts,
+			idDistricts=idDistricts,
+			subDistrict=subDistrict,
+			idSubDistrict=idSubDistrict,
+			village=village,
+			idVillage=idVillage
+		)
 
 	# @property
 	def get_years_birthday(self):
 		years = "-"
-		if self.tanggal_lahir:
-			rdelta = relativedelta(date.today(), self.tanggal_lahir)
+		if self.birthDate:
+			rdelta = relativedelta(date.today(), self.birthDate)
 			years = rdelta.years
 			return years
 		return years
 
 	def get_month_birthday(self):
 		months = "-"
-		if self.tanggal_lahir:
-			rdelta = relativedelta(date.today(), self.tanggal_lahir)
+		if self.birthDate:
+			rdelta = relativedelta(date.today(), self.birthDate)
 			months = rdelta.months
 			return months
 		return months
 
 	def get_day_birthday(self):
 		days = "-"
-		if self.tanggal_lahir:
-			rdelta = relativedelta(date.today(), self.tanggal_lahir)
+		if self.birthDate:
+			rdelta = relativedelta(date.today(), self.birthDate)
 			days = rdelta.days
 			return days
 		return days
@@ -148,15 +156,15 @@ class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 
 	def get_full_name(self):
 		# The user is identified by their nama
-		if self.first_name:
-			return self.first_name +' '+ self.last_name
+		if self.firstName:
+			return self.firstName +' '+ self.lastName
 		else:
 			return ''
 
 	def get_alamat(self):
 		a = "-"
-		if self.alamat:
-			a = self.alamat
+		if self.address:
+			a = self.address
 		if self.desa:
 			a = a+" "+self.desa.alamat_lengkap()
 		return a
@@ -171,9 +179,9 @@ class Account(AbstractBaseUser,PermissionsMixin, MetaAtribut):
 		verbose_name_plural = 'Akun'
 
 class NomorIdentitasPengguna(models.Model):
-	nomor = models.CharField(max_length=100, unique=True, db_index=True)
+	number = models.CharField(max_length=100, unique=True, db_index=True)
 	user = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name='User')
-	jenis_identitas = models.ForeignKey(JenisNomorIdentitas, on_delete=models.CASCADE, verbose_name='Jenis Nomor Identitas')
+	typeIdentity = models.ForeignKey(JenisNomorIdentitas, on_delete=models.CASCADE, verbose_name='Jenis Nomor Identitas')
 
 	def set_as_username(self):
 		self.user.username = re.sub('[^0-9a-zA-Z]+', '', self.nomor)
@@ -189,10 +197,10 @@ class NomorIdentitasPengguna(models.Model):
 class AccountHistoryAction(models.Model):
 	action = models.CharField(max_length=100)
 	user = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name='User')
-	keterangan = models.CharField(max_length=255, blank=True, null=True)
+	information = models.CharField(max_length=255, blank=True, null=True)
 
-	created_at = models.DateTimeField(editable=False)
-	updated_at = models.DateTimeField(auto_now=True)
+	createdAt = models.DateTimeField(editable=False)
+	updatedAt = models.DateTimeField(auto_now=True)
 
 	def save(self, *args, **kwargs):
 		''' On save, update timestamps '''
