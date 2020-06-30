@@ -19,8 +19,8 @@ apiEndpoints:
 
   fileupload:
     host: '*'
-    paths: /file-upload/*
-    methods: ["POST","PUT","OPTIONS"]
+    paths: /file/*
+    methods: ["GET","POST","PUT","OPTIONS"]
 
   satuankerja:
     host: '*'

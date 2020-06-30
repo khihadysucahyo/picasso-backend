@@ -16,6 +16,8 @@ const Project = new Schema({
     ...attributes
 })
 
-Project.index({ createByID: 1 })
+Project.index({
+  projectName: 1
+})
 
 module.exports = mongoose.models.LogBook || mongoose.model('Project', Project)
