@@ -29,14 +29,14 @@ class AccountViewSet(viewsets.ModelViewSet):
         This view should return a list of all the purchases for
         the user as determined by the username portion of the URL.
         """
-        q = self.request.query_params.get('q', None)
+        search = self.request.query_params.get('search', None)
         blank = ""
-        if q is not None and q is not blank:
+        if search is not None and search is not blank:
             self.queryset = self.queryset.filter(
-                (Q(username=q))|
-                (Q(email=q))|
-                (Q(nama_depan__icontains=q))|
-                (Q(nama_belakang__icontains=q)))
+                (Q(username=search))|
+                (Q(email=search))|
+                (Q(firstName__icontains=search))|
+                (Q(lastName__icontains=search)))
         return self.queryset
 
     def post(self, request, format=None):
