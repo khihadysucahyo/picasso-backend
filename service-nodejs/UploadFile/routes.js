@@ -8,6 +8,6 @@ const detail = require('./controllers/detail')
 
 router.post('/', create)
 router.put('/:id', update)
-router.get('/image/:path/:name', detail)
+router.get('/image/:name', detail)
 
 module.exports = router
