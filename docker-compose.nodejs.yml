@@ -57,9 +57,22 @@ services:
       - ./service-nodejs/apiProject:/usr/src/app
       - /usr/src/app/node_modules
     networks:
-      - logbook
+      - project
     env_file: 
       - .env-nodejs
+
+  attendance:
+    build:
+      context: ./service-nodejs
+    command: npm start
+    volumes:
+      - ./service-nodejs/apiAttendance:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - attendance
+    env_file: 
+      - .env-nodejs
+
 
 networks:
   apigateway:
@@ -79,5 +92,9 @@ networks:
       name: gateway
 
   project:
+    external:
+      name: gateway
+
+  attendance:
     external:
       name: gateway

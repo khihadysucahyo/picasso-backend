@@ -1,7 +1,7 @@
 const { errors, APIError } = require('../utils/exceptions')
 const { onUpdated } = require('../utils/session')
 // Import Model
-const Project = require('../models/Project')
+const Attendance = require('../models/Attendance')
 
 module.exports = async (req, res) => { // eslint-disable-line
     try {
@@ -10,17 +10,19 @@ module.exports = async (req, res) => { // eslint-disable-line
         if (!_id) throw new APIError(errors.notFound)
 
         const {
-          projectName = null,
-          projectDescription = null
+            checkinAt = null,
+            location = null,
+            message = null,
         } = req.body
 
         const data = {
-          projectName,
-          projectDescription,
+          checkinAt,
+          location,
+          message,
             ...onUpdated(session)
         }
 
-        const results = await Project.findByIdAndUpdate(_id, data)
+        const results = await Attendance.findByIdAndUpdate(_id, data)
 
         await res.status(201).send({
             message: 'Update data successfull',

@@ -42,6 +42,11 @@ apiEndpoints:
     paths: /project/*
     methods: ["GET","POST","PUT","DELETE","OPTIONS"]
 
+  attendance:
+    host: '*'
+    paths: /attendance/*
+    methods: ["GET","POST","PUT","DELETE","OPTIONS"]
+
   mockserver:
     host: '*'
     paths: /mock/*
@@ -69,6 +74,9 @@ serviceEndpoints:
 
   project:
     url: '${PROJECT_NODEJS_SERVICE_URI}/api/'
+
+  attendance:
+    url: '${ATTENDANCE_NODEJS_SERVICE_URI}/api/'
 
   mockserver:
     url: '${MOCKSERVER_NODEJS_SERVICE_URI}/api/'
@@ -220,3 +228,20 @@ pipelines:
           - action:
               serviceEndpoint: project
               changeOrigin: true
+
+  attendance:
+    apiEndpoints:
+      - attendance
+    policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
+      - jwt:
+          - action:
+              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+              checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: attendance
+              changeOrigin: true
+              
