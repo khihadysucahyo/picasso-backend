@@ -14,9 +14,9 @@ import (
 
 func (config *ConfigDB) listJabatan(w http.ResponseWriter, r *http.Request) {
 	search := string(r.URL.Query().Get("search"))
-	offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil {
-		offset = 0
+		page = 0
 	}
 	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
 	if err != nil {
@@ -31,7 +31,7 @@ func (config *ConfigDB) listJabatan(w http.ResponseWriter, r *http.Request) {
 		Order("created_at DESC").
 		Count(&total).
 		Limit(limit).
-		Offset(offset).
+		Offset(page).
 		Find(&jabatan).Error; err != nil {
 		utils.ResponseError(w, http.StatusBadRequest, "Invalid body")
 		return
@@ -40,7 +40,7 @@ func (config *ConfigDB) listJabatan(w http.ResponseWriter, r *http.Request) {
 	metaData := models.MetaData{
 		TotalCount:  total,
 		TotalPage:   utils.PageCount(total, limit),
-		CurrentPage: utils.CurrentPage(offset, limit),
+		CurrentPage: utils.CurrentPage(page, limit),
 		PerPage:     limit,
 	}
 

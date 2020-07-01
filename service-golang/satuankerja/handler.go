@@ -4,63 +4,64 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 
-  "github.com/jabardigitalservice/picasso-backend/service-golang/utils"
 	"github.com/jabardigitalservice/picasso-backend/service-golang/models"
+	"github.com/jabardigitalservice/picasso-backend/service-golang/utils"
 )
 
-func (config *ConfigDB)listSatuanKerja(w http.ResponseWriter, r *http.Request) {
+func (config *ConfigDB) listSatuanKerja(w http.ResponseWriter, r *http.Request) {
 	search := string(r.URL.Query().Get("search"))
-	offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil {
-			 offset = 0
+		page = 0
 	}
 	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
 	if err != nil {
-			limit = 20
+		limit = 20
 	}
 	var total int
 
 	var satker []models.SatuanKerja
 
 	if err := config.db.Model(&models.SatuanKerja{}).
-	Where("name_satuan_kerja ILIKE ?", "%"+search+"%").
-	Order("created_at DESC").
-	Count(&total).
-	Limit(limit).
-	Offset(offset).
-	Find(&satker).Error; err != nil {
+		Where("name_satuan_kerja ILIKE ?", "%"+search+"%").
+		Order("created_at DESC").
+		Count(&total).
+		Limit(limit).
+		Offset(page).
+		Find(&satker).Error; err != nil {
 		utils.ResponseError(w, http.StatusBadRequest, "Invalid body")
 		return
 	}
 
 	metaData := models.MetaData{
-		TotalCount: total,
-		TotalPage: utils.PageCount(total, limit),
-		CurrentPage: utils.CurrentPage(offset, limit),
-		PerPage: limit,
+		TotalCount:  total,
+		TotalPage:   utils.PageCount(total, limit),
+		CurrentPage: utils.CurrentPage(page, limit),
+		PerPage:     limit,
 	}
 
 	result := models.ResultsData{
-		Status: http.StatusOK,
+		Status:  http.StatusOK,
 		Success: true,
 		Results: satker,
-		Meta: metaData,
+		Meta:    metaData,
 	}
 
 	utils.ResponseOk(w, result)
 }
 
-func (config *ConfigDB)postSatuanKerja(w http.ResponseWriter, r *http.Request) {
+func (config *ConfigDB) postSatuanKerja(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context().Value("user")
 	sessionUser := ctx.(*jwt.Token).Claims.(jwt.MapClaims)
 	decoder := json.NewDecoder(r.Body)
 	payload := models.SatuanKerja{}
 	if err := decoder.Decode(&payload); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	strSession := sessionUser["email"]
 	userSession := strSession.(string)
@@ -73,11 +74,11 @@ func (config *ConfigDB)postSatuanKerja(w http.ResponseWriter, r *http.Request) {
 	}
 
 	create := models.SatuanKerja{
-		ParentID: payload.ParentID,
-		NameParent: parent.NameSatuanKerja,
+		ParentID:        payload.ParentID,
+		NameParent:      parent.NameSatuanKerja,
 		NameSatuanKerja: payload.NameSatuanKerja,
-		Description: payload.Description,
-		CreatedBy: userSession,
+		Description:     payload.Description,
+		CreatedBy:       userSession,
 	}
 
 	if err := config.db.Create(&create).Error; err != nil {
@@ -88,7 +89,7 @@ func (config *ConfigDB)postSatuanKerja(w http.ResponseWriter, r *http.Request) {
 	utils.ResponseOk(w, response.Value)
 }
 
-func (config *ConfigDB)putSatuanKerja(w http.ResponseWriter, r *http.Request) {
+func (config *ConfigDB) putSatuanKerja(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	ctx := r.Context().Value("user")
@@ -96,8 +97,8 @@ func (config *ConfigDB)putSatuanKerja(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	payload := models.SatuanKerja{}
 	if err := decoder.Decode(&payload); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	strSession := sessionUser["email"]
 	userSession := strSession.(string)
@@ -110,11 +111,11 @@ func (config *ConfigDB)putSatuanKerja(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	update := models.SatuanKerja{
-		ParentID: payload.ParentID,
-		NameParent: parent.NameSatuanKerja,
+		ParentID:        payload.ParentID,
+		NameParent:      parent.NameSatuanKerja,
 		NameSatuanKerja: payload.NameSatuanKerja,
-		Description: payload.Description,
-		CreatedBy: userSession,
+		Description:     payload.Description,
+		CreatedBy:       userSession,
 	}
 
 	if err := config.db.Model(&payload).Where("ID = ?", params["id"]).Update(&update).Error; err != nil {
@@ -125,7 +126,7 @@ func (config *ConfigDB)putSatuanKerja(w http.ResponseWriter, r *http.Request) {
 	utils.ResponseOk(w, response.Value)
 }
 
-func (config *ConfigDB)detailSatuanKerja(w http.ResponseWriter, r *http.Request) {
+func (config *ConfigDB) detailSatuanKerja(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var response models.SatuanKerja
@@ -134,23 +135,23 @@ func (config *ConfigDB)detailSatuanKerja(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	result := models.ResultsData{
-		Status: http.StatusOK,
+		Status:  http.StatusOK,
 		Success: true,
 		Results: response,
 	}
 	utils.ResponseOk(w, result)
 }
 
-func (config *ConfigDB)deleteSatuanKerja(w http.ResponseWriter, r *http.Request) {
+func (config *ConfigDB) deleteSatuanKerja(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	payload := models.SatuanKerja{}
-	if err := config.db.Model(&payload).Where("ID = ?", params["id"]).Delete(&payload).Error;err != nil {
+	if err := config.db.Model(&payload).Where("ID = ?", params["id"]).Delete(&payload).Error; err != nil {
 		utils.ResponseError(w, http.StatusBadRequest, "Data Not Found")
 		return
 	}
 	result := models.ResultsData{
-		Status: http.StatusOK,
+		Status:  http.StatusOK,
 		Success: true,
 		Message: `Data Berhasil Di Hapus`,
 	}
