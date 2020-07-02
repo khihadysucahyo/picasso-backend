@@ -4,6 +4,7 @@ const express = require("express")
 const helmet = require('helmet')
 const cors = require('cors')
 const path = require('path')
+const Raven = require('raven')
 const fileUpload = require('express-fileupload')
 
 // Import middleware
@@ -62,7 +63,7 @@ const route = require('./routes')
 
 //routes
 app.use('/api/project', route)
-
+Raven.config(process.env.SENTRY_URI).install()
 app.listen(8203, () => {
     console.log(`Data Master Project service listening on port 8203`)
 })

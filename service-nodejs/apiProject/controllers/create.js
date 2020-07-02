@@ -1,11 +1,22 @@
 const { errors, APIError } = require('../utils/exceptions')
 const { onCreated } = require('../utils/session')
+const {
+    validationResult
+} = require('express-validator')
 // Import Model
 const Project = require('../models/Project')
 
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const session = req.user
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            res.status(422).json({
+                code: 422,
+                errors: errors.array(),
+            })
+            return
+        }
         const {
             projectName = null,
             projectDescription = null

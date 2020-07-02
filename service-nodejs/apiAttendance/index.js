@@ -4,6 +4,7 @@ const express = require("express")
 const helmet = require('helmet')
 const cors = require('cors')
 const path = require('path')
+const Raven = require('raven')
 const fileUpload = require('express-fileupload')
 
 // Import middleware
@@ -62,6 +63,8 @@ const route = require('./routes')
 
 //routes
 app.use('/api/attendance', route)
+
+Raven.config(process.env.SENTRY_URI).install()
 
 app.listen(8204, () => {
     console.log(`Api Attendance service listening on port 8204`)
