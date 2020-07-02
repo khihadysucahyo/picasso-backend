@@ -15,22 +15,12 @@ const LogBook = new Schema({
     },
     projectName: {
       type: String,
-      required: false,
+      required: true,
       default: null
     },
     nameTask: {
         type: String,
         required: true,
-        default: null
-    },
-    startTimeTask: {
-        type: Date,
-        required: true,
-        default: null
-    },
-    endTimeTask: {
-        type: Date,
-        required: false,
         default: null
     },
     difficultyTask: {

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.639.0",
+    "raven": "^2.6.4",
     "helmet": "^3.21.1"
   }
 }

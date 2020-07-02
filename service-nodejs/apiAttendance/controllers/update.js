@@ -1,11 +1,27 @@
-const { errors, APIError } = require('../utils/exceptions')
-const { onUpdated } = require('../utils/session')
+const {
+    errors,
+    APIError
+} = require('../utils/exceptions')
+const {
+    onUpdated
+} = require('../utils/session')
+const {
+    validationResult
+} = require('express-validator')
 // Import Model
 const Attendance = require('../models/Attendance')
 
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const session = req.user
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            res.status(422).json({
+                code: 422,
+                errors: errors.array(),
+            })
+            return
+        }
         const { _id } = req.params
         if (!_id) throw new APIError(errors.notFound)
 
