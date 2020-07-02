@@ -30,6 +30,19 @@ module.exports = async (req, res, next) => {
           }
         },
       },
+      {
+        '$project': {
+          'startDate': 1,
+          'endDate': 1,
+          'officeHours': 1,
+          'location': 1,
+          'message': 1,
+          'email': '$createdBy.email',
+          'username': '$createdBy.username',
+          'divisi': '$createdBy.divisi',
+          'jabatan': '$createdBy.jabatan'
+        }
+      }
     ]
 
     if (_sort) {

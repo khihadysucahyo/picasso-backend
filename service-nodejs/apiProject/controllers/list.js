@@ -18,6 +18,12 @@ module.exports = async (req, res, next) => {
     const _sort = req.query.sort
 
     const rules = [
+      {
+        '$project': {
+          'projectName': 1,
+          'projectDescription': 1
+        }
+      }
     ]
 
     if (_sort) {
