@@ -22,6 +22,20 @@ module.exports = async (req, res, next) => {
           'createdBy.email': session.email,
         },
       },
+      {
+        '$project': {
+          'projectId': 1,
+          'projectName': 1,
+          'nameTask': 1,
+          'difficultyTask': 1,
+          'evidenceTask': 1,
+          'documentTask': 1,
+          'isDocumentLink': 1,
+          'isMainTask': 1,
+          'organizerTask': 1,
+          'otherInformation': 1
+        }
+      }
     ]
 
     if (_sort) {
