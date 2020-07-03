@@ -30,12 +30,16 @@ module.exports = async (req, res) => { // eslint-disable-line
         const resultLogBook = await LogBook.findById({
             _id: _id
         }).lean()
-        if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.serverError)
-        const evidenceResponse = await updateFile(
-            resultLogBook.evidenceTask.filePath,
-            'image',
-            req.files.evidenceTask
-        )
+        let evidenceResponse = {}
+        if (req.files) {
+            evidenceResponse = await updateFile(
+                resultLogBook.evidenceTask.filePath,
+                'image',
+                req.files.evidenceTask
+            )
+        } else {
+            evidenceResponse = resultLogBook.evidenceTask
+        }
         let documentResponse = {}
         const {
             dateTask = null,
@@ -87,7 +91,6 @@ module.exports = async (req, res) => { // eslint-disable-line
         })
 
     } catch (error) {
-      console.log(error)
       const { code, message, data } = error
 
       if (code && message) {
