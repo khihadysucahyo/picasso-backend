@@ -1,5 +1,3 @@
-var fs = require('fs')
-
 function getRandomString(length) {
   let randomString = ''
   do {
@@ -11,12 +9,6 @@ function getRandomString(length) {
   return randomString
 }
 
-function base64_encode(file) {
-  var bitmap = fs.readFileSync(file)
-  return new Buffer(bitmap).toString('base64')
-}
-
 module.exports = {
-    getRandomString,
-    base64_encode
+    getRandomString
 }
