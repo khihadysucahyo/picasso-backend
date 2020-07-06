@@ -17,38 +17,36 @@ const Filepath = require('../models/Filepath')
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const {
-            name
+            path,
+            name,
         } = req.params
         var options = {
             Bucket: process.env.AWS_S3_BUCKET,
-            Key: `image/${name}`,
+            Key: `${path}/${name}`,
         }
 
         s3.getObject(options, function (err, data) {
             if (err) {
                 throw new APIError(errors.serverError)
             }
-            // const base64str = base64_encode(data.Body)
-            const bytes = new Uint8Array(data.Body)
-            const blobImage = 'data:image/png;base64,' + encode(bytes)
-            res.send(blobImage)
+            res.send(data.Body)
         })
     } catch (error) {
         console.log(error)
-       const {
-           code,
-           message,
-           data
-       } = error
+        const {
+            code,
+            message,
+            data
+        } = error
 
-       if (code && message) {
-           res.status(code).send({
-               code,
-               message,
-               data,
-           })
-       } else {
-           res.status(500).send(errors.serverError)
-       }
-   }
-   }
+        if (code && message) {
+            res.status(code).send({
+                code,
+                message,
+                data,
+            })
+        } else {
+            res.status(500).send(errors.serverError)
+        }
+    }
+}

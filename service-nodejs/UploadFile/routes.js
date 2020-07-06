@@ -4,10 +4,12 @@ const router = express.Router()
 // Import methods
 const create = require('./controllers/create')
 const update = require('./controllers/update')
-const detail = require('./controllers/detail')
+const detailBlobImage = require('./controllers/detailBlobImage')
+const detailFile = require('./controllers/detailFile')
 
 router.post('/', create)
 router.put('/:id', update)
-router.get('/image/:name', detail)
+router.get('/image-blob/:name', detailBlobImage)
+router.get('/:path/:name', detailFile)
 
 module.exports = router
