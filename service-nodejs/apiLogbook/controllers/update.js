@@ -31,16 +31,8 @@ module.exports = async (req, res) => { // eslint-disable-line
             _id: _id
         }).lean()
         let evidenceResponse = {}
-        if (req.files) {
-            evidenceResponse = await updateFile(
-                resultLogBook.evidenceTask.filePath,
-                'image',
-                req.files.evidenceTask
-            )
-        } else {
-            evidenceResponse = resultLogBook.evidenceTask
-        }
         let documentResponse = {}
+
         const {
             dateTask = null,
             projectId = null,
@@ -55,6 +47,15 @@ module.exports = async (req, res) => { // eslint-disable-line
 
         const isTask = String(isMainTask) === 'true'
         const isLink = String(isDocumentLink) === 'true'
+        if (req.files.evidenceTask) {
+            evidenceResponse = await updateFile(
+                resultLogBook.evidenceTask.filePath,
+                'image',
+                req.files.evidenceTask
+            )
+        } else {
+            evidenceResponse = resultLogBook.evidenceTask
+        }
         if (isLink) {
             if (req.body.documentTask.length < 0) throw new APIError(errors.serverError)
             documentResponse = {
@@ -62,11 +63,15 @@ module.exports = async (req, res) => { // eslint-disable-line
                 fileURL: req.body.documentTask
             }
         } else {
-            documentResponse = await updateFile(
-                resultLogBook.evidenceTask.filePath,
-                'document',
-                req.files.documentTask
-            )
+            if (req.files.documentTask) {
+                documentResponse = await updateFile(
+                    resultLogBook.evidenceTask.filePath,
+                    'document',
+                    req.files.documentTask
+                )
+            } else {
+                documentResponse = resultLogBook.documentTask
+            }
         }
 
         const data = {
@@ -92,6 +97,7 @@ module.exports = async (req, res) => { // eslint-disable-line
         })
 
     } catch (error) {
+      console.log(error)
       const { code, message, data } = error
 
       if (code && message) {
