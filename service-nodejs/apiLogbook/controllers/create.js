@@ -59,6 +59,7 @@ module.exports = async (req, res) => { // eslint-disable-line
           projectId,
           projectName,
           nameTask,
+          isDocumentLink: isLink,
           isMainTask: isTask,
           difficultyTask,
           evidenceTask: filePath(evidenceResponse),
