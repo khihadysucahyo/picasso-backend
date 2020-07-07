@@ -47,7 +47,7 @@ module.exports = async (req, res) => { // eslint-disable-line
 
         const isTask = String(isMainTask) === 'true'
         const isLink = String(isDocumentLink) === 'true'
-        if (req.files.evidenceTask) {
+        if (req.files) {
             evidenceResponse = await updateFile(
                 resultLogBook.evidenceTask.filePath,
                 'image',
@@ -63,7 +63,7 @@ module.exports = async (req, res) => { // eslint-disable-line
                 fileURL: req.body.documentTask
             }
         } else {
-            if (req.files.documentTask) {
+            if (req.files) {
                 documentResponse = await updateFile(
                     resultLogBook.evidenceTask.filePath,
                     'document',
