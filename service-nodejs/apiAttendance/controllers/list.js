@@ -24,7 +24,7 @@ module.exports = async (req, res, next) => {
     const rules = [
       {
         $match: {
-          createdAt: {
+          startDate: {
             $gte: start,
             $lt: end
           }
