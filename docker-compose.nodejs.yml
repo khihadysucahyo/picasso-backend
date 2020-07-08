@@ -65,6 +65,8 @@ services:
     build:
       context: ./service-nodejs
     command: npm start
+    enviroment:
+      - TZ=Asia/Jakarta
     volumes:
       - ./service-nodejs/apiAttendance:/usr/src/app
       - /usr/src/app/node_modules
