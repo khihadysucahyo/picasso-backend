@@ -42,7 +42,7 @@ module.exports = async (req, res) => { // eslint-disable-line
         const rulesCheckin = [{
             $match: {
                 'createdBy.email': session.email,
-                startDate: {
+                createdAt: {
                     $gte: start,
                     $lt: end
                 }
@@ -51,7 +51,7 @@ module.exports = async (req, res) => { // eslint-disable-line
         const rulesCheckout = [{
             $match: {
                 'createdBy.email': session.email,
-                endDate: {
+                updatedAt: {
                     $gte: start,
                     $lt: end
                 }
@@ -62,7 +62,7 @@ module.exports = async (req, res) => { // eslint-disable-line
 
         if (new Date(date) <= minCheckout) throw new APIError({
             code: 422,
-            message: 'Belum waktu untuk checkout',
+            message: 'Baru bisa checkout jam 4 sore ya :)',
         })
 
         if (checkUserCheckin.length <= 0) throw new APIError({

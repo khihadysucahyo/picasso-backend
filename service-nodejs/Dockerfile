@@ -14,5 +14,8 @@ RUN npm ci --production && \
 FROM arf95/npm-alpine:latest
 WORKDIR /usr/src/app
 
-COPY .babelrc .
+ENV TZ=Asia/Jakarta
+RUN apk --update add tzdata && \
+cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 COPY --from=build /usr/src/app .
