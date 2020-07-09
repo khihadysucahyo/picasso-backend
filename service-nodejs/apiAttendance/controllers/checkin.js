@@ -37,7 +37,7 @@ module.exports = async (req, res) => { // eslint-disable-line
         const rules = [{
             $match: {
                 'createdBy.email': session.email,
-                startDate: {
+                createdAt: {
                     $gte: start,
                     $lt: end
                 }
