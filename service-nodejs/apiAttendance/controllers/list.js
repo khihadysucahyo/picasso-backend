@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const { errors, APIError } = require('../utils/exceptions')
 const Attendance = require('../models/Attendance')
+const moment = require('moment')
+moment.locale('id')
 
 // eslint-disable-next-line
 module.exports = async (req, res, next) => {
@@ -15,18 +17,24 @@ module.exports = async (req, res, next) => {
     const skip = (page - 1) * pageSize
     const search = req.query.search
     const _sort = req.query.sort
-    let start = new Date();
-    start.setHours(0, 0, 0, 0)
+    let start = moment().set({
+      "hour": 0,
+      "minute": 0,
+      "second": 0
+    }).format()
 
-    let end = new Date();
-    end.setHours(23, 59, 59, 999)
+    let end = moment().set({
+      "hour": 23,
+      "minute": 59,
+      "second": 59
+    }).format()
 
     const rules = [
       {
         $match: {
           createdAt: {
-            $gte: start,
-            $lt: end
+            $gte: new Date(start),
+            $lt: new Date(end)
           }
         },
       },
@@ -62,12 +70,15 @@ module.exports = async (req, res, next) => {
           },
         },
       })
-
     }
 
     // Get page count
     const count = await Attendance.countDocuments({
-      'createdBy.email': session.email
+      'createdBy.email': session.email,
+      startDate: {
+        $gte: new Date(start),
+        $lt: new Date(end)
+      }
     })
     const filtered = await Attendance.aggregate([
       ...rules,
