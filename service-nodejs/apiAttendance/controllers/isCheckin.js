@@ -1,7 +1,8 @@
 const {
     errors,
 } = require('../utils/exceptions')
-
+const moment = require('moment')
+moment.locale('id')
 // Import Model
 const Attendance = require('../models/Attendance')
 
@@ -9,17 +10,23 @@ module.exports = async (req, res) => { // eslint-disable-line
     try {
         const session = req.user
 
-        let start = new Date()
-        start.setHours(0, 0, 0, 0)
+        let start = moment().set({
+            "hour": 0,
+            "minute": 0,
+            "second": 0
+        }).format()
 
-        let end = new Date()
-        end.setHours(23, 59, 59, 999)
+        let end = moment().set({
+            "hour": 23,
+            "minute": 59,
+            "second": 59
+        }).format()
         const rules = [{
             $match: {
                 'createdBy.email': session.email,
                 createdAt: {
-                    $gte: start,
-                    $lt: end
+                    $gte: new Date(start),
+                    $lt: new Date(end)
                 }
             },
         }]

@@ -11,6 +11,8 @@ const {
 const {
     calculateHours
 } = require('../utils/functions')
+const moment = require('moment')
+moment.locale('id')
 
 // Import Model
 const Attendance = require('../models/Attendance')
@@ -30,21 +32,30 @@ module.exports = async (req, res) => { // eslint-disable-line
             date = null,
         } = req.body
 
-        let start = new Date()
-        start.setHours(0, 0, 0, 0)
+        let start = moment().set({
+            "hour": 0,
+            "minute": 0,
+            "second": 0
+        }).format()
 
-        let end = new Date()
-        end.setHours(23, 59, 59, 999)
+        let end = moment().set({
+            "hour": 23,
+            "minute": 59,
+            "second": 59
+        }).format()
 
-        let minCheckout = new Date();
-        minCheckout.setHours(16, 0, 0, 0)
+        let minCheckout = moment().set({
+            "hour": 16,
+            "minute": 0,
+            "second": 0
+        }).format()
 
         const rulesCheckin = [{
             $match: {
                 'createdBy.email': session.email,
                 createdAt: {
-                    $gte: start,
-                    $lt: end
+                    $gte: new Date(start),
+                    $lt: new Date(end)
                 }
             },
         }]
@@ -52,15 +63,15 @@ module.exports = async (req, res) => { // eslint-disable-line
             $match: {
                 'createdBy.email': session.email,
                 updatedAt: {
-                    $gte: start,
-                    $lt: end
+                    $gte: new Date(start),
+                    $lt: new Date(end)
                 }
             },
         }]
         const checkUserCheckin = await Attendance.aggregate(rulesCheckin)
         const checkUserCheckout = await Attendance.aggregate(rulesCheckout)
 
-        if (new Date(date) <= minCheckout) throw new APIError({
+        if (new Date(date) <= new Date(minCheckout)) throw new APIError({
             code: 422,
             message: 'Baru bisa checkout jam 4 sore ya :)',
         })

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const mongooseLogs = require('mongoose-activitylogs')
-
+const moment = require('moment')
+moment.locale('id')
 module.exports = {
     createdBy: {
         _id: {
@@ -21,7 +22,7 @@ module.exports = {
     },
     createdAt: {
         type: Date,
-        default: Date.now(),
+        default: moment().format(),
     },
     updatedBy: {
         _id: {

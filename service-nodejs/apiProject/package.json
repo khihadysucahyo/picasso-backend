@@ -25,6 +25,7 @@
   "dependencies": {
     "helmet": "^3.21.1",
     "raven": "^2.6.4",
+    "moment": "^2.27.0",
     "express-validator": "^6.6.0"
   }
 }
