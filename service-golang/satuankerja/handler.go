@@ -17,6 +17,8 @@ func (config *ConfigDB) listSatuanKerja(w http.ResponseWriter, r *http.Request) 
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil {
 		page = 0
+	} else {
+		page--
 	}
 	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
 	if err != nil {

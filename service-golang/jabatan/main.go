@@ -6,13 +6,14 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/jabardigitalservice/picasso-backend/service-golang/middleware"
+	auth "github.com/jabardigitalservice/picasso-backend/service-golang/middleware"
 )
 
 func newRouter(config *ConfigDB) (router *mux.Router) {
 	router = mux.NewRouter()
 	router.HandleFunc("/api/jabatan/list", config.listJabatan).Methods("GET")
 	router.HandleFunc("/api/jabatan/create", config.postJabatan).Methods("POST")
+	router.HandleFunc("/api/jabatan/list/by-satuan-kerja/{id}", config.listJabatanBySatuanKerja).Methods("GET")
 	router.HandleFunc("/api/jabatan/update/{id}", config.putJabatan).Methods("PUT")
 	router.HandleFunc("/api/jabatan/detail/{id}", config.detailJabatan).Methods("GET")
 	router.HandleFunc("/api/jabatan/delete/{id}", config.deleteJabatan).Methods("DELETE")

@@ -19,12 +19,20 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = (
+            'id',
             'email',
             'nama_lengkap',
             'username',
+            'firstName',
+            'lastName',
+            'birthPlace',
+            'birthDate',
+            'telephone',
             'is_active',
             'photo',
+            'idDivisi',
             'divisi',
+            'idJabatan',
             'jabatan'
         )
 

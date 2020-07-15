@@ -2,7 +2,7 @@ const moment = require('moment')
 moment.locale('id')
 module.exports = {
     onUpdated: (session) => ({
-        updatedAt: moment().format(),
+        updatedAt: new Date(moment().format()),
         updatedBy: {
             _id: session ? session.user_id : null,
             email: session ? session.email : null,
