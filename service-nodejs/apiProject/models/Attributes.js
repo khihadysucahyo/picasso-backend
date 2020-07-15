@@ -23,7 +23,7 @@ module.exports = {
     },
     createdAt: {
         type: Date,
-        default: moment().format(),
+        default: new Date(moment().format()),
     },
     updatedBy: {
         _id: {

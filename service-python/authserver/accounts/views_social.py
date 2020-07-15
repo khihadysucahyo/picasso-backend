@@ -44,12 +44,18 @@ def oauth2_signin(request):
                 if user.exists() and user.count() == 1:
                     user_obj = user.first()
                 else:
-                    user_obj = Account.objects.create_user(
-                        data['email'],
-                        data['given_name'],
-                        data['given_name'],
-                        data['family_name'],
-                        data['picture']
+                    # user_obj = Account.objects.create_user(
+                    #     data['email'],
+                    #     data['given_name'],
+                    #     data['given_name'],
+                    #     data['family_name'],
+                    #     data['picture']
+                    # )
+                    return Response(
+                        {'errors': {
+                            'message': 'User belum terdaftar',
+                        }},
+                        status=status.HTTP_400_BAD_REQUEST,
                     )
                 ip = get_client_ip(request)
                 token = create_token(user_obj)
@@ -78,8 +84,8 @@ def oauth2_signin(request):
 @permission_classes([IsAuthenticated])
 def detailUser(request):
     try:
-        akun = Account.objects.get(email=request.user)
-        serializer = AccountSerializer(akun)
+        account = Account.objects.get(email=request.user)
+        serializer = AccountSerializer(account)
         responseData = {
             'data': serializer.data
         }

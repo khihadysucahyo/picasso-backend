@@ -17,6 +17,8 @@ func (config *ConfigDB) listJabatan(w http.ResponseWriter, r *http.Request) {
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil {
 		page = 0
+	} else {
+		page--
 	}
 	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
 	if err != nil {
@@ -28,6 +30,49 @@ func (config *ConfigDB) listJabatan(w http.ResponseWriter, r *http.Request) {
 
 	if err := config.db.Model(&models.Jabatan{}).
 		Where("name_jabatan ILIKE ?", "%"+search+"%").
+		Order("created_at DESC").
+		Count(&total).
+		Offset(page).
+		Limit(limit).
+		Find(&jabatan).Error; err != nil {
+		utils.ResponseError(w, http.StatusBadRequest, "Invalid body")
+		return
+	}
+
+	metaData := models.MetaData{
+		TotalCount:  total,
+		TotalPage:   utils.PageCount(total, limit),
+		CurrentPage: utils.CurrentPage(page, limit),
+		PerPage:     limit,
+	}
+
+	result := models.ResultsData{
+		Status:  http.StatusOK,
+		Success: true,
+		Results: jabatan,
+		Meta:    metaData,
+	}
+
+	utils.ResponseOk(w, result)
+}
+
+func (config *ConfigDB) listJabatanBySatuanKerja(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	var jabatan []models.Jabatan
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil {
+		page = 0
+	} else {
+		page--
+	}
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		limit = 100
+	}
+	var total int
+	if err := config.db.Model(&models.Jabatan{}).
+		Where("satuan_kerja_id = ?", params["id"]).
 		Order("created_at DESC").
 		Count(&total).
 		Limit(limit).
@@ -50,7 +95,6 @@ func (config *ConfigDB) listJabatan(w http.ResponseWriter, r *http.Request) {
 		Results: jabatan,
 		Meta:    metaData,
 	}
-
 	utils.ResponseOk(w, result)
 }
 
