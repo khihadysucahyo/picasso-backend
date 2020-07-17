@@ -22,7 +22,7 @@ const generateReport = (docDefinition, filePath) => {
               fs.unlinkSync(filePath)
               resolve(pdfFile)
           })
-          pdfDoc.end();
+          pdfDoc.end()
       } catch (err) {
           reject(err)
       }
@@ -45,7 +45,53 @@ const logBook = (data) => {
     return records
 }
 
+const logBookPerDay = (data) => {
+    let records = []
+    data['logBookPerDay'].forEach((item, index) => {
+        records.push({
+            margin: [0, 15, 0, 0],
+            fontSize: 11,
+            bold: true,
+            text: 'Hari, Tanggal : ' + moment(item._id).format('dddd, DD MMMM YYYY')
+        })
+
+        item['items'].forEach((itemB, indexB) => {
+            records.push(
+                {
+                    margin: [10, 10, 0, 0],
+                    fontSize: 11,
+                    text: (indexB+1) + '. ' + `${itemB.projectName} - ${itemB.nameTask}`
+                },
+                {
+                    margin: [20, 0, 0, 0],
+                    fontSize: 11,
+                    text: 'a. FOTO'
+                },
+                {
+                    margin: [20, 0, 0, 0],
+                    width: 100,
+                    text: itemB.evidenceTaskPath,
+                    // image: 'static/images/logo_jabarprov.png',
+                    // width: 150
+                },
+                {
+                    margin: [20, 0, 0, 0],
+                    fontSize: 11,
+                    text: 'b. LINK'
+                },
+                {
+                    margin: [20, 0, 0, 0],
+                    fontSize: 11,
+                    text: itemB.evidenceTaskURL
+                }
+            )
+        })
+    })
+    return records
+}
+
 const reportForm = (data) => {
+
   const { user } = data
   const docDefinition = {
       content: [
@@ -65,53 +111,45 @@ const reportForm = (data) => {
           {
             text: 'BULAN JULI 2020',
             alignment: 'center',
-            bold: true,
-            fontSize: 11
+            style: 'boldNormal'
           },
           {
             text: 'IMPLEMENTASI DAN PEMELIHARAAN INFRASTRUKTUR COMMAND CENTER',
             alignment: 'center',
             margin: [0, 85, 0, 0],
-            bold: true,
-            fontSize: 11
+            style: 'boldNormal'
           },
           {
             text: `${user.username}`,
             margin: [0, 85, 0, 0],
             alignment: 'center',
-            bold: true,
-            fontSize: 11
+            style: 'boldNormal'
           },
           {
             text: `${user.divisi}`,
             alignment: 'center',
-            bold: true,
-            fontSize: 11
+            style: 'boldNormal'
           },
           {
             text: 'TENAGA AHLI PENGELOLA LAYANAN DIGITAL',
             alignment: 'center',
             margin: [0, 105, 0, 0],
-            bold: true,
-            fontSize: 11
+            style: 'boldNormal'
           },
           {
             text: 'DINAS KOMUNIKASI INFORMATIKA',
             alignment: 'center',
-            bold: true,
-            fontSize: 11
+            style: 'boldNormal'
           },
           {
             text: 'PROVINSI JAWA BARAT',
             alignment: 'center',
-            bold: true,
-            fontSize: 11
+            style: 'boldNormal'
           },
           {
             text: '2020',
             alignment: 'center',
-            bold: true,
-            fontSize: 11
+            style: 'boldNormal'
           },
           // BODY   
           {
@@ -133,8 +171,7 @@ const reportForm = (data) => {
           },
           {
             margin: [0, 25, 0, 0],
-            bold: true,
-            fontSize: 11,
+            style: 'boldNormal',
             table: {
                 headerRows: 1,
                 widths: [ 70, 120, '*' ],
@@ -154,8 +191,7 @@ const reportForm = (data) => {
          },
          {
             margin: [0, 5, 0, 0],
-            bold: true,
-            fontSize: 11,
+            style: 'boldNormal',
             table: {
                 headerRows: 1,
                 widths: [ 120, 10, 10, '*' ],
@@ -196,15 +232,13 @@ const reportForm = (data) => {
          {
             margin: [0, 10, 0, 0],
             text: 'RINCIAN HASIL KERJA SELAMA BULAN JULI',
-            bold: true,
-            fontSize: 11
+            style: 'boldNormal'
          },
-         // DATA LAPORAN 
+         // RINCIAN TABEL LAPORAN
          {
             alignment: 'center',
             margin: [0, 5, 0, 0],
-            bold: true,
-            fontSize: 11,
+            style: 'boldNormal',
             table: {
                 headerRows: 2,
                 widths: [ 20, 80, '*', 100, 100, 100, 100 ],
@@ -230,8 +264,7 @@ const reportForm = (data) => {
         // EVIDENCE   
         {
             alignment: 'center',
-            bold: true,
-            fontSize: 11,
+            style: 'boldNormal',
             pageBreak: 'before',
             pageOrientation: 'landscape',
             text: 'LAMPIRAN'
@@ -240,34 +273,7 @@ const reportForm = (data) => {
             fontSize: 11,
             text: 'Berikut adalah evidence daftar uraian kegiatan harian yang didetailkan setiap harinya dibulan MARET 2020 ini.'
         },
-        // TODO LOOPING
-        {
-            margin: [0, 15, 0, 0],
-            fontSize: 11,
-            text: 'Hari, Tanggal : Rabu, 26 Februari 2020'
-        },
-        {
-            margin: [10, 0, 0, 0],
-            fontSize: 11,
-            text: '1. [PROJECT/PRODUCT] - NAMA TASK'
-        },
-        {
-            margin: [20, 0, 0, 0],
-            fontSize: 11,
-            text: 'a. FOTO'
-        },
-        {
-            margin: [20, 0, 0, 0],
-            width: 100,
-            image: 'static/images/logo_jabarprov.png',
-            width: 150
-
-        },
-        {
-            margin: [20, 0, 0, 0],
-            fontSize: 11,
-            text: 'b. LINK'
-        }
+        ...logBookPerDay(data)
       ],
       styles: {
           header: {
@@ -280,6 +286,10 @@ const reportForm = (data) => {
             color: 'black',
             fillColor: '#1aa3ff'
           },
+          boldNormal: {
+            bold: true,
+            fontSize: 11
+          }
       },
       defaultStyle: {
           fontSize: 12,

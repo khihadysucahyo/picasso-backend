@@ -13,7 +13,7 @@ const moment = require('moment')
 module.exports = async (req, res, next) => {
     try {
         let sort = {
-            dateTask: -1,
+            dateTask: 1,
         }
         const {
             userId
@@ -49,7 +49,22 @@ module.exports = async (req, res, next) => {
         const logBook = await LogBook
             .aggregate(rules)
             .sort(sort)
+        
+        // Get logbook per Day
+        rules.push({
+            $group: {
+                _id: "$dateTask",
+                items: {
+                    $push: '$$ROOT'
+                }
+            }
+        })
 
+        const logBookPerDay = await LogBook
+            .aggregate(rules)
+            .sort(sort)
+
+    
         if (!logBook) throw new APIError(errors.serverError)       
 
         const {
@@ -59,7 +74,8 @@ module.exports = async (req, res, next) => {
 
         const layout = reportForm({
             user: req.user,
-            logBook: logBook
+            logBook: logBook,
+            logBookPerDay: logBookPerDay
         })
 
         const month = req.query.date || moment().format('YYYY')
