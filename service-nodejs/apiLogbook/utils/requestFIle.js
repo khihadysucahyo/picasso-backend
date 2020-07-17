@@ -19,7 +19,7 @@ async function postFile(fileType, file) {
     }
     const response = {
         filePath: params.Key,
-        fileURL: process.env.AWS_S3_URL + `/${params.Key}`,
+        fileURL: process.env.AWS_S3_CLOUDFRONT + `/${params.Key}`,
     }
     await s3.upload(params, async function (err, data) {
         //handle error
@@ -62,7 +62,7 @@ async function updateFile(lastFilePath, fileType, file) {
 
     const response = {
         filePath: params.Key,
-        fileURL: process.env.AWS_S3_URL + `/${params.Key}`,
+        fileURL: process.env.AWS_S3_CLOUDFRONT + `/${params.Key}`,
     }
     await s3.upload(params, async function (err, data) {
         //handle error
