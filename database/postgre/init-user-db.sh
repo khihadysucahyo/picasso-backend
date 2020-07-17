@@ -3,12 +3,12 @@ set -o errexit
 
 create_user() {
   psql -v ON_ERROR_STOP=1 --username "$POSTGRESQL_USER" <<-EOSQL
-    CREATE USER adminpostgre WITH PASSWORD 'plokijuh';
-    ALTER ROLE adminpostgre SET client_encoding TO 'utf8';
-    ALTER ROLE adminpostgre SET default_transaction_isolation TO 'read committed';
-    ALTER ROLE adminpostgre SET timezone TO 'Asia/Jakarta';
-    ALTER ROLE adminpostgre WITH PASSWORD 'plokijuh';
-    ALTER USER adminpostgre WITH SUPERUSER;
+    CREATE USER $POSTGRESQL_USER WITH PASSWORD $POSTGRESQL_PASSWORD;
+    ALTER ROLE $POSTGRESQL_USER SET client_encoding TO 'utf8';
+    ALTER ROLE $POSTGRESQL_USER SET default_transaction_isolation TO 'read committed';
+    ALTER ROLE $POSTGRESQL_USER SET timezone TO $POSTGRESQL_TIMEZONE;
+    ALTER ROLE $POSTGRESQL_USER WITH PASSWORD $POSTGRESQL_PASSWORD;
+    ALTER USER $POSTGRESQL_USER WITH SUPERUSER;
 EOSQL
 }
 
@@ -18,7 +18,7 @@ create_database() {
 	echo "  Creating user and database '$database'"
 	psql -v ON_ERROR_STOP=1 --username "$POSTGRESQL_USER" <<-EOSQL
 	    CREATE DATABASE $database;
-	    GRANT ALL PRIVILEGES ON DATABASE $database TO "adminpostgre";
+	    GRANT ALL PRIVILEGES ON DATABASE $database TO "$POSTGRESQL_USER";
 EOSQL
 }
 

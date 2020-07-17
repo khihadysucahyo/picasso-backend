@@ -22,6 +22,8 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_MULTIPLE_DATABASES=authserver,datamaster
+      - POSTGRESQL_PASSWORD=example
+      - POSTGRESQL_TIMEZONE='Asia/Jakarta'
       - POSTGRES_HOST_AUTH_METHOD=trust
 
   redis:

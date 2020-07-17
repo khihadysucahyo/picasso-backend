@@ -30,6 +30,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         the user as determined by the username portion of the URL.
         """
         search = self.request.query_params.get('search', None)
+        idDivisi = self.request.query_params.get('idDivisi', None)
         blank = ""
         if search is not None and search is not blank:
             self.queryset = self.queryset.filter(
@@ -37,6 +38,9 @@ class AccountViewSet(viewsets.ModelViewSet):
                 (Q(email=search))|
                 (Q(firstName__icontains=search))|
                 (Q(lastName__icontains=search)))
+        if idDivisi is not None and idDivisi is not blank:
+            self.queryset = self.queryset.filter(
+                (Q(idDivisi=idDivisi)))
         return self.queryset
 
     def post(self, request, format=None):

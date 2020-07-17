@@ -40,7 +40,7 @@ def oauth2_signin(request):
             r = requests.get("https://www.googleapis.com/oauth2/v2/userinfo", params=PARAMS)
             data = json.loads(r.text)
             try:
-                user = Account.objects.filter(Q(username=data['given_name'])|Q(email=data['email'])).distinct()
+                user = Account.objects.filter(Q(email=data['email'])).distinct()
                 if user.exists() and user.count() == 1:
                     user_obj = user.first()
                 else:
