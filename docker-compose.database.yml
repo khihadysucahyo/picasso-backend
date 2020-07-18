@@ -22,7 +22,7 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_MULTIPLE_DATABASES=authserver,datamaster
-      - POSTGRESQL_PASSWORD=example
+      - POSTGRESQL_PASSWORD=plokijuh
       - POSTGRESQL_TIMEZONE='Asia/Jakarta'
       - POSTGRES_HOST_AUTH_METHOD=trust
 
@@ -33,6 +33,12 @@ services:
     ports:
       - 6379:6379
 
+  nats:
+    image : nats
+    restart: always
+    ports:
+      - 4222:4222
+
 networks:
   mongo:
     external:
@@ -41,5 +47,8 @@ networks:
     external:
       name: gateway
   redis:
+    external:
+      name: gateway
+  nats:
     external:
       name: gateway

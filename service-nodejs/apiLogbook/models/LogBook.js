@@ -39,6 +39,11 @@ const LogBook = new Schema({
             required: false,
             default: null,
         },
+        fileBlob: {
+            type: String,
+            required: false,
+            default: null,
+        },
     },
     documentTask: {
         filePath: {

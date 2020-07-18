@@ -25,5 +25,6 @@ module.exports = {
     filePath: (file) => ({
         filePath: file ? file.filePath : null,
         fileURL: file ? file.fileURL : null,
+        fileBlob: file ? file.fileBlob : null,
     }),
 }

@@ -54,8 +54,7 @@ const logBookPerDay = (data) => {
             bold: true,
             text: 'Hari, Tanggal : ' + moment(item._id).format('dddd, DD MMMM YYYY')
         })
-
-        item['items'].forEach((itemB, indexB) => {
+        item['items'].forEach(async (itemB, indexB) => {
             records.push(
                 {
                     margin: [10, 10, 0, 0],
@@ -68,11 +67,9 @@ const logBookPerDay = (data) => {
                     text: 'a. FOTO'
                 },
                 {
-                    margin: [20, 0, 0, 0],
-                    width: 100,
-                    text: itemB.evidenceTaskPath,
-                    // image: 'static/images/logo_jabarprov.png',
-                    // width: 150
+                    margin: [80, 0, 10, 0],
+                    image: itemB.evidenceBlob,
+                    width: 400,
                 },
                 {
                     margin: [20, 0, 0, 0],
@@ -120,7 +117,7 @@ const reportForm = (data) => {
             style: 'boldNormal'
           },
           {
-            text: `${user.username}`,
+            text: `${user.first_name} ${user.last_name}`,
             margin: [0, 85, 0, 0],
             alignment: 'center',
             style: 'boldNormal'
@@ -200,7 +197,7 @@ const reportForm = (data) => {
                         { text: 'Nama' },
                         { text: '' },
                         { text: ':' },
-                        { text: 'Khi Hady Sucahyo' }
+                        { text: `${user.first_name} ${user.last_name}` }
                     ],
                     [ 
                         { text: 'Divisi' },
@@ -220,9 +217,9 @@ const reportForm = (data) => {
                         { text: ':' },
                         {
                             ol: [
-                                'item 1',
-                                'Lorem ipsum dolor sit amet, consectetur ..',
-                                'item 3',
+                                '1. ',
+                                '2. ',
+                                '3. ',
                             ]
                         }
                     ],

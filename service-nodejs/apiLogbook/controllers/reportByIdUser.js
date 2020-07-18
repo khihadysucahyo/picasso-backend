@@ -8,7 +8,11 @@ const {
 } = require('../utils/generateReport')
 const LogBook = require('../models/LogBook')
 const moment = require('moment')
-
+const axios = require('axios')
+const servers_nats = [process.env.NATS_URI]
+const nats = require('nats').connect({
+    'servers': servers_nats
+})
 // eslint-disable-next-line
 module.exports = async (req, res, next) => {
     try {
@@ -39,6 +43,7 @@ module.exports = async (req, res, next) => {
                     'otherInformation': 1,
                     'evidenceTaskPath': '$evidenceTask.filePath',
                     'evidenceTaskURL': '$evidenceTask.fileURL',
+                    'evidenceBlob': '$evidenceTask.fileBlob',
                     'documentTaskPath': '$documentTask.filePath',
                     'documentTaskURL': '$documentTask.fileURL',
                 }
@@ -63,28 +68,28 @@ module.exports = async (req, res, next) => {
         const logBookPerDay = await LogBook
             .aggregate(rules)
             .sort(sort)
-
-    
         if (!logBook) throw new APIError(errors.serverError)       
+        nats.requestOne('userDetail', String(userId), {}, 300, async function(response) {
+            // `NATS` is the library.
+            if (response.code) {
+                res.status(500).send(errors.serverError)
+            }
+            const responseParse = JSON.parse(response)[0]
+            const user = JSON.parse(responseParse)
+            const layout = reportForm({
+                user: user,
+                logBook: logBook,
+                logBookPerDay: logBookPerDay
+            })
+            const fullName = `${user.first_name}_${user.last_name}`
+            const month = req.query.date || moment().format('YYYY')
+            const fileName = `LaporanPLD_${month}_${fullName.replace(/[^\w\s]/gi, '')}_${user.jabatan}.pdf`
+            const pdfFile = await generateReport(layout, fileName)
 
-        const {
-            username,
-            jabatan
-        } = req.user
-
-        const layout = reportForm({
-            user: req.user,
-            logBook: logBook,
-            logBookPerDay: logBookPerDay
+            res.set('Content-disposition', 'attachment; filename=' + fileName.replace(/[-\s]/g, '_'))
+            res.set('Content-Type', 'attachment')
+            res.status(200).send(pdfFile)
         })
-
-        const month = req.query.date || moment().format('YYYY')
-        const fileName = `LaporanPLD_${month}_${username}_${jabatan}.pdf`
-        const pdfFile = await generateReport(layout, fileName)
-
-        res.set('Content-disposition', 'attachment; filename=' + fileName.replace(/[-\s]/g, '_'))
-        res.set('Content-Type', 'attachment')
-        res.status(200).send(pdfFile)
     } catch (error) {
         next(error)
     }

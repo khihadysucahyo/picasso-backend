@@ -19,6 +19,13 @@ services:
     env_file: 
       - .env-golang
 
+  event:
+    build:
+      context: ./service-golang
+    command: "eventUser"
+    env_file: 
+      - .env-golang
+
 networks:
   satuankerja:
     external:
