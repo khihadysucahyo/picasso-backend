@@ -52,6 +52,7 @@
     "mocha": "^7.2.0",
     "moment": "^2.27.0",
     "mongoose-activitylogs": "^2.1.15",
+    "pdfmake": "^0.1.66",
     "raven": "^2.6.4",
     "redis": "^2.8.0",
     "uuid": "^7.0.2",
