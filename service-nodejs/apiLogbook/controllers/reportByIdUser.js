@@ -62,9 +62,8 @@ module.exports = async (req, res, next) => {
 
         const logBookPerDay = await LogBook
             .aggregate(rules)
-            .sort(sort)
+            .sort({ _id: 1 })
 
-    
         if (!logBook) throw new APIError(errors.serverError)       
 
         const {
@@ -89,4 +88,3 @@ module.exports = async (req, res, next) => {
         next(error)
     }
 }
-
