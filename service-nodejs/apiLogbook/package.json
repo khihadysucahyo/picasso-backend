@@ -29,6 +29,7 @@
     "axios": "^0.19.2",
     "raven": "^2.6.4",
     "moment": "^2.27.0",
+    "pdfmake": "^0.1.66",
     "express-validator": "^6.6.0"
   }
 }
