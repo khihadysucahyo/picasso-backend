@@ -8,7 +8,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls && nyc report --reporter=lcov",
     "build": "lerna exec NODE_ENV=production npm run-script build",
     "prestart": "npm run-script build",
-    "start": "lerna exec NODE_ENV=development npm start"
+    "start": "lerna exec NODE_ENV=development npm start watch --parallel --stream"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -32,6 +32,8 @@
   "dependencies": {
     "accesscontrol": "^2.2.1",
     "aws-sdk": "^2.639.0",
+    "axios": "^0.19.2",
+    "canvas": "^2.6.1",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "compression": "^1.7.4",

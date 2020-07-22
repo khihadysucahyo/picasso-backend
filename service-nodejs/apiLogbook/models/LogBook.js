@@ -38,7 +38,7 @@ const LogBook = new Schema({
             type: String,
             required: false,
             default: null,
-        },
+        }
     },
     documentTask: {
         filePath: {
@@ -61,6 +61,11 @@ const LogBook = new Schema({
         type: Boolean,
         required: false,
         default: true
+    },
+    workPlace: {
+        type: String,
+        required: false,
+        default: null
     },
     organizerTask: {
         type: String,

@@ -21,7 +21,7 @@ module.exports = async (req, res, next) => {
 
         res.status(200).json(results)
     } catch (error) {
-        next(error)
+        next(error) 
     }
 }
 

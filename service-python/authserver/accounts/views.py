@@ -36,11 +36,11 @@ class AccountViewSet(viewsets.ModelViewSet):
             self.queryset = self.queryset.filter(
                 (Q(username=search))|
                 (Q(email=search))|
-                (Q(firstName__icontains=search))|
-                (Q(lastName__icontains=search)))
+                (Q(first_name__icontains=search))|
+                (Q(last_name__icontains=search)))
         if idDivisi is not None and idDivisi is not blank:
             self.queryset = self.queryset.filter(
-                (Q(idDivisi=idDivisi)))
+                (Q(id_divisi=idDivisi)))
         return self.queryset
 
     def post(self, request, format=None):

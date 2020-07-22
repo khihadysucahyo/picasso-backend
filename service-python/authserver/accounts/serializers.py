@@ -23,16 +23,16 @@ class AccountSerializer(serializers.ModelSerializer):
             'email',
             'nama_lengkap',
             'username',
-            'firstName',
-            'lastName',
-            'birthPlace',
-            'birthDate',
+            'first_name',
+            'last_name',
+            'birth_place',
+            'birth_date',
             'telephone',
             'is_active',
             'photo',
-            'idDivisi',
+            'id_divisi',
             'divisi',
-            'idJabatan',
+            'id_jabatan',
             'jabatan'
         )
 
@@ -65,7 +65,7 @@ class AccountLoginSerializer(serializers.HyperlinkedModelSerializer):
         if user.exists() and user.count() == 1:
             user_obj = user.first()
         else:
-            raise ValidationError("Usernam/Email yang anda masukkan tidak terdaftar")
+            raise ValidationError("Username/Email yang anda masukkan tidak terdaftar")
         if user_obj:
             if not user_obj.check_password(password):
                 raise ValidationError("Password yang anda masukkan salah")
