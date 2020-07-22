@@ -19,10 +19,12 @@ services:
     env_file: 
       - .env-golang
 
-  event:
+  eventuser:
     build:
       context: ./service-golang
-    command: "eventUser"
+    command: "eventuser"
+    networks:
+      - eventuser
     env_file: 
       - .env-golang
 
@@ -32,5 +34,9 @@ networks:
       name: gateway
 
   jabatan:
+    external:
+      name: gateway
+
+  eventuser:
     external:
       name: gateway

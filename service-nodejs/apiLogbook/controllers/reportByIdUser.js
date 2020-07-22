@@ -8,7 +8,6 @@ const {
 } = require('../utils/generateReport')
 const LogBook = require('../models/LogBook')
 const moment = require('moment')
-const axios = require('axios')
 const servers_nats = [process.env.NATS_URI]
 const nats = require('nats').connect({
     'servers': servers_nats
@@ -31,6 +30,20 @@ module.exports = async (req, res, next) => {
                 },
             },
             {
+                '$lookup': {
+                    'from': 'blobsfiles',
+                    'localField': '_id',
+                    'foreignField': 'logBookId',
+                    'as': 'blobsEvidence'
+                }
+            },
+            {
+                '$unwind': {
+                    'path': '$blobsEvidence',
+                    'includeArrayIndex': 'arrayIndex'
+                }
+            },
+            {
                 '$project': {
                     'dateTask': 1,
                     'projectId': 1,
@@ -46,6 +59,7 @@ module.exports = async (req, res, next) => {
                     'evidenceBlob': '$evidenceTask.fileBlob',
                     'documentTaskPath': '$documentTask.filePath',
                     'documentTaskURL': '$documentTask.fileURL',
+                    'blobsEvidence': '$blobsEvidence.blob'
                 }
             }
         ]
@@ -94,4 +108,3 @@ module.exports = async (req, res, next) => {
         next(error)
     }
 }
-

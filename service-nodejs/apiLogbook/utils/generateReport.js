@@ -68,7 +68,7 @@ const logBookPerDay = (data) => {
                 },
                 {
                     margin: [80, 0, 10, 0],
-                    image: itemB.evidenceBlob,
+                    image: itemB.blobsEvidence,
                     width: 400,
                 },
                 {
@@ -79,7 +79,7 @@ const logBookPerDay = (data) => {
                 {
                     margin: [20, 0, 0, 0],
                     fontSize: 11,
-                    text: itemB.evidenceTaskURL
+                    text: itemB.documentTaskURL
                 }
             )
         })
@@ -88,7 +88,9 @@ const logBookPerDay = (data) => {
 }
 
 const reportForm = (data) => {
-
+  const month = moment().format('MMMM')
+  const year = moment().format('YYYY')
+  
   const { user } = data
   const docDefinition = {
       content: [
@@ -106,7 +108,7 @@ const reportForm = (data) => {
             fontSize: 16
           },
           {
-            text: 'BULAN JULI 2020',
+            text: `BULAN ${month} ${year}`,
             alignment: 'center',
             style: 'boldNormal'
           },
@@ -144,7 +146,7 @@ const reportForm = (data) => {
             style: 'boldNormal'
           },
           {
-            text: '2020',
+            text: `${year}`,
             alignment: 'center',
             style: 'boldNormal'
           },
@@ -174,8 +176,8 @@ const reportForm = (data) => {
                 widths: [ 70, 120, '*' ],
                 body: [
                     [ 
-                        { text: 'Bulan: Juli', border: [] },
-                        { text: 'Tahun: 2020', border: [] },
+                        { text: `Bulan: ${month}`, border: [] },
+                        { text: `Tahun: ${year}`, border: [] },
                         { 
                             text: 'Instansi: Dinas Komunikasi dan Informatika Jawa Barat',
                             alignment: 'right',
@@ -217,9 +219,7 @@ const reportForm = (data) => {
                         { text: ':' },
                         {
                             ol: [
-                                '1. ',
-                                '2. ',
-                                '3. ',
+                                '-',
                             ]
                         }
                     ],
@@ -228,7 +228,7 @@ const reportForm = (data) => {
          },
          {
             margin: [0, 10, 0, 0],
-            text: 'RINCIAN HASIL KERJA SELAMA BULAN JULI',
+            text: `RINCIAN HASIL KERJA SELAMA BULAN ${month.toUpperCase()}`,
             style: 'boldNormal'
          },
          // RINCIAN TABEL LAPORAN

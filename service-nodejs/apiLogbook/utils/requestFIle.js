@@ -7,16 +7,11 @@ const {
 const {
     getRandomString
 } = require('../utils/randomString')
-const {
-    encode,
-} = require('./functions')
 
 async function postFile(fileType, file) {
     const fileName = file.name
     const fileExt = fileName.substr((Math.max(0, fileName.lastIndexOf(".")) || Infinity) + 1)
     const newFileName = getRandomString(32) + '.' + fileExt
-    const bytes = new Uint8Array(file.data)
-    const dataBlob = 'data:image/png;base64,' + encode(bytes)
     const params = {
         Bucket: process.env.AWS_S3_BUCKET,
         Body: file.data,
@@ -24,8 +19,7 @@ async function postFile(fileType, file) {
     }
     const response = {
         filePath: params.Key,
-        fileURL: process.env.AWS_S3_CLOUDFRONT + `/${params.Key}`,
-        fileBlob: dataBlob
+        fileURL: process.env.AWS_S3_CLOUDFRONT + `/${params.Key}`
     }
     await s3.upload(params, async function (err, data) {
         //handle error
@@ -56,8 +50,6 @@ async function updateFile(lastFilePath, fileType, file) {
             throw new APIError(errors.serverError)
         }
     })
-    const bytes = new Uint8Array(file.data)
-    const dataBlob = 'data:image/png;base64,' + encode(bytes)
     const fileName = file.name
     const fileExt = fileName.substr((Math.max(0, fileName.lastIndexOf(".")) || Infinity) + 1)
     const newFileName = getRandomString(32) + '.' + fileExt
@@ -69,8 +61,7 @@ async function updateFile(lastFilePath, fileType, file) {
 
     const response = {
         filePath: params.Key,
-        fileURL: process.env.AWS_S3_CLOUDFRONT + `/${params.Key}`,
-        fileBlob: dataBlob
+        fileURL: process.env.AWS_S3_CLOUDFRONT + `/${params.Key}`
     }
     await s3.upload(params, async function (err, data) {
         //handle error

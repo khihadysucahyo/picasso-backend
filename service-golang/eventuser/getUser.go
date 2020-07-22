@@ -5,18 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"runtime"
 	"strconv"
-	"time"
 
 	"github.com/bdwilliams/go-jsonify/jsonify"
 	"github.com/jabardigitalservice/picasso-backend/service-golang/utils"
 	_ "github.com/lib/pq"
-	"github.com/nats-io/go-nats"
 )
 
 func getUser(id string) ([]byte, error) {
-	// Create DB pool
 	postgresHost := utils.GetEnv("POSTGRESQL_HOST")
 	postgresPort, errPort := strconv.ParseInt(utils.GetEnv("POSTGRESQL_PORT"), 10, 64)
 	postgresUser := utils.GetEnv("POSTGRESQL_USER")
@@ -28,7 +24,6 @@ func getUser(id string) ([]byte, error) {
 	addr := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		postgresHost, postgresPort, postgresUser, postgresPassword, postgresDB)
-
 	db, err := sql.Open("postgres", addr)
 	if err != nil {
 		log.Fatal("Failed to open a DB connection: ", err)
@@ -53,31 +48,4 @@ func getUser(id string) ([]byte, error) {
 	var response = jsonify.Jsonify(rows)
 	usersBytes, _ := json.Marshal(response)
 	return usersBytes, nil
-}
-
-func main() {
-	subject := "userDetail"
-	natsUri := utils.GetEnv("NATS_URI")
-
-	opts := nats.Options{
-		AllowReconnect: true,
-		MaxReconnect:   5,
-		ReconnectWait:  5 * time.Second,
-		Timeout:        3 * time.Second,
-		Url:            natsUri,
-	}
-	conn, _ := opts.Connect()
-	//defer conn.Close()
-	fmt.Println("Subscriber connected to NATS server")
-
-	fmt.Printf("Subscribing to subject %s\n", subject)
-	conn.Subscribe(subject, func(msg *nats.Msg) {
-		cok, err := getUser(string(msg.Data))
-		if err != nil {
-			fmt.Println(err)
-		}
-		conn.Publish(msg.Reply, cok)
-	})
-
-	runtime.Goexit()
 }

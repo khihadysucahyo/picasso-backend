@@ -33,6 +33,7 @@ module.exports = async (req, res, next) => {
           'documentTaskURL': '$documentTask.fileURL',
           'isDocumentLink': 1,
           'isMainTask': 1,
+          'workPlace': 1,
           'organizerTask': 1,
           'otherInformation': 1
         }

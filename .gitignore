@@ -7,6 +7,7 @@ service-python/authserver/files/static-collected/
 service-python/**/migrations/*
 service-nodejs/**/build/
 service-golang/event/
+service-python/executeFunction/
 service-nodejs/lerna-debug.log
 .DS_Store
 /.env
