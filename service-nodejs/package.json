@@ -33,7 +33,6 @@
     "accesscontrol": "^2.2.1",
     "aws-sdk": "^2.639.0",
     "axios": "^0.19.2",
-    "canvas": "^2.6.1",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "compression": "^1.7.4",
