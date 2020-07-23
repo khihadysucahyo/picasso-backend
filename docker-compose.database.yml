@@ -36,6 +36,8 @@ services:
   nats:
     image : nats
     restart: always
+    networks:
+      - nats
     ports:
       - 4222:4222
 
@@ -43,12 +45,15 @@ networks:
   mongo:
     external:
       name: gateway
+
   postgres:
     external:
       name: gateway
+
   redis:
     external:
       name: gateway
+
   nats:
     external:
       name: gateway
