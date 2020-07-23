@@ -9,9 +9,13 @@ const {
 const {
     updateFile
 } = require('../utils/requestFile')
+const {
+    encode,
+} = require('../utils/functions')
 
 // Import Model
 const LogBook = require('../models/LogBook')
+const BlobsFile = require('../models/BlobsFile')
 
 module.exports = async (req, res) => { // eslint-disable-line
     try {
@@ -41,18 +45,22 @@ module.exports = async (req, res) => { // eslint-disable-line
             difficultyTask = null,
             organizerTask = null,
             isMainTask = null,
+            workPlace = null,
             otherInformation = null,
             isDocumentLink = null
         } = req.body
 
         const isTask = String(isMainTask) === 'true'
         const isLink = String(isDocumentLink) === 'true'
+        let dataBlobEvidence = null
         if (req.files) {
             evidenceResponse = await updateFile(
                 resultLogBook.evidenceTask.filePath,
                 'image',
                 req.files.evidenceTask
             )
+            const bytes = new Uint8Array(req.files.evidenceTask.data)
+            dataBlobEvidence = 'data:image/png;base64,' + encode(bytes)
         } else {
             evidenceResponse = resultLogBook.evidenceTask
         }
@@ -84,12 +92,14 @@ module.exports = async (req, res) => { // eslint-disable-line
             difficultyTask,
             evidenceTask: filePath(evidenceResponse),
             documentTask: filePath(documentResponse),
+            workPlace,
             organizerTask,
             otherInformation,
             ...onUpdated(session)
         }
 
         const results = await LogBook.findByIdAndUpdate(_id, data)
+        if (dataBlobEvidence !== null) await BlobsFile.updateOne({ logBookId: results._id,}, { blob: dataBlobEvidence })
 
         await res.status(201).send({
             message: 'Update data successfull',
