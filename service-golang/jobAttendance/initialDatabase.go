@@ -9,10 +9,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// ConfigDB mongo
 type ConfigDB struct {
 	mongodb *mongo.Database
 }
 
+// Initialize mongodb connection
 func Initialize() (*ConfigDB, error) {
 	addr := "mongodb://" + utils.GetEnv("DB_MONGO_HOST") + ":" + utils.GetEnv("DB_MONGO_PORT")
 	config := ConfigDB{}
