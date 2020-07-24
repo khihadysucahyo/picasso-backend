@@ -27,6 +27,15 @@ services:
       - eventuser
     env_file: 
       - .env-golang
+    
+  jobattendance:
+    build:
+      context: ./service-golang
+    command: "jobattendance"
+    networks:
+      - jobattendance
+    env_file: 
+      - .env-golang
 
 networks:
   satuankerja:
@@ -38,5 +47,9 @@ networks:
       name: gateway
 
   eventuser:
+    external:
+      name: gateway
+
+  jobattendance:
     external:
       name: gateway
