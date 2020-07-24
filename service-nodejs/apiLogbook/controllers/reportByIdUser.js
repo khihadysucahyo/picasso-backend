@@ -54,6 +54,7 @@ module.exports = async (req, res, next) => {
                     'isMainTask': 1,
                     'organizerTask': 1,
                     'otherInformation': 1,
+                    'workPlace': 1,
                     'evidenceTaskPath': '$evidenceTask.filePath',
                     'evidenceTaskURL': '$evidenceTask.fileURL',
                     'evidenceBlob': '$evidenceTask.fileBlob',
@@ -97,7 +98,7 @@ module.exports = async (req, res, next) => {
             })
             const fullName = `${user.first_name}_${user.last_name}`
             const month = req.query.date || moment().format('YYYY')
-            const fileName = `LaporanPLD_${month}_${fullName.replace(/[^\w\s]/gi, '')}_${user.jabatan}.pdf`
+            const fileName = `LaporanPLD_${month}_${fullName.replace(/[^\w\s]/gi, '')}_${user.jabatan.replace(/[^\w\s]/gi, '')}.pdf`
             const pdfFile = await generateReport(layout, fileName)
 
             res.set('Content-disposition', 'attachment; filename=' + fileName.replace(/[-\s]/g, '_'))
