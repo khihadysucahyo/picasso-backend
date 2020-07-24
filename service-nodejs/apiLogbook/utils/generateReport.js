@@ -36,7 +36,7 @@ const logBook = (data) => {
             { text: index + 1 },
             { text: moment(item.dateTask).format('dddd, DD MMMM YYYY') },
             { text: item.projectName + ' - ' +  item.nameTask},
-            { text: '-' },
+            { text: item.workPlace },
             { text: 'PLD' },
             { text: item.isMainTask ? '√' : '' },
             { text: !item.isMainTask ? '√' : '' }
@@ -79,7 +79,7 @@ const logBookPerDay = (data) => {
                 {
                     margin: [20, 0, 0, 0],
                     fontSize: 11,
-                    text: itemB.documentTaskURL
+                    text: itemB.documentTaskURL === null ? '-' : itemB.documentTaskURL
                 }
             )
         })
