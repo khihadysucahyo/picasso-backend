@@ -31,6 +31,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
+REFRESH_TOKEN_SECRET = os.environ.get("REFRESH_TOKEN_SECRET")
 TOKEN_KEY = os.environ.get("TOKEN_KEY")
 
 DB_NAME_AUTH = os.environ.get("DB_NAME_AUTH")
@@ -138,6 +139,7 @@ REST_FRAMEWORK = {
         # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
         # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
         # 'rest_framework.authentication.BasicAuthentication'
+        'accounts.authentication.SafeJWTAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
