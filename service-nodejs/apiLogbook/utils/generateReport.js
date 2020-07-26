@@ -55,6 +55,7 @@ const logBookPerDay = (data) => {
             text: 'Hari, Tanggal : ' + moment(item._id).format('dddd, DD MMMM YYYY')
         })
         item['items'].forEach(async (itemB, indexB) => {
+            const isDocumentTaskURL = String(itemB.documentTaskURL) === 'null'
             records.push(
                 {
                     margin: [10, 10, 0, 0],
@@ -74,12 +75,12 @@ const logBookPerDay = (data) => {
                 {
                     margin: [20, 0, 0, 0],
                     fontSize: 11,
-                    text: 'b. LINK'
+                    text: isDocumentTaskURL ? '' : 'b. LINK'
                 },
                 {
                     margin: [20, 0, 0, 0],
                     fontSize: 11,
-                    text: itemB.documentTaskURL === null ? '-' : itemB.documentTaskURL
+                    text: isDocumentTaskURL ? '' : itemB.documentTaskURL
                 }
             )
         })

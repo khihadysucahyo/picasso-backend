@@ -9,8 +9,7 @@ from .serializers import AccountSerializer
 import requests
 from rest_framework.utils import json
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
-from .utils import get_client_ip, create_token
-from authServer.AESEncryption import AESCipher
+from .utils import get_client_ip, generate_access_token, generate_refresh_token
 from authServer.settings import TOKEN_KEY, CLIENT_SECRETS
 from datetime import datetime, timedelta
 
@@ -58,12 +57,14 @@ def oauth2_signin(request):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
                 ip = get_client_ip(request)
-                token = create_token(user_obj)
+                access_token = generate_access_token(user_obj)
+                refresh_token = generate_refresh_token(user_obj)
                 dt = datetime.utcnow() + timedelta(seconds=14420)
                 expTime = int(round(dt.timestamp() * 1000))
                 response = {
-                    'auth_token': token,
-                    'key': AESCipher(TOKEN_KEY).encrypt(token),
+                    'auth_token': access_token,
+                    'refresh_token': refresh_token,
+                    'email': serialized_user['email'],
                     'ip' : ip,
                     'exp': expTime
                 }

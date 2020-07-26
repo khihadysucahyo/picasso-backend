@@ -82,8 +82,10 @@ module.exports = async (req, res, next) => {
 
         const logBookPerDay = await LogBook
             .aggregate(rules)
-            .sort(sort)
+            .sort({ _id: 1 })
+
         if (!logBook) throw new APIError(errors.serverError)       
+
         nats.requestOne('userDetail', String(userId), {}, 300, async function(response) {
             // `NATS` is the library.
             if (response.code) {
@@ -98,7 +100,7 @@ module.exports = async (req, res, next) => {
             })
             const fullName = `${user.first_name}_${user.last_name}`
             const month = req.query.date || moment().format('YYYY')
-            const fileName = `LaporanPLD_${month}_${fullName.replace(/[^\w\s]/gi, '')}_${user.jabatan.replace(/[^\w\s]/gi, '')}.pdf`
+            const fileName = `LaporanPLD_${month}_${fullName.replace(/[^\w\s]/gi, '')}.pdf`
             const pdfFile = await generateReport(layout, fileName)
 
             res.set('Content-disposition', 'attachment; filename=' + fileName.replace(/[-\s]/g, '_'))

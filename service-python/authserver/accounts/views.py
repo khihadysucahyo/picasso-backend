@@ -10,7 +10,6 @@ from .models import Account
 from .serializers import AccountSerializer, AccountLoginSerializer
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.response import Response
-from authServer.AESEncryption import AESCipher
 from authServer.settings import TOKEN_KEY
 from .utils import get_client_ip
 from datetime import datetime, timedelta
@@ -49,28 +48,3 @@ class AccountViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@permission_classes(
-    (permissions.AllowAny,))
-class AccountLogin(APIView):
-    """
-    Login a User
-    """
-    serializer_class = AccountLoginSerializer
-
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        serializer = AccountLoginSerializer(data=data)
-        dt = datetime.utcnow() + timedelta(seconds=14420)
-        expTime = int(round(dt.timestamp() * 1000))
-        if serializer.is_valid(raise_exception=True):
-            ip = get_client_ip(request)
-            new_data = {
-                'auth_token': serializer.data["token"],
-                'email': serializer.data["email"],
-                'key': AESCipher(TOKEN_KEY).encrypt(serializer.data["token"]),
-                'ip' : ip,
-                'exp': expTime
-            }
-            return Response(new_data, status=HTTP_200_OK)
-        return Response(serializer.erors, status=HTTP_400_BAD_REQUEST)

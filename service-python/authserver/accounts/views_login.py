@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import get_token, ensure_csrf_cookie, csrf_protect
 from .serializers import AccountLoginSerializer
-from .utils import generate_access_token, generate_refresh_token
+from .utils import get_client_ip, generate_access_token, generate_refresh_token
 from django.contrib.sessions.models import Session
 from django.conf import settings
     
@@ -32,12 +32,16 @@ def login_view(request):
 
     access_token = generate_access_token(user)
     refresh_token = generate_refresh_token(user)
-
+    ip = get_client_ip(request)
+    dt = datetime.datetime.utcnow() + datetime.timedelta(seconds=14420)
+    expTime = int(round(dt.timestamp() * 1000))
     # response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
     response.data = {
-        'access_token': access_token,
+        'auth_token': access_token,
         'refresh_token': refresh_token,
-        'username': serialized_user['username'],
+        'email': serialized_user['email'],
+        'ip' : ip,
+        'exp': expTime
     }
 
     return response
@@ -73,6 +77,6 @@ def refresh_token_view(request):
     access_token = generate_access_token(user)
     refresh_token = generate_refresh_token(user)
     return Response({
-        'access_token': access_token,
+        'auth_token': access_token,
         'refresh_token': refresh_token
     })
