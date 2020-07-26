@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import AccountLogin, AccountViewSet
+from accounts.views import AccountViewSet
 from accounts.views_social import oauth2_signin, detailUser
+from accounts.views_login import login_view, refresh_token_view
 from rest_framework_jwt.views import refresh_jwt_token
 from rest_framework import routers
 
@@ -27,10 +28,11 @@ user_detail = AccountViewSet.as_view({'get':'detail'})
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-    path('api/auth/login/', AccountLogin.as_view(), name='user-login'),
     path('api/user/info', detailUser),
     path('api/token/refresh', refresh_jwt_token),
     path('api/social/google-oauth2/', oauth2_signin),
+    path('api/auth/login/', login_view),
+    path('api/auth/refresh/', refresh_token_view),
 
     #Restframework
     path('api/', include(router.urls)),

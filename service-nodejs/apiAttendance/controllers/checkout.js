@@ -70,8 +70,10 @@ module.exports = async (req, res) => { // eslint-disable-line
         }]
         const checkUserCheckin = await Attendance.aggregate(rulesCheckin)
         const checkUserCheckout = await Attendance.aggregate(rulesCheckout)
-
-        if (new Date(date) <= new Date(minCheckout)) throw new APIError({
+        day = moment(date).format('dddd')
+        arrayWeekend = ['Sabtu', 'Minggu']
+        isWeekend = arrayWeekend.includes(day)
+        if (!isWeekend && new Date(date) <= new Date(minCheckout)) throw new APIError({
             code: 422,
             message: 'Baru bisa checkout jam 4 sore ya :)',
         })
