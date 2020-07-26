@@ -64,7 +64,6 @@ def oauth2_signin(request):
                 response = {
                     'auth_token': access_token,
                     'refresh_token': refresh_token,
-                    'email': serialized_user['email'],
                     'ip' : ip,
                     'exp': expTime
                 }
