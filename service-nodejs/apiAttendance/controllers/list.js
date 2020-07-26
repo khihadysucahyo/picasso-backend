@@ -45,6 +45,7 @@ module.exports = async (req, res, next) => {
           'officeHours': 1,
           'location': 1,
           'message': 1,
+          'fullname': '$createdBy.fullname',
           'email': '$createdBy.email',
           'username': '$createdBy.username',
           'divisi': '$createdBy.divisi',

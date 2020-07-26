@@ -10,6 +10,11 @@ module.exports = {
             required: false,
             default: null,
         },
+        fullname: {
+            type: String,
+            required: false,
+            default: null,
+        },
         email: {
             type: String,
             required: false,
@@ -37,6 +42,11 @@ module.exports = {
     },
     updatedBy: {
         _id: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        fullname: {
             type: String,
             required: false,
             default: null,

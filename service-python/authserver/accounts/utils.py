@@ -47,7 +47,9 @@ def generate_access_token(user):
 
     access_token_payload = {
         'user_id': str(user.id),
+        'fullname': user.get_full_name(),
         'email': user.email,
+        'username': user.username,
         'divisi': user.divisi,
         'jabatan': user.jabatan,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=0, seconds=14420),
@@ -61,7 +63,9 @@ def generate_access_token(user):
 def generate_refresh_token(user):
     refresh_token_payload = {
         'user_id': str(user.id),
+        'fullname': user.get_full_name(),
         'email': user.email,
+        'username': user.username,
         'divisi': user.divisi,
         'jabatan': user.jabatan,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),

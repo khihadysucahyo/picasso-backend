@@ -6,6 +6,7 @@ module.exports = {
         updatedAt: new Date(moment().format()),
         updatedBy: {
             _id : session ? session.user_id : null,
+            fullname: session ? session.fullname : null,
             email: session ? session.email : null,
             username: session ? session.username : null,
             divisi: session ? session.divisi : null,
@@ -16,6 +17,7 @@ module.exports = {
     onCreated : (session) => ({
         createdBy: {
             _id : session ? session.user_id : null,
+            fullname: session ? session.fullname : null,
             email: session ? session.email : null,
             username: session ? session.username : null,
             divisi: session ? session.divisi : null,
