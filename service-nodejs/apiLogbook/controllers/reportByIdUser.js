@@ -86,15 +86,18 @@ module.exports = async (req, res, next) => {
 
         if (!logBook) throw new APIError(errors.serverError)       
 
-        nats.requestOne('userDetail', String(userId), {}, 300, async function(response) {
+        nats.requestOne('userDetail', String(userId), {}, 600, async function(response) {
             // `NATS` is the library.
             if (response.code) {
                 res.status(500).send(errors.serverError)
             }
-            const responseParse = JSON.parse(response)[0]
-            const user = JSON.parse(responseParse)
+            const responseParseUser = JSON.parse(response)[0]
+            const responseParseJabatan = JSON.parse(response)[1]
+            const user = JSON.parse(responseParseUser)
+            const jabatan = JSON.parse(responseParseJabatan)
             const layout = reportForm({
                 user: user,
+                jabatan: jabatan,
                 logBook: logBook,
                 logBookPerDay: logBookPerDay
             })
