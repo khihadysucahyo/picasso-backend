@@ -92,7 +92,10 @@ const reportForm = (data) => {
   const month = moment().format('MMMM')
   const year = moment().format('YYYY')
   
-  const { user } = data
+  const {
+      user,
+      jabatan
+  } = data
   const docDefinition = {
       content: [
           {
@@ -218,11 +221,7 @@ const reportForm = (data) => {
                         { text: 'URAIAN TUGAS\n(DESKRIPSI JABATAN)' },
                         { text: '' },
                         { text: ':' },
-                        {
-                            ol: [
-                                '-',
-                            ]
-                        }
+                        { text: `${jabatan.description}` }
                     ],
                 ]
             }
