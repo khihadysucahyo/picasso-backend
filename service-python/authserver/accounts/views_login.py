@@ -1,5 +1,6 @@
 import jwt, datetime
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import exceptions
 from rest_framework.permissions import AllowAny
@@ -22,7 +23,7 @@ def login_view(request):
         raise exceptions.AuthenticationFailed(
             'username and password required')
 
-    user = User.objects.filter(username=username).first()
+    user = User.objects.filter(Q(username=username)|Q(email=username)).first()
     if(user is None):
         raise exceptions.AuthenticationFailed('user not found')
     if (not user.check_password(password)):
