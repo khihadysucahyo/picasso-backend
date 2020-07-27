@@ -13,7 +13,7 @@ type Jabatan struct {
 	SatuanKerjaID   string     `gorm:"size:40;index" json:"satuan_kerja_id"`
 	NameSatuanKerja string     `gorm:"size:64" json:"name_satuan_kerja"`
 	NameJabatan     string     `gorm:"size:64;index" json:"name_jabatan, omitempty"`
-	Description     string     `gorm:"size:255" json:"description"`
+	Description     []string   `gorm:"type:text" json:"description"`
 	CreatedAt       *time.Time `json:"created_at"`
 	CreatedBy       string     `json:"created_by"`
 	UpdatedAt       *time.Time `json:"updated_at"`

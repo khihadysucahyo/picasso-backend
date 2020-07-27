@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -114,12 +115,14 @@ func (config *ConfigDB) postJabatan(w http.ResponseWriter, r *http.Request) {
 		utils.ResponseError(w, http.StatusNotFound, "SatuanKerjaID ID Not Found")
 		return
 	}
-
+	tags := []string{"go", "goroutines", "queues"}
+	fmt.Println(payload.Description)
+	// description, _ := []string(payload.Description)
 	create := models.Jabatan{
 		SatuanKerjaID:   payload.SatuanKerjaID,
 		NameSatuanKerja: satuankerja.NameSatuanKerja,
 		NameJabatan:     payload.NameJabatan,
-		Description:     payload.Description,
+		Description:     tags,
 		CreatedBy:       userSession,
 	}
 
@@ -157,6 +160,9 @@ func (config *ConfigDB) putJabatan(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	fmt.Println(payload.Description)
+	tags := []string{"go", "goroutines", "queues"}
+	fmt.Println(tags)
 	update := models.Jabatan{
 		SatuanKerjaID:   payload.SatuanKerjaID,
 		NameSatuanKerja: satuankerja.NameSatuanKerja,
