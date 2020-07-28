@@ -1,3 +1,5 @@
+const imagemin = require("imagemin")
+const mozjpeg = require("imagemin-mozjpeg")
 const {
     errors,
     APIError
@@ -14,6 +16,7 @@ const {
 } = require('../utils/requestFile')
 const {
     encode,
+    imageResize,
 } = require('../utils/functions')
 
 // Import Model
@@ -33,7 +36,12 @@ module.exports = async (req, res) => { // eslint-disable-line
         }
         if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.serverError)
         const evidenceResponse = await postFile('image', req.files.evidenceTask)
-        const bytes = new Uint8Array(req.files.evidenceTask.data)
+        const miniBuffer = await imagemin.buffer(req.files.evidenceTask.data, {
+            plugins: [imageResize, mozjpeg({
+                quality: 85
+            })]
+        })
+        const bytes = new Uint8Array(miniBuffer)
         const dataBlobEvidence = 'data:image/png;base64,' + encode(bytes)
         let documentResponse = {}
         const {

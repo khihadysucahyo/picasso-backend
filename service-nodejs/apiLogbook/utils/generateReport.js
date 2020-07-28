@@ -70,7 +70,7 @@ const logBookPerDay = (data) => {
                 {
                     margin: [80, 0, 10, 0],
                     image: itemB.blobsEvidence,
-                    width: 400,
+                    width: 350,
                 },
                 {
                     margin: [20, 0, 0, 0],

@@ -47,6 +47,8 @@
     "firebase-admin": "^8.12.1",
     "helmet": "^3.21.1",
     "http": "^0.0.0",
+    "imagemin": "^7.0.1",
+    "imagemin-mozjpeg": "^9.0.0",
     "json-server": "^0.15.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
@@ -56,6 +58,7 @@
     "pdfmake": "^0.1.66",
     "raven": "^2.6.4",
     "redis": "^2.8.0",
+    "sharp": "^0.25.4",
     "uuid": "^7.0.2",
     "winston": "^3.2.1"
   }

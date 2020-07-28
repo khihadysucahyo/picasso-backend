@@ -1,4 +1,6 @@
 const { errors, APIError } = require('../utils/exceptions')
+const imagemin = require("imagemin")
+const mozjpeg = require("imagemin-mozjpeg")
 const {
     onUpdated,
     filePath
@@ -11,7 +13,9 @@ const {
 } = require('../utils/requestFile')
 const {
     encode,
+    imageResize,
 } = require('../utils/functions')
+
 
 // Import Model
 const LogBook = require('../models/LogBook')
@@ -59,7 +63,12 @@ module.exports = async (req, res) => { // eslint-disable-line
                 'image',
                 req.files.evidenceTask
             )
-            const bytes = new Uint8Array(req.files.evidenceTask.data)
+            const miniBuffer = await imagemin.buffer(req.files.evidenceTask.data, {
+                plugins: [imageResize, mozjpeg({
+                    quality: 85
+                })]
+            })
+            const bytes = new Uint8Array(miniBuffer)
             dataBlobEvidence = 'data:image/png;base64,' + encode(bytes)
         } else {
             evidenceResponse = resultLogBook.evidenceTask
@@ -99,8 +108,11 @@ module.exports = async (req, res) => { // eslint-disable-line
         }
 
         const results = await LogBook.findByIdAndUpdate(_id, data)
-        if (dataBlobEvidence !== null) await BlobsFile.updateOne({ logBookId: results._id,}, { blob: dataBlobEvidence })
-
+        if (dataBlobEvidence !== null) await BlobsFile.updateOne({
+            logBookId: results._id,
+        }, {
+            blob: dataBlobEvidence
+        })
         await res.status(201).send({
             message: 'Update data successfull',
             data: results,
