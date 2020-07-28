@@ -22,11 +22,20 @@ module.exports = async (req, res, next) => {
             userId
         } = req.params
 
+        const {
+            start_date,
+            end_date
+        } = req.query
+
         if (!userId) throw new APIError(errors.serverError)
 
         const rules = [{
                 $match: {
                     'createdBy._id': userId,
+                    'dateTask': {
+                        $gte: new Date(start_date),
+                        $lt: new Date(end_date)
+                    }
                 },
             },
             {
@@ -86,7 +95,7 @@ module.exports = async (req, res, next) => {
 
         if (!logBook) throw new APIError(errors.serverError)       
 
-        nats.requestOne('userDetail', String(userId), {}, 600, async function(response) {
+        nats.requestOne('userDetail', String(userId), {}, 800, async function(response) {
             // `NATS` is the library.
             if (response.code) {
                 res.status(500).send(errors.serverError)
@@ -101,12 +110,12 @@ module.exports = async (req, res, next) => {
                 logBook: logBook,
                 logBookPerDay: logBookPerDay
             })
-            const fullName = `${user.first_name}_${user.last_name}`
+            const fullName = `${user.first_name}_${user.last_name}`.replace(/[^\w\s]/gi, '')
             const month = req.query.date || moment().format('YYYY')
-            const fileName = `LaporanPLD_${month}_${fullName.replace(/[^\w\s]/gi, '')}.pdf`
+            const fileName = `LaporanPLD_${month}_${fullName}.pdf`.replace(/[-\s]/g, '_')
             const pdfFile = await generateReport(layout, fileName)
 
-            res.set('Content-disposition', 'attachment; filename=' + fileName.replace(/[-\s]/g, '_'))
+            res.set('Content-disposition', 'attachment; filename=' + fileName)
             res.set('Content-Type', 'attachment')
             res.status(200).send(pdfFile)
         })
