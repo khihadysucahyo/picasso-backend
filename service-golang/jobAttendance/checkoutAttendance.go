@@ -34,17 +34,22 @@ func checkoutAttendance() {
 	for i := 0; i < len(data); i++ {
 		id := data[i]["_id"]
 
-		startDate := data[i]["startDate"]
+		// startDate := data[i]["startDate"]
 		// why return epoch unix? && data type: primivitive.DateTime
 		// Founded the logic and code to incrementing endDate for 8.5 hours
 		// but stuck in data type converting "primivitive.DateTime" to "Time"
-		fmt.Printf("%T\n", startDate)
 
-		// db update
+		// for date incrementing purpose
+		endDate := time.Unix(1494505756 /*todo startDate*/, 0).Add(time.Hour*time.Duration(8) +
+			time.Minute*time.Duration(30) +
+			time.Second*time.Duration(0))
+
+		// db update attendaces
 		filter := bson.D{{"_id", id}}
 		update := bson.D{{"$set",
 			bson.D{
 				{"officeHours", 8.5},
+				{"endDate", endDate},
 			},
 		}}
 
@@ -59,4 +64,5 @@ func checkoutAttendance() {
 
 		fmt.Println(res)
 	}
+
 }

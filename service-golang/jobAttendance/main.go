@@ -10,7 +10,13 @@ import (
 func main() {
 	log.Println("running job")
 	c := cron.New()
+
+	// release purpose:
 	c.AddFunc("@daily", func() { checkoutAttendance() })
+
+	// debug purpose:
+	// checkoutAttendance()
+
 	c.Start()
 	runtime.Goexit()
 }
