@@ -11,7 +11,7 @@ const {
 } = require('../utils/requestFile')
 const {
     encode,
-    // imageResize,
+    imageResize,
 } = require('../utils/functions')
 
 
@@ -61,7 +61,7 @@ module.exports = async (req, res) => { // eslint-disable-line
                 'image',
                 req.files.evidenceTask
             )
-            // const miniBuffer = await imageResize(req.files.evidenceTask.data)
+            const miniBuffer = await imageResize(req.files.evidenceTask.data)
             const bytes = new Uint8Array(req.files.evidenceTask.data)
             dataBlobEvidence = 'data:image/png;base64,' + encode(bytes)
         } else {
