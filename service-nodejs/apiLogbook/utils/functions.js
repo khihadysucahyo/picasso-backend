@@ -1,4 +1,4 @@
-const Sharp = require("sharp")
+// const sharp = require("sharp")
 
 function encode(input) {
     const keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
@@ -27,22 +27,22 @@ function encode(input) {
     return output
 }
 
-function imageResize(input) {
-    return Sharp(input)
-        .resize({
-            width: 350,
-            fit: Sharp.fit.contain,
-        })
-        .png({
-            compressionLevel: 9,
-            quality: 85,
-            adaptiveFiltering: true,
-            force: true
-        })
-        .toBuffer()
-}
+// function imageResize(input) {
+//     return sharp(input)
+//         .resize({
+//             width: 350,
+//             fit: sharp.fit.contain,
+//         })
+//         .png({
+//             compressionLevel: 9,
+//             quality: 85,
+//             adaptiveFiltering: true,
+//             force: true
+//         })
+//         .toBuffer()
+// }
 
 module.exports = {
     encode,
-    imageResize,
+    // imageResize,
 }
