@@ -1,6 +1,4 @@
 const { errors, APIError } = require('../utils/exceptions')
-const imagemin = require("imagemin")
-const mozjpeg = require("imagemin-mozjpeg")
 const {
     onUpdated,
     filePath
@@ -63,11 +61,7 @@ module.exports = async (req, res) => { // eslint-disable-line
                 'image',
                 req.files.evidenceTask
             )
-            const miniBuffer = await imagemin.buffer(req.files.evidenceTask.data, {
-                plugins: [imageResize, mozjpeg({
-                    quality: 85
-                })]
-            })
+            const miniBuffer = await imageResize(req.files.evidenceTask.data)
             const bytes = new Uint8Array(miniBuffer)
             dataBlobEvidence = 'data:image/png;base64,' + encode(bytes)
         } else {

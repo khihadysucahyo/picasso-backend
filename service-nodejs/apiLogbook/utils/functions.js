@@ -31,11 +31,11 @@ function imageResize(input) {
     return Sharp(input)
         .resize({
             width: 350,
-            height: 350,
-            fit: Sharp.fit.fill,
+            fit: Sharp.fit.contain,
         })
         .png({
             compressionLevel: 9,
+            quality: 85,
             adaptiveFiltering: true,
             force: true
         })
