@@ -23,6 +23,7 @@ services:
     build:
       context: ./service-golang
     command: "eventuser"
+    restart: always
     networks:
       - eventuser
     env_file: 
