@@ -14,7 +14,7 @@ const {
 } = require('../utils/requestFile')
 const {
     encode,
-    imageResize,
+    // imageResize,
 } = require('../utils/functions')
 
 // Import Model
@@ -34,8 +34,8 @@ module.exports = async (req, res) => { // eslint-disable-line
         }
         if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.serverError)
         const evidenceResponse = await postFile('image', req.files.evidenceTask)
-        const miniBuffer = await imageResize(req.files.evidenceTask.data)
-        const bytes = new Uint8Array(miniBuffer)
+        // const miniBuffer = await imageResize(req.files.evidenceTask.data)
+        const bytes = new Uint8Array(req.files.evidenceTask.data)
         const dataBlobEvidence = 'data:image/png;base64,' + encode(bytes)
         let documentResponse = {}
         const {
