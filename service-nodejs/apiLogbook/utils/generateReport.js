@@ -268,7 +268,7 @@ const reportForm = (data) => {
         },
         {
             fontSize: 11,
-            text: 'Berikut adalah evidence daftar uraian kegiatan harian yang didetailkan setiap harinya dibulan MARET 2020 ini.'
+            text: 'Berikut adalah evidence daftar uraian kegiatan harian yang didetailkan setiap harinya dibulan ini.'
         },
         ...logBookPerDay(data)
       ],

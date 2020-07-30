@@ -1,6 +1,7 @@
-const mongoose = require('mongoose')
 const { errors, APIError } = require('../utils/exceptions')
 const LogBook = require('../models/LogBook')
+const moment = require('moment')
+moment.locale('id')
 
 // eslint-disable-next-line
 module.exports = async (req, res, next) => {
@@ -13,13 +14,17 @@ module.exports = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1
     const pageSize = parseInt(req.query.pageSize) || 10
     const skip = (page - 1) * pageSize
-    const search = req.query.search
-    const _sort = req.query.sort
+    const  {
+        search,
+        start_date,
+        end_date,
+        _sort
+    } = req.query
 
     const rules = [
       {
         $match: {
-          'createdBy.email': session.email,
+          'createdBy.email': session.email
         },
       },
       {
@@ -60,6 +65,29 @@ module.exports = async (req, res, next) => {
         },
       })
 
+    }
+
+    if (start_date) {
+      let start = moment(start_date).set({
+        "hour": 0,
+        "minute": 0,
+        "second": 0
+      }).format()
+
+      let end = moment(end_date).set({
+        "hour": 23,
+        "minute": 59,
+        "second": 59
+      }).format()
+      
+      rules.push({
+        '$match': {
+          'dateTask': {
+            $gte: new Date(start),
+            $lt: new Date(end)
+          }
+        },
+      })
     }
 
     // Get page count

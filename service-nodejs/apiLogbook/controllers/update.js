@@ -14,7 +14,6 @@ const {
     imageResize,
 } = require('../utils/functions')
 
-
 // Import Model
 const LogBook = require('../models/LogBook')
 const BlobsFile = require('../models/BlobsFile')
@@ -62,7 +61,7 @@ module.exports = async (req, res) => { // eslint-disable-line
                 req.files.evidenceTask
             )
             const miniBuffer = await imageResize(req.files.evidenceTask.data)
-            const bytes = new Uint8Array(req.files.evidenceTask.data)
+            const bytes = new Uint8Array(miniBuffer)
             dataBlobEvidence = 'data:image/png;base64,' + encode(bytes)
         } else {
             evidenceResponse = resultLogBook.evidenceTask
