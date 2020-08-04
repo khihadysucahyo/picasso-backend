@@ -15,29 +15,14 @@ module.exports = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1
     const pageSize = parseInt(req.query.pageSize) || 10
     const skip = (page - 1) * pageSize
-    const search = req.query.search
-    const _sort = req.query.sort
-    let start = moment().set({
-      "hour": 0,
-      "minute": 0,
-      "second": 0
-    }).format()
-
-    let end = moment().set({
-      "hour": 23,
-      "minute": 59,
-      "second": 59
-    }).format()
+    const {
+      search,
+      date,
+      sort: _sort
+    } = req.query
+    let start, end
 
     const rules = [
-      {
-        $match: {
-          startDate: {
-            $gte: new Date(start),
-            $lt: new Date(end)
-          }
-        },
-      },
       {
         '$project': {
           'startDate': 1,
@@ -53,6 +38,50 @@ module.exports = async (req, res, next) => {
         }
       }
     ]
+
+    if (date) {
+      start = moment(date).set({
+        "hour": 0,
+        "minute": 0,
+        "second": 0
+      }).format()
+
+      end = moment(date).set({
+        "hour": 23,
+        "minute": 59,
+        "second": 59
+      }).format()
+
+      rules.push({
+        '$match': {
+          'startDate': {
+            $gte: new Date(start),
+            $lt: new Date(end)
+          }
+        },
+      })
+    } else {
+      start = moment().set({
+        "hour": 0,
+        "minute": 0,
+        "second": 0
+      }).format()
+
+      end = moment().set({
+        "hour": 23,
+        "minute": 59,
+        "second": 59
+      }).format()
+
+      rules.push({
+        $match: {
+          startDate: {
+            $gte: new Date(start),
+            $lt: new Date(end)
+          }
+        },
+      })
+    }
 
     if (_sort) {
       const __sort = _sort.split(',')
@@ -114,6 +143,7 @@ module.exports = async (req, res, next) => {
       }
     })
   } catch (error) {
+
     const { code, message, data } = error
 
     if (code && message) {
