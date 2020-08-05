@@ -37,6 +37,11 @@ apiEndpoints:
     paths: /logbook/*
     methods: ["GET","POST","PUT","DELETE","OPTIONS"]
 
+  monthlyreport:
+    host: '*'
+    paths: /monthly-report/*
+    methods: ["GET","OPTIONS"]
+
   project:
     host: '*'
     paths: /project/*
@@ -71,6 +76,9 @@ serviceEndpoints:
 
   logbook:
     url: '${LOGBOOK_NODEJS_SERVICE_URI}/api/'
+
+  monthlyreport:
+    url: '${MONTHLY_REPORT_PY_SERVICE_URI}/api/'
 
   project:
     url: '${PROJECT_NODEJS_SERVICE_URI}/api/'
@@ -211,6 +219,22 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: logbook
+              changeOrigin: true
+
+  monthlyreport:
+    apiEndpoints:
+      - monthlyreport
+    policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
+      - jwt:
+          - action:
+              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+              checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: monthlyreport
               changeOrigin: true
 
   project:
