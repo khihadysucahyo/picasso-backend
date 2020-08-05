@@ -11,6 +11,9 @@ COPY . ./
 RUN npm ci --production && \
     npm i lerna && npm run-script build
 
+# remove development dependencies
+RUN npm prune --production
+
 FROM arf95/npm-alpine:latest
 WORKDIR /usr/src/app
 

@@ -11,7 +11,19 @@ services:
     env_file: 
       - .env-python
 
+  monthlyreport:
+    build:
+      context: ./service-python/monthlyreport
+    networks:
+      - monthlyreport
+    env_file: 
+      - .env-python
+
 networks:
   authserver:
+    external:
+      name: gateway
+
+  monthlyreport:
     external:
       name: gateway
