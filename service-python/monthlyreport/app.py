@@ -59,11 +59,11 @@ def getCountHours(idUser, start_date, end_date):
     ]
 
     if start_date:
-        agr.append({
+        agr.insert(0, {
             '$match': {
                 'startDate': {
-                    '$gte': datetime.datetime.strptime(start_date, '%Y-%m-%d'),
-                    '$lt': datetime.datetime.strptime(end_date, '%Y-%m-%d')
+                    '$gte': datetime.datetime.strptime(start_date+'-0:0:0', '%Y-%m-%d-%H:%M:%S'),
+                    '$lt': datetime.datetime.strptime(end_date+'-23:59:59', '%Y-%m-%d-%H:%M:%S')
                 }
             }
         })
@@ -95,11 +95,11 @@ def getCountLogbook(idUser, start_date, end_date):
     ]
 
     if start_date:
-        agr.append({
+        agr.insert(0, {
             '$match': {
                 'dateTask': {
-                    '$gte': datetime.datetime.strptime(start_date, '%Y-%m-%d'),
-                    '$lt': datetime.datetime.strptime(end_date, '%Y-%m-%d')
+                    '$gte': datetime.datetime.strptime(start_date+'-0:0:0', '%Y-%m-%d-%H:%M:%S'),
+                    '$lt': datetime.datetime.strptime(end_date+'-23:59:59', '%Y-%m-%d-%H:%M:%S')
                 }
             }
         })
