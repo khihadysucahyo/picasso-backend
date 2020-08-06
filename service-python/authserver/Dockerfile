@@ -2,6 +2,7 @@ FROM ubuntu:16.04
 LABEL maintainer="<Arif Wicaksono> arifboyz16@gmail.com"
 
 # Install required packages and remove the apt packages cache when done.
+ENV TZ=Asia/Jakarta
 
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -12,8 +13,10 @@ RUN apt-get update && \
 	python3-setuptools \
 	python3-pip \
 	nginx \
+	tzdata \
 	supervisor && \
 	pip3 install -U pip setuptools && \
+	cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
    rm -rf /var/lib/apt/lists/*
 
 # install uwsgi now because it takes a little while
