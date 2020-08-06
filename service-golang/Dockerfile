@@ -26,4 +26,8 @@ WORKDIR /usr/bin
 ARG POSTGRESQL_HOST
 ARG POSTGRESQL_PORT
 
+ENV TZ=Asia/Jakarta
+RUN apk --update add tzdata && \
+    cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+    
 COPY --from=build /go/bin .
