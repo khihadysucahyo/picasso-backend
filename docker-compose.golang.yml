@@ -29,6 +29,16 @@ services:
     env_file: 
       - .env-golang
 
+  jobattendance:
+    build:
+      context: ./service-golang
+    command: "jobAttendance"
+    restart: always
+    networks:
+      - jobattendance
+    env_file: 
+      - .env-golang
+
 networks:
   satuankerja:
     external:
@@ -39,5 +49,9 @@ networks:
       name: gateway
 
   eventuser:
+    external:
+      name: gateway
+  
+  jobattendance:
     external:
       name: gateway

@@ -21,15 +21,16 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/nats-io/go-nats v1.7.2
 	github.com/nats-io/nats.go v1.10.0
+	github.com/robfig/cron v1.2.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.5.1 // indirect
 	github.com/tidwall/gjson v1.6.0
 	github.com/tidwall/pretty v1.0.1 // indirect
 	github.com/tinrab/meower v0.0.0-20200716211802-d193f7f1f143
+	go.mongodb.org/mongo-driver v1.4.0
 	golang.org/x/mod v0.2.0 // indirect
 	golang.org/x/net v0.0.0-20200222125558-5a598a2470a0 // indirect
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e // indirect
 	golang.org/x/sys v0.0.0-20200219091948-cb0a6d8edb6c // indirect
 	golang.org/x/tools v0.0.0-20200221224223-e1da425f72fd // indirect
 	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
