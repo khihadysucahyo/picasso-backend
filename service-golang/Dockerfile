@@ -15,6 +15,7 @@ COPY retry retry
 COPY satuankerja satuankerja
 COPY jabatan jabatan
 COPY eventuser eventuser
+COPY jobAttendance jobAttendance
 COPY utils utils
 
 RUN go install ./...
