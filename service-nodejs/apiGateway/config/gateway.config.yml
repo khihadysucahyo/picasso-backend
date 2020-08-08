@@ -52,6 +52,11 @@ apiEndpoints:
     paths: /attendance/*
     methods: ["GET","POST","PUT","DELETE","OPTIONS"]
 
+  devicetoken:
+    host: '*'
+    paths: /device-token/*
+    methods: [POST","PUT","DELETE","OPTIONS"]
+
   mockserver:
     host: '*'
     paths: /mock/*
@@ -85,6 +90,9 @@ serviceEndpoints:
 
   attendance:
     url: '${ATTENDANCE_NODEJS_SERVICE_URI}/api/'
+
+  devicetoken:
+      url: '${DEVICE_TOKEN_GO_SERVICE_URI}/api/'
 
   mockserver:
     url: '${MOCKSERVER_NODEJS_SERVICE_URI}/api/'
@@ -267,5 +275,21 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: attendance
+              changeOrigin: true
+
+  devicetoken:
+    apiEndpoints:
+      - devicetoken
+    policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
+      - jwt:
+          - action:
+              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+              checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: devicetoken
               changeOrigin: true
               

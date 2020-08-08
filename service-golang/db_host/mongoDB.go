@@ -10,7 +10,7 @@ import (
 
 var MongoDB *mongo.Database
 
-func InitMongoDB(url string) *mongo.Database {
+func InitMongoDB(url string, nameDB string) *mongo.Database {
 	client, err := mongo.Connect(
 		context.Background(),
 		options.Client().ApplyURI(url),
@@ -19,7 +19,7 @@ func InitMongoDB(url string) *mongo.Database {
 	if err != nil {
 		log.Fatal(err)
 	}
-	MongoDB = client.Database("attendance")
+	MongoDB = client.Database(nameDB)
 	return MongoDB
 }
 
