@@ -40,12 +40,17 @@ func (config *ConfigDB) postDeviceToken(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	result, err := collection.InsertOne(ctx, payload)
-	if err != nil {
-		log.Fatal(err)
+	count, _ := collection.CountDocuments(ctx, models.DeviceToken{UserID: payload.UserID})
+	if count == 1 {
+		utils.ResponseError(w, http.StatusBadRequest, "userID is exist")
+		return
+	} else {
+		result, err := collection.InsertOne(ctx, payload)
+		if err != nil {
+			log.Fatal(err)
+		}
+		utils.ResponseOk(w, result)
 	}
-
-	utils.ResponseOk(w, result)
 }
 
 func (config *ConfigDB) putDeviceToken(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +65,6 @@ func (config *ConfigDB) putDeviceToken(w http.ResponseWriter, r *http.Request) {
 	}
 	// we dont handle the json decode return error because all our fields have the omitempty tag.
 	var params = mux.Vars(r)
-	oid, err := primitive.ObjectIDFromHex(params["id"])
 	if err != nil {
 		utils.ResponseError(w, http.StatusBadRequest, "id that you sent is wrong!!!")
 		return
@@ -68,7 +72,7 @@ func (config *ConfigDB) putDeviceToken(w http.ResponseWriter, r *http.Request) {
 	update := bson.M{
 		"$set": updateData,
 	}
-	result, err := collection.UpdateOne(ctx, models.DeviceToken{ID: oid}, update)
+	result, err := collection.UpdateOne(ctx, models.DeviceToken{UserID: params["userID"]}, update)
 	if err != nil {
 		log.Printf("Error while updateing document: %v", err)
 		utils.ResponseError(w, http.StatusInternalServerError, "error in updating document!!!")

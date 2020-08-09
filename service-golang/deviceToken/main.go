@@ -9,9 +9,9 @@ import (
 
 func newRouter(config *ConfigDB) (router *mux.Router) {
 	router = mux.NewRouter()
-	router.HandleFunc("/api/device-token", config.listDeviceToken).Methods("GET")
+	router.HandleFunc("/api/device-token/list", config.listDeviceToken).Methods("GET")
 	router.HandleFunc("/api/device-token/create", config.postDeviceToken).Methods("POST")
-	router.HandleFunc("/api/device-token/update/{id}", config.putDeviceToken).Methods("PUT")
+	router.HandleFunc("/api/device-token/update/{userID}", config.putDeviceToken).Methods("PUT")
 	router.HandleFunc("/api/device-token/delete/{id}", config.deleteDeviceToken).Methods("DELETE")
 	return
 }

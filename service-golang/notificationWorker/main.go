@@ -24,7 +24,7 @@ func main() {
 	}
 
 	// Create a FCM client to send the message.
-	client, err := fcm.NewClient(utils.GetEnv("FCM_TOKEN"))
+	client, err := fcm.NewClient(utils.GetEnv("FCM_SERVER_KEY"))
 	if err != nil {
 		log.Fatalln(err)
 	}

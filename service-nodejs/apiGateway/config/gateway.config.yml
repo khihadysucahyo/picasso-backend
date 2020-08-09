@@ -55,7 +55,7 @@ apiEndpoints:
   devicetoken:
     host: '*'
     paths: /device-token/*
-    methods: [POST","PUT","DELETE","OPTIONS"]
+    methods: ["GET","POST","PUT","DELETE","OPTIONS"]
 
   mockserver:
     host: '*'
