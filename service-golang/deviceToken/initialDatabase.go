@@ -11,18 +11,18 @@ import (
 
 // ConfigDB mongo
 type ConfigDB struct {
-	mongodb *mongo.Database
+	db *mongo.Database
 }
 
 // Initialize mongodb connection
 func Initialize() (*ConfigDB, error) {
 	addr := "mongodb://" + utils.GetEnv("DB_MONGO_HOST") + ":" + utils.GetEnv("DB_MONGO_PORT")
-	nameDB := utils.GetEnv("MONGO_DB_ATTENDANCE")
+	nameDB := utils.GetEnv("MONGO_DB_NOTIFICATION_TOKEN")
 	config := ConfigDB{}
 	// Connect to MongoDB
 	retry.ForeverSleep(2*time.Second, func(attempt int) error {
-		mongodb := db.InitMongoDB(addr, nameDB)
-		config.mongodb = mongodb
+		db := db.InitMongoDB(addr, nameDB)
+		config.db = db
 		return nil
 	})
 	return &config, nil

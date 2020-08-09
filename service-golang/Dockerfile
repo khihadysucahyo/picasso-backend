@@ -6,7 +6,13 @@ WORKDIR /app
 COPY go.mod go.sum ./
 
 # Dependency install
-RUN go get -d
+RUN go get -d -v
+
+#disable crosscompiling 
+ENV CGO_ENABLED=0
+
+#compile linux only
+ENV GOOS=linux
 
 COPY db_host db_host
 COPY middleware middleware
@@ -16,11 +22,13 @@ COPY satuankerja satuankerja
 COPY jabatan jabatan
 COPY eventuser eventuser
 COPY jobAttendance jobAttendance
+COPY deviceToken deviceToken
 COPY utils utils
 
 RUN go install ./...
 
 FROM alpine:3.7
+
 WORKDIR /usr/bin
 
 ARG POSTGRESQL_HOST

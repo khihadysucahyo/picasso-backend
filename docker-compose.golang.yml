@@ -39,6 +39,16 @@ services:
     env_file: 
       - .env-golang
 
+  devicetoken:
+    build:
+      context: ./service-golang
+    command: "deviceToken"
+    restart: always
+    networks:
+      - devicetoken
+    env_file: 
+      - .env-golang
+
 networks:
   satuankerja:
     external:
@@ -53,5 +63,9 @@ networks:
       name: gateway
   
   jobattendance:
+    external:
+      name: gateway
+
+  devicetoken:
     external:
       name: gateway

@@ -3,6 +3,8 @@ module github.com/jabardigitalservice/picasso-backend/service-golang
 go 1.12
 
 require (
+	github.com/NaySoftware/go-fcm v0.0.0-20190516140123-808e978ddcd2
+	github.com/appleboy/go-fcm v0.1.5
 	github.com/auth0/go-jwt-middleware v0.0.0-20190805220309-36081240882b
 	github.com/bdwilliams/go-jsonify v0.0.0-20141020182238-48749139e742
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -16,6 +18,7 @@ require (
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/lib/pq v1.3.0
+	github.com/maddevsio/fcm v1.0.5
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
