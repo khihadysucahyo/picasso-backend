@@ -23,6 +23,7 @@ COPY jabatan jabatan
 COPY eventuser eventuser
 COPY jobAttendance jobAttendance
 COPY deviceToken deviceToken
+COPY notificationWorker notificationWorker
 COPY utils utils
 
 RUN go install ./...
