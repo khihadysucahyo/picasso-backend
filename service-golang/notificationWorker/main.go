@@ -2,38 +2,22 @@ package main
 
 import (
 	"log"
+	"runtime"
 
-	"github.com/appleboy/go-fcm"
+	"github.com/jabardigitalservice/picasso-backend/service-golang/utils"
+	"github.com/robfig/cron"
 )
 
 func main() {
-	deviceToken := "device_token"
-	msg := &fcm.Message{
-		To:       deviceToken,
-		Priority: "high",
-		Notification: &fcm.Notification{
-			Title:       "",
-			Body:        "",
-			Icon:        "",
-			Badge:       "",
-			Image:       "",
-			Sound:       "",
-			ClickAction: "",
-			Color:       "",
-		},
-	}
+	config, err := Initialize()
 
-	// Create a FCM client to send the message.
-	client, err := fcm.NewClient(utils.GetEnv("FCM_SERVER_KEY"))
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 
-	// Send the message and receive the response without retries.
-	response, err := client.SendWithRetry(msg, 10)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	c := cron.New()
+	c.AddFunc(utils.GetEnv("CHECKIN_CRON_JOB"), func() { sendToAll(config) })
 
-	log.Printf("%#v\n", response)
+	c.Start()
+	runtime.Goexit()
 }

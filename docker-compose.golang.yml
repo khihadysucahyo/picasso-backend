@@ -49,6 +49,16 @@ services:
     env_file: 
       - .env-golang
 
+  notificationworker:
+    build:
+      context: ./service-golang
+    command: "notificationWorker"
+    restart: always
+    networks:
+      - notificationworker
+    env_file: 
+      - .env-golang
+
 networks:
   satuankerja:
     external:
@@ -69,3 +79,7 @@ networks:
   devicetoken:
     external:
       name: gateway
+
+  notificationworker:
+      external:
+        name: gateway
