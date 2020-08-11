@@ -76,7 +76,6 @@ def exportExcel():
     divisi = request.args.get('divisi')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
-
     dates = [start_date, end_date]
 
     output = StringIO()
