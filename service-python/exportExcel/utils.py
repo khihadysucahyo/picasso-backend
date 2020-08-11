@@ -1,5 +1,11 @@
 from datetime import datetime, timedelta
 from collections import OrderedDict
+try:
+    # Python 2
+    xrange
+except NameError:
+    # Python 3, xrange is now named range
+    xrange = range
 
 def monthlist_short(dates):
     start, end = [datetime.strptime(_, "%Y-%m-%d") for _ in dates]
