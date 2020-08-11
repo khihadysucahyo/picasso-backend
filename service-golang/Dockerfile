@@ -1,19 +1,9 @@
 FROM golang:1.12.17-alpine3.11 AS build
 RUN apk --no-cache add gcc g++ make ca-certificates git
-RUN mkdir /app
-WORKDIR /app
+WORKDIR /go/src/github.com/jabardigitalservice/picasso-backend/service-golang
 
-COPY go.mod go.sum ./
-
-# Dependency install
-RUN go get -d -v
-
-#disable crosscompiling 
-ENV CGO_ENABLED=0
-
-#compile linux only
-ENV GOOS=linux
-
+COPY Gopkg.lock Gopkg.toml ./
+COPY vendor vendor
 COPY db_host db_host
 COPY middleware middleware
 COPY models models
@@ -28,12 +18,11 @@ COPY utils utils
 
 RUN go install ./...
 
+# 5 build the GO program
+RUN CGO_ENABLED=0 GOOS=linux
+
 FROM alpine:3.7
-
 WORKDIR /usr/bin
-
-ARG POSTGRESQL_HOST
-ARG POSTGRESQL_PORT
 
 ENV TZ=Asia/Jakarta
 RUN apk --update add tzdata && \
