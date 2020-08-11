@@ -1,6 +1,11 @@
-import os, json, math, xlsxwriter, StringIO
+import os, json, math, xlsxwriter
 from datetime import datetime, timedelta
 from xlsxwriter.utility import xl_range
+
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 from os.path import join, dirname, exists
 from dotenv import load_dotenv
@@ -71,10 +76,10 @@ def exportExcel():
     divisi = request.args.get('divisi')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
-    
+
     dates = [start_date, end_date]
 
-    output = StringIO.StringIO()
+    output = StringIO()
     workbook = xlsxwriter.Workbook(output, {'in_memory': True})
     worksheet = workbook.add_worksheet()
 
