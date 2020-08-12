@@ -28,7 +28,9 @@ function encode(input) {
 }
 
 function imageResize(input) {
-    return sharp(input)
+    return sharp(input, {
+            failOnError: false
+        })
         .resize({
             width: 350,
             fit: sharp.fit.contain,
