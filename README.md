@@ -1,16 +1,24 @@
 # kepegawaian-apps
 
-### Start/Stop all services
-
+### First 
 ```bash
-make start-all
-make stop-all
+Rename .env-database-example file to .env-database
+Rename .env-golang-example file to .env-golang
+Rename .env-nodejs-example file to .env-nodejs
+Rename .env-python-example file to .env-python
 ```
 
 ### Create network
 
 ```bash
 make create-network
+```
+
+### Start/Stop all services
+
+```bash
+make start-all
+make stop-all
 ```
 
 ### Start/Stop services one by one
