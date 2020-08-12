@@ -64,9 +64,10 @@ const route = require('./routes')
 //routes
 app.use('/api/logbook', route)
 Raven.config(process.env.SENTRY_URI).install()
-app.listen(8202, () => {
-    console.log(`Api Logbook service listening on port 8202`)
+
+const host = process.env.HOST || "0.0.0.0"
+const port = process.env.LOGBOOK_PORT || 80
+
+app.listen(port, () => {
+    console.log(`Api Logbook service listening on port ${host}:${port}`)
 })
-
-
-

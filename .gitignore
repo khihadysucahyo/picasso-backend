@@ -10,5 +10,9 @@ service-golang/event/
 service-python/executeFunction/
 service-nodejs/lerna-debug.log
 .DS_Store
-/.env
+.env
+.env-golang
+.env-nodejs
+.env-python
+.env-database
 data/

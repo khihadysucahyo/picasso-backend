@@ -142,5 +142,6 @@ def listUserByUnit():
             response.append(conv_func(i, totalReport, totalHours))
     return json.dumps(response)
 
+port = os.environ.get('MONTHLY_REPORT_PORT', 80)
 if __name__ == '__main__':
-      app.run(debug=True, host='0.0.0.0', port=8101)
+      app.run(debug=True, host='0.0.0.0', port=int(port))
