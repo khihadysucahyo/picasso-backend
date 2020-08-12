@@ -66,9 +66,10 @@ app.use('/api/attendance', route)
 
 Raven.config(process.env.SENTRY_URI).install()
 
-app.listen(8204, () => {
-    console.log(`Api Attendance service listening on port 8204`)
+const host = process.env.HOST || "0.0.0.0"
+const port = process.env.ATTENDANCE_PORT || 80
+
+app.listen(port, () => {
+    console.log(`Api Attendance service listening on port ${host}:${port}`)
 })
-
-
 

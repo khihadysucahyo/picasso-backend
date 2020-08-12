@@ -66,6 +66,10 @@ server.use(jsonServer.rewriter({
 
 server.use(middlewares)
 server.use(router)
-server.listen(3000, '0.0.0.0', () => {
-  console.log('JSON Server is running')
+
+const host = process.env.HOST || "0.0.0.0"
+const port = process.env.MOCKSERVER_PORT || 3000
+
+server.listen(port, host, () => {
+  console.log(`Api mockserver service listening on port ${host}:${port}`)
 })

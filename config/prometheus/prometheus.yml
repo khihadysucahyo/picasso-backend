@@ -38,10 +38,6 @@ scrape_configs:
         labels:
           application: 'apigateway'
 
-      - targets: ['mockserver']
-        labels:
-          application: 'mockserver'
-
       - targets: ['uploadfile']
         labels:
           application: 'uploadfile'
@@ -49,7 +45,19 @@ scrape_configs:
       - targets: ['logbook']
         labels:
           application: 'logbook'
-          
+
+      - targets: ['monthlyreport']
+        labels:
+          application: 'monthlyreport'
+
+      - targets: ['exportexcel']
+        labels:
+          application: 'exportexcel'
+
+      - targets: ['devicetoken']
+        labels:
+          application: 'devicetoken'
+
   - job_name: 'prometheus'
 
     scrape_interval: 5s

@@ -17,6 +17,8 @@ build:
 compose-service-monitoring=docker-compose -f docker-compose.monitoring.yml -p service_monitoring
 start-service-monitoring:
 	@$(compose-service-monitoring) up -d
+rebuild-service-monitoring:
+	@$(compose-service-monitoring) up -d --build
 stop-service-monitoring:
 	@$(compose-service-monitoring) stop
 
@@ -24,6 +26,8 @@ stop-service-monitoring:
 compose-service-database=docker-compose -f docker-compose.database.yml -p service_database
 start-service-database:
 	@$(compose-service-database) up -d
+rebuild-service-database:
+	@$(compose-service-database) up -d --build
 stop-service-database:
 	@$(compose-service-database) stop
 
@@ -31,6 +35,8 @@ stop-service-database:
 compose-service-python=docker-compose -f docker-compose.python.yml -p service_python
 start-service-python:
 	@$(compose-service-python) up -d
+rebuild-service-python:
+	@$(compose-service-python) up -d --build
 stop-service-python:
 	@$(compose-service-python) stop
 
@@ -38,6 +44,8 @@ stop-service-python:
 compose-service-nodejs=docker-compose -f docker-compose.nodejs.yml -p service_nodejs
 start-service-nodejs:
 	@$(compose-service-nodejs) up -d
+rebuild-service-nodejs:
+	@$(compose-service-nodejs) up -d --build
 stop-service-nodejs:
 	@$(compose-service-nodejs) stop
 
@@ -45,6 +53,8 @@ stop-service-nodejs:
 compose-service-golang=docker-compose -f docker-compose.golang.yml -p service_golang
 start-service-golang:
 	@$(compose-service-golang) up -d
+rebuild-service-golang:
+	@$(compose-service-golang) up -d --build
 stop-service-golang:
 	@$(compose-service-golang) stop
 
@@ -52,6 +62,8 @@ stop-service-golang:
 compose-service-traefik=docker-compose -f docker-compose.traefik.yml -p service_traefik
 start-service-traefik:
 	@$(compose-service-traefik) up -d
+rebuild-service-traefik:
+	@$(compose-service-traefik) up -d --build
 stop-service-traefik:
 	@$(compose-service-traefik) stop
 
@@ -59,6 +71,8 @@ stop-service-traefik:
 start-all: start-service-database start-service-python start-service-golang start-service-nodejs start-service-monitoring
 
 stop-all: stop-service-database stop-service-python stop-service-golang stop-service-nodejs stop-service-monitoring
+
+rebuild-service: rebuild-service-python rebuild-service-nodejs rebuild-service-golang
 
 clean:
 	@./scripts/clean.sh

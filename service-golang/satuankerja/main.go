@@ -6,7 +6,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/jabardigitalservice/picasso-backend/service-golang/middleware"
+	auth "github.com/jabardigitalservice/picasso-backend/service-golang/middleware"
+	"github.com/jabardigitalservice/picasso-backend/service-golang/utils"
 )
 
 func newRouter(config *ConfigDB) (router *mux.Router) {
@@ -27,7 +28,12 @@ func main() {
 	}
 	// Run HTTP server
 	router := newRouter(configuration)
-	if err := http.ListenAndServe(":8301", auth.AuthMiddleware(router)); err != nil {
+	var port string
+	port = ":" + utils.GetEnv("SATUANKERJA_PORT")
+	if len(port) > 0 {
+		port = ":80"
+	}
+	if err := http.ListenAndServe(port, auth.AuthMiddleware(router)); err != nil {
 		log.Fatal(err)
 	}
 }
