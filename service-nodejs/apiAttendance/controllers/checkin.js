@@ -28,6 +28,7 @@ module.exports = async (req, res) => { // eslint-disable-line
             date = null,
             location = null,
             message = null,
+            note = null
         } = req.body
 
         let start = moment().set({
@@ -67,6 +68,7 @@ module.exports = async (req, res) => { // eslint-disable-line
             startDate: date,
             location,
             message,
+            note,
             ...onCreated(session)
         }
 
