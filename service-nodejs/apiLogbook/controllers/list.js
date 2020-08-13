@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
     // Get request params
     const session = req.user
     let sort = {
-      dateTask: -1,
+      dateTask: 1,
     }
     const page = parseInt(req.query.page) || 1
     const pageSize = parseInt(req.query.pageSize) || 10
@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
         search,
         start_date,
         end_date,
-        _sort
+        sort: _sort
     } = req.query
 
     const rules = [
