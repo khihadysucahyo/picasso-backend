@@ -1,49 +1,8 @@
-FROM ubuntu:16.04
-LABEL maintainer="<Arif Wicaksono> arifboyz16@gmail.com"
+FROM python:3.7-slim
 
-# Install required packages and remove the apt packages cache when done.
-ENV TZ=Asia/Jakarta
+RUN python -m pip install --upgrade pip
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y \
-	git \
-	python3 \
-	python3-dev \
-	python3-setuptools \
-	python3-pip \
-	nginx \
-	tzdata \
-	supervisor && \
-	pip3 install -U pip setuptools && \
-	cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-   rm -rf /var/lib/apt/lists/*
+COPY requirements.txt requirements.txt
+RUN python -m pip install -r requirements.txt
 
-# install uwsgi now because it takes a little while
-RUN pip3 install uwsgi
-
-ADD . /opt/authServer
-WORKDIR /opt/authServer
-
-# setup all the configfiles
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-COPY /conf/nginx/nginx-app.conf /etc/nginx/sites-available/default
-COPY /conf/supervisord/supervisord-app.conf /etc/supervisor/conf.d/
-
-ARG SECRET_KEY
-ARG TOKEN_KEY
-ARG POSTGRESQL_HOST
-ARG POSTGRESQL_PORT
-ARG DB_NAME_AUTH
-ARG DB_USER_AUTH
-ARG DB_PASSWORD_AUTH
-ARG DJANGO_DB_NAME
-ARG DJANGO_SU_NAME
-ARG DJANGO_SU_EMAIL
-ARG DJANGO_SU_PASSWORD
-
-# COPY SOURCE TO IMAGE
-RUN pip3 install -r requirements.txt
-
-EXPOSE 80
-CMD ["supervisord", "-n"]
+COPY . .
