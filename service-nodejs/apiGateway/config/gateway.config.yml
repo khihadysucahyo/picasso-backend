@@ -42,6 +42,11 @@ apiEndpoints:
     paths: /monthly-report/*
     methods: ["GET","OPTIONS"]
 
+  exportexcel:
+    host: '*'
+    paths: /export-excel/*
+    methods: ["GET","OPTIONS"]
+
   project:
     host: '*'
     paths: /project/*
@@ -84,6 +89,9 @@ serviceEndpoints:
 
   monthlyreport:
     url: '${MONTHLY_REPORT_PY_SERVICE_URI}/api/'
+
+  exportexcel:
+    url: '${EXPORT_EXCEL_PY_SERVICE_URI}/api/'
 
   project:
     url: '${PROJECT_NODEJS_SERVICE_URI}/api/'
@@ -243,6 +251,22 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: monthlyreport
+              changeOrigin: true
+
+  exportexcel:
+    apiEndpoints:
+      - exportexcel
+    policies:
+      - cors:
+          - action:
+              allowedHeaders: '*'
+      - jwt:
+          - action:
+              secretOrPublicKey: '${SECRET_KEY:-SECRET_KEY}'
+              checkCredentialExistence: false
+      - proxy:
+          - action:
+              serviceEndpoint: exportexcel
               changeOrigin: true
 
   project:

@@ -65,9 +65,9 @@ module.exports = async (req, res, next) => {
     // Get results
     const results = await Project
       .aggregate(rules)
+      .sort(sort)
       .skip(skip)
       .limit(pageSize)
-      .sort(sort)
 
     res.status(200).json({
       filtered: filtered.length > 0 ? filtered[0].rows : 0,
