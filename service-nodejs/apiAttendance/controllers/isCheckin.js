@@ -10,23 +10,16 @@ module.exports = async (req, res) => { // eslint-disable-line
     try {
         const session = req.user
 
-        let start = moment().set({
-            "hour": 0,
-            "minute": 0,
-            "second": 0
-        }).format()
+        const start = moment().format("YYYY/MM/DD")
 
-        let end = moment().set({
-            "hour": 23,
-            "minute": 59,
-            "second": 59
-        }).format()
+        const end = moment().format("YYYY/MM/DD")
+
         const rules = [{
             $match: {
                 'createdBy.email': session.email,
-                createdAt: {
-                    $gte: new Date(start),
-                    $lt: new Date(end)
+                startDate: {
+                    $gte: new Date(`${start} 00:00:00 +0000`),
+                    $lt: new Date(`${end} 23:59:59 +0000`)
                 }
             },
         }]

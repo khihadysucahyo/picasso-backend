@@ -31,17 +31,9 @@ module.exports = async (req, res) => { // eslint-disable-line
             note = null
         } = req.body
 
-        let start = moment().set({
-            "hour": 0,
-            "minute": 0,
-            "second": 0
-        }).format()
+        const start = moment().format("YYYY/MM/DD")
 
-        let end = moment().set({
-            "hour": 23,
-            "minute": 59,
-            "second": 59
-        }).format()
+        const end = moment().format("YYYY/MM/DD")
 
         if (moment().isSame(date, 'day') === false) throw new APIError({
             code: 422,
@@ -52,8 +44,8 @@ module.exports = async (req, res) => { // eslint-disable-line
             $match: {
                 'createdBy.email': session.email,
                 startDate: {
-                    $gte: new Date(start),
-                    $lt: new Date(end)
+                    $gte: new Date(`${start} 00:00:00 +0000`),
+                    $lt: new Date(`${end} 23:59:59 +0000`)
                 }
             },
         }]
@@ -80,7 +72,6 @@ module.exports = async (req, res) => { // eslint-disable-line
         })
 
     } catch (error) {
-        console.log(error)
         const {
             code,
             message,
