@@ -12,7 +12,7 @@ import (
 	"github.com/jabardigitalservice/picasso-backend/service-golang/models"
 	"github.com/jabardigitalservice/picasso-backend/service-golang/utils"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func (config *ConfigDB) listDeviceToken(w http.ResponseWriter, r *http.Request) {
@@ -85,17 +85,31 @@ func (config *ConfigDB) putDeviceToken(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (config *ConfigDB) detailDeviceToken(w http.ResponseWriter, r *http.Request) {
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	nameDB := utils.GetEnv("MONGO_DB_NOTIFICATION_TOKEN")
+	collection := config.db.Collection(nameDB)
+	var params = mux.Vars(r)
+	var deviceToken models.DeviceToken
+	err := collection.FindOne(ctx, models.DeviceToken{UserID: params["userID"]}).Decode(&deviceToken)
+	if err != nil {
+		switch err {
+		case mongo.ErrNoDocuments:
+			utils.ResponseError(w, http.StatusInternalServerError, "device token not found")
+		default:
+			utils.ResponseError(w, http.StatusInternalServerError, "there is an error on server!!!")
+		}
+		return
+	}
+	utils.ResponseOk(w, deviceToken)
+}
+
 func (config *ConfigDB) deleteDeviceToken(w http.ResponseWriter, r *http.Request) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	nameDB := utils.GetEnv("MONGO_DB_NOTIFICATION_TOKEN")
 	collection := config.db.Collection(nameDB)
 	var params = mux.Vars(r)
-	oid, err := primitive.ObjectIDFromHex(params["id"])
-	if err != nil {
-		utils.ResponseError(w, http.StatusBadRequest, "id that you sent is wrong!!!")
-		return
-	}
-	result, err := collection.DeleteOne(ctx, models.DeviceToken{ID: oid})
+	result, err := collection.DeleteOne(ctx, models.DeviceToken{UserID: params["userID"]})
 	if err != nil {
 		log.Printf("Error while updateing document: %v", err)
 		utils.ResponseError(w, http.StatusInternalServerError, "error in updating document!!!")

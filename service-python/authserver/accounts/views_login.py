@@ -48,6 +48,43 @@ def login_view(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@ensure_csrf_cookie
+def login_admin_view(request):
+    User = get_user_model()
+    username = request.data.get('username')
+    password = request.data.get('password')
+    response = Response()
+    if (username is None) or (password is None):
+        raise exceptions.AuthenticationFailed(
+            'username and password required')
+
+    user = User.objects.filter(Q(username=username)|Q(email=username)).first()
+    if(user is None):
+        raise exceptions.AuthenticationFailed('user not found')
+    if (not user.check_password(password)):
+        raise exceptions.AuthenticationFailed('wrong password')
+    if (not user.is_admin):
+        raise exceptions.AuthenticationFailed('user does not have access rights')
+
+    serialized_user = AccountLoginSerializer(user).data
+
+    access_token = generate_access_token(user)
+    refresh_token = generate_refresh_token(user)
+    ip = get_client_ip(request)
+    dt = datetime.datetime.utcnow() + datetime.timedelta(seconds=14420)
+    expTime = int(round(dt.timestamp() * 1000))
+    # response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
+    response.data = {
+        'auth_token': access_token,
+        'refresh_token': refresh_token,
+        'ip' : ip,
+        'exp': expTime
+    }
+
+    return response
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
 def refresh_token_view(request):
     User = get_user_model()
     request.session.clear()
