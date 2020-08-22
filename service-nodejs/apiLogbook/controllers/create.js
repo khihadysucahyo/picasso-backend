@@ -92,6 +92,7 @@ module.exports = async (req, res) => { // eslint-disable-line
         })
 
     } catch (error) {
+      console.log(error)
       const { code, message, data } = error
 
       if (code && message) {

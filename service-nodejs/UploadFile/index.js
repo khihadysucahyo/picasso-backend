@@ -7,10 +7,9 @@ const path = require('path')
 const Raven = require('raven')
 const fileUpload = require('express-fileupload')
 
-// Import middleware
 const env = process.env.NODE_ENV
 try {
-    switch(env) {
+    switch (env) {
         case 'undefined':
             require('dotenv').config();
             break
@@ -26,6 +25,7 @@ try {
     Error('Error trying to run file')
 }
 
+// Import middleware
 const authenticate = require('./controllers/authenticate')
 
 const app = express()
@@ -63,10 +63,12 @@ const route = require('./routes')
 
 //routes
 app.use('/api/file', route)
+
 Raven.config(process.env.SENTRY_URI).install()
-app.listen(8201, () => {
-    console.log(`File Upload service listening on port 8201`)
+
+const host = process.env.HOST || "0.0.0.0"
+const port = process.env.FILEUPLOAD_PORT || 80
+
+app.listen(port, () => {
+    console.log(`Api File Upload service listening on port ${host}:${port}`)
 })
-
-
-

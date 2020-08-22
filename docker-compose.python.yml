@@ -4,18 +4,27 @@ services:
   authserver:
     build:
       context: ./service-python/authserver
+    command: /usr/local/bin/gunicorn authServer.wsgi:application -w 2 -b :80
     networks:
       - authserver
-    ports:
-      - 80:8081
     env_file: 
       - .env-python
 
   monthlyreport:
     build:
       context: ./service-python/monthlyreport
+    command: /usr/local/bin/gunicorn wsgi:app -w 2 -b :80
     networks:
       - monthlyreport
+    env_file: 
+      - .env-python
+
+  exportexcel:
+    build:
+      context: ./service-python/exportExcel
+    command: /usr/local/bin/gunicorn wsgi:app -w 2 -b :80
+    networks:
+      - exportexcel
     env_file: 
       - .env-python
 
@@ -25,5 +34,9 @@ networks:
       name: gateway
 
   monthlyreport:
+    external:
+      name: gateway
+
+  exportexcel:
     external:
       name: gateway

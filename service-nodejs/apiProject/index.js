@@ -64,6 +64,10 @@ const route = require('./routes')
 //routes
 app.use('/api/project', route)
 Raven.config(process.env.SENTRY_URI).install()
-app.listen(8203, () => {
-    console.log(`Data Master Project service listening on port 8203`)
+
+const host = process.env.HOST || "0.0.0.0"
+const port = process.env.PROJECT_PORT || 80
+
+app.listen(port, () => {
+    console.log(`Api Data Master Project service listening on port ${host}:${port}`)
 })
