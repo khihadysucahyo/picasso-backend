@@ -9,7 +9,10 @@ const {
 } = require('../utils/randomString')
 
 async function postFile(fileType, file) {
-    const fileName = file.name
+    let fileName = getRandomString(32)
+    if (file.name) {
+        fileName = file.name
+    }
     const fileExt = fileName.substr((Math.max(0, fileName.lastIndexOf(".")) || Infinity) + 1)
     const newFileName = getRandomString(32) + '.' + fileExt
     const params = {

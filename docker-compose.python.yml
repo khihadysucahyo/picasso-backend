@@ -19,11 +19,23 @@ services:
     env_file: 
       - .env-python
 
+  exportexcel:
+    build:
+      context: ./service-python/exportExcel
+    networks:
+      - exportexcel
+    env_file: 
+      - .env-python
+
 networks:
   authserver:
     external:
       name: gateway
 
   monthlyreport:
+    external:
+      name: gateway
+
+  exportexcel:
     external:
       name: gateway
