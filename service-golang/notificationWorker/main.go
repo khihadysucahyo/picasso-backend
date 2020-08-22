@@ -49,6 +49,6 @@ func main() {
 	// Added time to see output
 	time.Sleep(5 * time.Second)
 
-	// c.Stop() // Stop the scheduler (does not stop any jobs already running).
+	c.Stop() // Stop the scheduler (does not stop any jobs already running).
 	runtime.Goexit()
 }
