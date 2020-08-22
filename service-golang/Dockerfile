@@ -13,6 +13,7 @@ COPY jabatan jabatan
 COPY eventuser eventuser
 COPY jobAttendance jobAttendance
 COPY deviceToken deviceToken
+COPY notificationService notificationService
 COPY notificationWorker notificationWorker
 COPY utils utils
 
