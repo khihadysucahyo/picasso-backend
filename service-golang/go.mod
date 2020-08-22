@@ -10,7 +10,7 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/jinzhu/gorm v1.9.12
 	github.com/joho/godotenv v1.3.0
-	github.com/lib/pq v1.3.0
+	github.com/lib/pq v1.8.0
 	github.com/nats-io/gnatsd v1.4.1 // indirect
 	github.com/nats-io/go-nats v1.7.2
 	github.com/nats-io/nats-server/v2 v2.1.7 // indirect
