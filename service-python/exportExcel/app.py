@@ -118,5 +118,6 @@ def exportExcel():
     output.seek(0)
     return send_file(output, attachment_filename="%s.xlsx" % nameFile, as_attachment=True)
 
+port = os.environ.get('EXPORT_EXCEL_PORT', 80)
 if __name__ == '__main__':
-      app.run(debug=True, host='0.0.0.0', port=8102)
+      app.run(debug=True, host='0.0.0.0', port=int(port))

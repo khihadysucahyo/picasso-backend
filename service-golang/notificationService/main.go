@@ -5,18 +5,14 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-
 	auth "github.com/jabardigitalservice/picasso-backend/service-golang/middleware"
 	"github.com/jabardigitalservice/picasso-backend/service-golang/utils"
 )
 
 func newRouter(config *ConfigDB) (router *mux.Router) {
 	router = mux.NewRouter()
-	router.HandleFunc("/api/satuan-kerja/list", config.listSatuanKerja).Methods("GET")
-	router.HandleFunc("/api/satuan-kerja/create", config.postSatuanKerja).Methods("POST")
-	router.HandleFunc("/api/satuan-kerja/update/{id}", config.putSatuanKerja).Methods("PUT")
-	router.HandleFunc("/api/satuan-kerja/detail/{id}", config.detailSatuanKerja).Methods("GET")
-	router.HandleFunc("/api/satuan-kerja/delete/{id}", config.deleteSatuanKerja).Methods("DELETE")
+	router.HandleFunc("/api/notification/send/all/", config.sendToAll).Methods("POST")
+	router.HandleFunc("/api/notification/send/group/{groupID}", config.sendByGroup).Methods("POST")
 	return
 }
 
@@ -29,7 +25,7 @@ func main() {
 	// Run HTTP server
 	router := newRouter(configuration)
 	var port string
-	port = ":" + utils.GetEnv("SATUANKERJA_PORT")
+	port = ":" + utils.GetEnv("MESSAGE_NOTIFICATION_PORT")
 	if len(port) > 0 {
 		port = ":80"
 	}

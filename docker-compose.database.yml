@@ -4,6 +4,7 @@ services:
 
   mongo:
     image : mongo:4.2.3
+    restart: always
     networks:
       - mongo
     volumes:
@@ -14,20 +15,19 @@ services:
   postgres:
     build:
       context: ./database/postgre
+    restart: always
     networks:
       - postgres
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
-    environment:
-      - POSTGRES_MULTIPLE_DATABASES=authserver,datamaster
-      - POSTGRESQL_PASSWORD=plokijuh
-      - POSTGRESQL_TIMEZONE='Asia/Jakarta'
-      - POSTGRES_HOST_AUTH_METHOD=trust
+    env_file: 
+      - .env-database
 
   redis:
     image : redis:latest
+    restart: always
     networks:
       - redis
     ports:

@@ -40,45 +40,27 @@ module.exports = async (req, res, next) => {
       }
     ]
 
-    if (date) {
-      start = moment(date).set({
-        "hour": 0,
-        "minute": 0,
-        "second": 0
-      }).format()
+    start = moment().format("YYYY/MM/DD")
+    end = moment().format("YYYY/MM/DD")
 
-      end = moment(date).set({
-        "hour": 23,
-        "minute": 59,
-        "second": 59
-      }).format()
+    if (date) {
+      start = moment(date).format("YYYY/MM/DD")
+      end = moment(date).format("YYYY/MM/DD")
 
       rules.push({
         '$match': {
           'startDate': {
-            $gte: new Date(start),
-            $lt: new Date(end)
+            $gte: new Date(`${start} 00:00:00`),
+            $lt: new Date(`${end} 23:59:59`)
           }
         },
       })
     } else {
-      start = moment().set({
-        "hour": 0,
-        "minute": 0,
-        "second": 0
-      }).format()
-
-      end = moment().set({
-        "hour": 23,
-        "minute": 59,
-        "second": 59
-      }).format()
-
       rules.push({
         $match: {
           startDate: {
-            $gte: new Date(start),
-            $lt: new Date(end)
+            $gte: new Date(`${start} 00:00:00`),
+            $lt: new Date(`${end} 23:59:59`)
           }
         },
       })
@@ -107,8 +89,8 @@ module.exports = async (req, res, next) => {
     const count = await Attendance.countDocuments({
       'createdBy.email': session.email,
       startDate: {
-        $gte: new Date(start),
-        $lt: new Date(end)
+        $gte: new Date(`${start} 00:00:00`),
+        $lt: new Date(`${end} 23:59:59`)
       }
     })
     const filtered = await Attendance.aggregate([

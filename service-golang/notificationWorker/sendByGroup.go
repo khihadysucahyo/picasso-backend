@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"time"
 
@@ -11,7 +12,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func sendToAll(config *ConfigDB, message string) {
+func sendByGroup(config *ConfigDB, data []byte) {
+	var parseData map[string]interface{}
+	json.Unmarshal(data, &parseData)
+	message := parseData["message"].(string)
+	groupID := parseData["groupID"].(string)
+	listUser := getListUserByGroup(groupID)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	nameDB := utils.GetEnv("MONGO_DB_NOTIFICATION_TOKEN")
 	collection := config.db.Collection(nameDB)
@@ -19,7 +25,8 @@ func sendToAll(config *ConfigDB, message string) {
 		{"_id", 0},
 		{"deviceToken", 1},
 	}
-	cursor, err := collection.Find(ctx, bson.M{}, options.Find().SetProjection(projection))
+	// fmt.Println('',listUser)
+	cursor, err := collection.Find(ctx, bson.M{"userID": bson.M{"$in": listUser}}, options.Find().SetProjection(projection))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,6 +38,7 @@ func sendToAll(config *ConfigDB, message string) {
 	if err = cursor.All(ctx, &result); err != nil {
 		log.Fatal(err)
 	}
+
 	listToken := []string{}
 	for key := range result {
 		listToken = append(listToken, result[key].DeviceToken)

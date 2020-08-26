@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func sendToAll(config *ConfigDB, message string) {
+func cronJobSendToAll(config *ConfigDB) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	nameDB := utils.GetEnv("MONGO_DB_NOTIFICATION_TOKEN")
 	collection := config.db.Collection(nameDB)
@@ -40,12 +40,13 @@ func sendToAll(config *ConfigDB, message string) {
 		RegistrationIDs: listToken,
 		Priority:        "high",
 		Notification: &fcm.Notification{
-			Title:       "digiteam",
-			Body:        message,
-			Icon:        "/img/icons/android-chrome-192x192.png",
+			Title: "Checkin Kehadiran",
+			Body:  "Selamat pagi, jangan lupa checkin kehadiran.",
+			Icon:  "/img/icons/android-chrome-192x192.png",
+			// Badge:       "/img/icons/android-chrome-192x192.png",
 			Image:       "https://firebasestorage.googleapis.com/v0/b/sapajds.appspot.com/o/FCMImages%2F59417937_385267968984855_3699827078091243520_o.jpg?alt=media&token=6c19bd46-bb5b-4cee-a47f-7cb35c8d24bb",
 			Sound:       "3",
-			ClickAction: "https://groupware.digitalservice.id/#/",
+			ClickAction: "https://groupware.digitalservice.id/#/checkins",
 			Color:       "green",
 		},
 	}
