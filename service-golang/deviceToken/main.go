@@ -12,7 +12,8 @@ func newRouter(config *ConfigDB) (router *mux.Router) {
 	router.HandleFunc("/api/device-token/list", config.listDeviceToken).Methods("GET")
 	router.HandleFunc("/api/device-token/create", config.postDeviceToken).Methods("POST")
 	router.HandleFunc("/api/device-token/update/{userID}", config.putDeviceToken).Methods("PUT")
-	router.HandleFunc("/api/device-token/delete/{id}", config.deleteDeviceToken).Methods("DELETE")
+	router.HandleFunc("/api/device-token/detail/{userID}", config.detailDeviceToken).Methods("GET")
+	router.HandleFunc("/api/device-token/delete/{userID}", config.deleteDeviceToken).Methods("DELETE")
 	return
 }
 

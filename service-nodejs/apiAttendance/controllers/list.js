@@ -30,6 +30,7 @@ module.exports = async (req, res, next) => {
           'officeHours': 1,
           'location': 1,
           'message': 1,
+          'note': 1,
           'fullname': '$createdBy.fullname',
           'email': '$createdBy.email',
           'username': '$createdBy.username',
@@ -127,9 +128,9 @@ module.exports = async (req, res, next) => {
     // Get results
     const results = await Attendance
       .aggregate(rules)
+      .sort(sort)
       .skip(skip)
       .limit(pageSize)
-      .sort(sort)
 
     res.status(200).json({
       filtered: filtered.length > 0 ? filtered[0].rows : 0,

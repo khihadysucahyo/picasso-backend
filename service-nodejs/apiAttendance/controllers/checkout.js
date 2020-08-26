@@ -32,17 +32,9 @@ module.exports = async (req, res) => { // eslint-disable-line
             date = null,
         } = req.body
 
-        let start = moment().set({
-            "hour": 0,
-            "minute": 0,
-            "second": 0
-        }).format()
+        const start = moment().format("YYYY/MM/DD")
 
-        let end = moment().set({
-            "hour": 23,
-            "minute": 59,
-            "second": 59
-        }).format()
+        const end = moment().format("YYYY/MM/DD")
 
         let minCheckout = moment().set({
             "hour": 16,
@@ -54,8 +46,8 @@ module.exports = async (req, res) => { // eslint-disable-line
             $match: {
                 'createdBy.email': session.email,
                 startDate: {
-                    $gte: new Date(start),
-                    $lt: new Date(end)
+                    $gte: new Date(`${start} 00:00:00`),
+                    $lt: new Date(`${end} 23:59:59`)
                 }
             },
         }]
@@ -63,8 +55,8 @@ module.exports = async (req, res) => { // eslint-disable-line
             $match: {
                 'createdBy.email': session.email,
                 endDate: {
-                    $gte: new Date(start),
-                    $lt: new Date(end)
+                    $gte: new Date(`${start} 00:00:00`),
+                    $lt: new Date(`${end} 23:59:59`)
                 }
             },
         }]

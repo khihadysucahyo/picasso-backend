@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from accounts.views import AccountViewSet
 from accounts.views_social import oauth2_signin, detailUser
-from accounts.views_login import login_view, refresh_token_view
+from accounts.views_login import login_view, login_admin_view, refresh_token_view
 from rest_framework_jwt.views import refresh_jwt_token
 from rest_framework import routers
 
@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/token/refresh', refresh_jwt_token),
     path('api/social/google-oauth2/', oauth2_signin),
     path('api/auth/login/', login_view),
+    path('api/auth/admin/login/', login_admin_view),
     path('api/auth/refresh/', refresh_token_view),
 
     #Restframework

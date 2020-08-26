@@ -28,6 +28,11 @@ const Attendance = new Schema({
       required: false,
       default: null
     },
+    note: {
+        type: String,
+        required: false,
+        default: null
+    },
     ...attributes
 })
 

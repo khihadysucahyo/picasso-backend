@@ -24,15 +24,15 @@ const BlobsFile = require('../models/BlobsFile')
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const session = req.user
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
+        const errorsValidate = validationResult(req)
+        if (!errorsValidate.isEmpty()) {
             res.status(422).json({
                 code: 422,
-                errors: errors.array(),
+                errors: errorsValidate.array(),
             })
             return
         }
-        if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.serverError)
+        if (!req.files || Object.keys(req.files).length === 0) throw new APIError(errors.validationError)
         const evidenceResponse = await postFile('image', req.files.evidenceTask)
         const miniBuffer = await imageResize(req.files.evidenceTask.data)
         const bytes = new Uint8Array(miniBuffer)
@@ -54,7 +54,7 @@ module.exports = async (req, res) => { // eslint-disable-line
         const isTask = String(isMainTask) === 'true'
         const isLink = String(isDocumentLink) === 'true'
         if (isLink) {
-            if (req.body.documentTask.length < 0) throw new APIError(errors.serverError)
+            if (req.body.documentTask.length < 0) throw new APIError(errors.validationError)
             documentResponse = {
                 filePath: '',
                 fileURL: req.body.documentTask
@@ -92,7 +92,6 @@ module.exports = async (req, res) => { // eslint-disable-line
         })
 
     } catch (error) {
-      console.log(error)
       const { code, message, data } = error
 
       if (code && message) {
