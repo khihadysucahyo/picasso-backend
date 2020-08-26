@@ -73,9 +73,9 @@ module.exports = async (req, res) => { // eslint-disable-line
                 fileURL: req.body.documentTask
             }
         } else {
-            if (req.files) {
+            if (req.files.documentTask) {
                 documentResponse = await updateFile(
-                    resultLogBook.evidenceTask.filePath,
+                    resultLogBook.documentTask.filePath,
                     'document',
                     req.files.documentTask
                 )
