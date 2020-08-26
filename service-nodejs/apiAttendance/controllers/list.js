@@ -41,44 +41,26 @@ module.exports = async (req, res, next) => {
     ]
 
     if (date) {
-      start = moment(date).set({
-        "hour": 0,
-        "minute": 0,
-        "second": 0
-      }).format()
-
-      end = moment(date).set({
-        "hour": 23,
-        "minute": 59,
-        "second": 59
-      }).format()
+      const start = moment(date).format("YYYY/MM/DD")
+      const end = moment(date).format("YYYY/MM/DD")
 
       rules.push({
         '$match': {
           'startDate': {
-            $gte: new Date(start),
-            $lt: new Date(end)
+            $gte: new Date(`${start} 00:00:00`),
+            $lt: new Date(`${end} 23:59:59`)
           }
         },
       })
     } else {
-      start = moment().set({
-        "hour": 0,
-        "minute": 0,
-        "second": 0
-      }).format()
-
-      end = moment().set({
-        "hour": 23,
-        "minute": 59,
-        "second": 59
-      }).format()
+      const start = moment().format("YYYY/MM/DD")
+      const end = moment().format("YYYY/MM/DD")
 
       rules.push({
         $match: {
           startDate: {
-            $gte: new Date(start),
-            $lt: new Date(end)
+            $gte: new Date(`${start} 00:00:00`),
+            $lt: new Date(`${end} 23:59:59`)
           }
         },
       })

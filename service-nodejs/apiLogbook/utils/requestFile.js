@@ -1,4 +1,5 @@
 const {
+    errors,
     APIError
 } = require('./exceptions')
 const {
@@ -48,11 +49,14 @@ async function updateFile(lastFilePath, fileType, file) {
         }
     }
 
-    await s3.deleteObjects(deleteParam, function (err, data) {
-        if (err) {
-            throw new APIError(errors.serverError)
-        }
-    })
+    if (lastFilePath !== null) {
+        await s3.deleteObjects(deleteParam, function (err, data) {
+            if (err) {
+                throw new APIError(errors.serverError)
+            }
+        })
+    }
+
     let fileName = getRandomString(32)
     if (file.name) {
         fileName = file.name
