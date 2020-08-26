@@ -40,9 +40,12 @@ module.exports = async (req, res, next) => {
       }
     ]
 
+    start = moment().format("YYYY/MM/DD")
+    end = moment().format("YYYY/MM/DD")
+
     if (date) {
-      const start = moment(date).format("YYYY/MM/DD")
-      const end = moment(date).format("YYYY/MM/DD")
+      start = moment(date).format("YYYY/MM/DD")
+      end = moment(date).format("YYYY/MM/DD")
 
       rules.push({
         '$match': {
@@ -53,9 +56,6 @@ module.exports = async (req, res, next) => {
         },
       })
     } else {
-      const start = moment().format("YYYY/MM/DD")
-      const end = moment().format("YYYY/MM/DD")
-
       rules.push({
         $match: {
           startDate: {
@@ -89,8 +89,8 @@ module.exports = async (req, res, next) => {
     const count = await Attendance.countDocuments({
       'createdBy.email': session.email,
       startDate: {
-        $gte: new Date(start),
-        $lt: new Date(end)
+        $gte: new Date(`${start} 00:00:00`),
+        $lt: new Date(`${end} 23:59:59`)
       }
     })
     const filtered = await Attendance.aggregate([
