@@ -50,22 +50,24 @@ module.exports = async (req, res) => { // eslint-disable-line
             otherInformation = null,
             isDocumentLink = null
         } = req.body
-
         const isTask = String(isMainTask) === 'true'
         const isLink = String(isDocumentLink) === 'true'
         let dataBlobEvidence = null
-        if (req.files) {
-            evidenceResponse = await updateFile(
-                resultLogBook.evidenceTask.filePath,
-                'image',
-                req.files.evidenceTask
-            )
-            const miniBuffer = await imageResize(req.files.evidenceTask.data)
-            const bytes = new Uint8Array(miniBuffer)
-            dataBlobEvidence = 'data:image/png;base64,' + encode(bytes)
-        } else {
+        try {
+            if (req.files.evidenceTask !== null) {
+                evidenceResponse = await updateFile(
+                    resultLogBook.evidenceTask.filePath,
+                    'image',
+                    req.files.evidenceTask
+                )
+                const miniBuffer = await imageResize(req.files.evidenceTask.data)
+                const bytes = new Uint8Array(miniBuffer)
+                dataBlobEvidence = 'data:image/png;base64,' + encode(bytes)
+            }
+        } catch(err) {
             evidenceResponse = resultLogBook.evidenceTask
         }
+
         if (isLink) {
             if (req.body.documentTask.length < 0) throw new APIError(errors.serverError)
             documentResponse = {
@@ -73,13 +75,15 @@ module.exports = async (req, res) => { // eslint-disable-line
                 fileURL: req.body.documentTask
             }
         } else {
-            if (req.files.documentTask) {
-                documentResponse = await updateFile(
-                    resultLogBook.documentTask.filePath,
-                    'document',
-                    req.files.documentTask
-                )
-            } else {
+            try {
+                if (req.files.documentTask) {
+                    documentResponse = await updateFile(
+                        resultLogBook.documentTask.filePath,
+                        'document',
+                        req.files.documentTask
+                    )
+                }
+            } catch(err) {
                 documentResponse = resultLogBook.documentTask
             }
         }

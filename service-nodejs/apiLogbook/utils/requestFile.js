@@ -1,4 +1,5 @@
 const {
+    errors,
     APIError
 } = require('./exceptions')
 const {
