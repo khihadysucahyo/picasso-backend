@@ -48,12 +48,15 @@ async function updateFile(lastFilePath, fileType, file) {
             }]
         }
     }
+    console.log(lastFilePath)
+    if (lastFilePath !== null) {
+        await s3.deleteObjects(deleteParam, function (err, data) {
+            if (err) {
+                throw new APIError(errors.serverError)
+            }
+        })
+    }
 
-    await s3.deleteObjects(deleteParam, function (err, data) {
-        if (err) {
-            throw new APIError(errors.serverError)
-        }
-    })
     let fileName = getRandomString(32)
     if (file.name) {
         fileName = file.name

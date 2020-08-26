@@ -7,6 +7,7 @@ const {
     validationResult
 } = require('express-validator')
 const {
+    postFile,
     updateFile
 } = require('../utils/requestFile')
 const {
@@ -21,11 +22,11 @@ const BlobsFile = require('../models/BlobsFile')
 module.exports = async (req, res) => { // eslint-disable-line
     try {
         const session = req.user
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
+        const errorsValidate = validationResult(req)
+        if (!errorsValidate.isEmpty()) {
             res.status(422).json({
                 code: 422,
-                errors: errors.array(),
+                errors: errorsValidate.array(),
             })
             return
         }
@@ -35,8 +36,8 @@ module.exports = async (req, res) => { // eslint-disable-line
         const resultLogBook = await LogBook.findById({
             _id: _id
         }).lean()
-        let evidenceResponse = {}
-        let documentResponse = {}
+        let evidenceResponse = resultLogBook.evidenceTask
+        let documentResponse = resultLogBook.documentTask
 
         const {
             dateTask = null,
@@ -48,13 +49,13 @@ module.exports = async (req, res) => { // eslint-disable-line
             isMainTask = null,
             workPlace = null,
             otherInformation = null,
-            isDocumentLink = null
+            isDocumentLink = false
         } = req.body
         const isTask = String(isMainTask) === 'true'
         const isLink = String(isDocumentLink) === 'true'
         let dataBlobEvidence = null
         try {
-            if (req.files.evidenceTask !== null) {
+            if (req.files.evidenceTask) {
                 evidenceResponse = await updateFile(
                     resultLogBook.evidenceTask.filePath,
                     'image',
@@ -65,26 +66,30 @@ module.exports = async (req, res) => { // eslint-disable-line
                 dataBlobEvidence = 'data:image/png;base64,' + encode(bytes)
             }
         } catch(err) {
-            evidenceResponse = resultLogBook.evidenceTask
+            //
         }
 
         if (isLink) {
             if (req.body.documentTask.length < 0) throw new APIError(errors.serverError)
             documentResponse = {
-                filePath: '',
+                filePath: null,
                 fileURL: req.body.documentTask
             }
         } else {
             try {
                 if (req.files.documentTask) {
-                    documentResponse = await updateFile(
-                        resultLogBook.documentTask.filePath,
-                        'document',
-                        req.files.documentTask
-                    )
+                    if (resultLogBook.documentTask.filePath === null) {
+                        documentResponse = await postFile('document', req.files.documentTask)
+                    } else {
+                        documentResponse = await updateFile(
+                            resultLogBook.documentTask.filePath,
+                            'document',
+                            req.files.documentTask
+                        )
+                    }
                 }
             } catch(err) {
-                documentResponse = resultLogBook.documentTask
+                //
             }
         }
 
