@@ -89,8 +89,8 @@ const logBookPerDay = (data) => {
 }
 
 const reportForm = (data) => {
-  const month = moment().format('MMMM')
-  const year = moment().format('YYYY')
+  const month = moment(data.reporting_date).format('MMMM')
+  const year = moment(data.reporting_date).format('YYYY')
   
   const {
       user,
