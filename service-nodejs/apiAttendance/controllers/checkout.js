@@ -46,8 +46,8 @@ module.exports = async (req, res) => { // eslint-disable-line
             $match: {
                 'createdBy.email': session.email,
                 startDate: {
-                    $gte: new Date(`${start} 00:00:00 +0000`),
-                    $lt: new Date(`${end} 23:59:59 +0000`)
+                    $gte: new Date(`${start} 00:00:00`),
+                    $lt: new Date(`${end} 23:59:59`)
                 }
             },
         }]
@@ -55,8 +55,8 @@ module.exports = async (req, res) => { // eslint-disable-line
             $match: {
                 'createdBy.email': session.email,
                 endDate: {
-                    $gte: new Date(`${start} 00:00:00 +0000`),
-                    $lt: new Date(`${end} 23:59:59 +0000`)
+                    $gte: new Date(`${start} 00:00:00`),
+                    $lt: new Date(`${end} 23:59:59`)
                 }
             },
         }]
