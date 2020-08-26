@@ -104,8 +104,10 @@ module.exports = async (req, res, next) => {
             const responseParseJabatan = JSON.parse(response)[1]
             const user = JSON.parse(responseParseUser)
             const jabatan = JSON.parse(responseParseJabatan)
+            const reporting_date = end_date ? end_date : moment().format('YYYY-MM-DD')
             const layout = reportForm({
                 user: user,
+                reporting_date: reporting_date,
                 jabatan: jabatan,
                 logBook: logBook,
                 logBookPerDay: logBookPerDay
