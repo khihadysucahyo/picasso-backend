@@ -60,6 +60,8 @@ start-all: start-service-database start-service-python start-service-golang star
 
 stop-all: stop-service-database stop-service-python stop-service-golang stop-service-nodejs stop-service-monitoring
 
+rebuild-service: rebuild-service-python rebuild-service-nodejs rebuild-service-golang
+
 clean:
 	@./scripts/clean.sh
 
