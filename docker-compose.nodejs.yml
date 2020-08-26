@@ -10,8 +10,6 @@ services:
       - /usr/src/app/node_modules
     networks:
       - apigateway
-    ports:
-      - 8001:8001
     env_file: 
       - .env-nodejs
 
