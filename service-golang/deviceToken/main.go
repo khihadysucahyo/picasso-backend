@@ -25,7 +25,12 @@ func main() {
 	}
 	// Run HTTP server
 	router := newRouter(configuration)
-	if err := http.ListenAndServe(":8303", router); err != nil {
+	var port string
+	port = ":" + utils.GetEnv("DEVICE_TOKEN_PORT")
+	if len(port) > 0 {
+		port = ":80"
+	}
+	if err := http.ListenAndServe(port, router); err != nil {
 		log.Fatal(err)
 	}
 }
