@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/jabardigitalservice/picasso-backend/service-golang/utils"
 	"github.com/gorilla/mux"
 )
 
