@@ -126,7 +126,7 @@ def exportExcel():
     red_format = workbook.add_format({'bg_color': '#FFC7CE'})
     totalListDate = len(listDate)
     index = 0
-    for idx in range(0, len(listDate) * 2):
+    for idx in range(0, totalListDate * 2):
         idx += 1
         if (idx % 2 != 0):
             index += 1
