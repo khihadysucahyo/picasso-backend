@@ -109,7 +109,7 @@ def exportExcel():
 
     worksheet.write('A1', 'Nama Divisi')
 
-    listDate = monthlist_short(dates)
+    listDate = list(monthlist_short(dates))
 
     # Write some numbers, with row/column notation.
     worksheet.set_column(0, 0, 20)
@@ -126,7 +126,7 @@ def exportExcel():
     red_format = workbook.add_format({'bg_color': '#FFC7CE'})
     totalListDate = len(listDate)
     index = 0
-    for idx in range(0, len(listDate) * 2):
+    for idx in range(0, totalListDate * 2):
         idx += 1
         if (idx % 2 != 0):
             index += 1
