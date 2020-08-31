@@ -18,24 +18,26 @@ module.exports = async (req, res) => { // eslint-disable-line
         const rules = [{
             $match: {
                 'createdBy.email': session.email,
-                endDate: {
+                startDate: {
                     $gte: new Date(`${start} 00:00:00`),
                     $lt: new Date(`${end} 23:59:59`)
                 }
             },
         }]
 
+        let isCheckout = false
         const checkUserCheckout = await Attendance.aggregate(rules)
 
         if (checkUserCheckout.length >= 1) {
-            res.status(201).send({
-                isCheckout: true,
-            })
-        } else {
-            res.status(201).send({
-                isCheckout: false,
-            })
+            if (checkUserCheckout[0].endDate === null) {
+                isCheckout = false
+            } else {
+                isCheckout = true
+            }
         }
+        res.status(201).send({
+            isCheckout: isCheckout,
+        })
     } catch (error) {
         const {
             code,
