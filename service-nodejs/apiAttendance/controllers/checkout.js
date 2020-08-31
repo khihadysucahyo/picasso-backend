@@ -51,17 +51,9 @@ module.exports = async (req, res) => { // eslint-disable-line
                 }
             },
         }]
-        const rulesCheckout = [{
-            $match: {
-                'createdBy.email': session.email,
-                endDate: {
-                    $gte: new Date(`${start} 00:00:00`),
-                    $lt: new Date(`${end} 23:59:59`)
-                }
-            },
-        }]
+
         const checkUserCheckin = await Attendance.aggregate(rulesCheckin)
-        const checkUserCheckout = await Attendance.aggregate(rulesCheckout)
+
         day = moment(date).format('dddd')
         arrayWeekend = ['Sabtu', 'Minggu']
         isWeekend = arrayWeekend.includes(day)
@@ -70,15 +62,19 @@ module.exports = async (req, res) => { // eslint-disable-line
             message: 'Baru bisa checkout jam 4 sore ya :)',
         })
 
-        if (checkUserCheckin.length <= 0) throw new APIError({
-            code: 422,
-            message: 'Belum melakukan checkin',
-        })
-        
-        if (checkUserCheckout.length >= 1) throw new APIError({
-            code: 422,
-            message: 'Sudah melakukan checkout',
-        })
+        if (checkUserCheckin.length <= 0) {
+            throw new APIError({
+                code: 422,
+                message: 'Belum melakukan checkin',
+            })
+        } else {
+            if (checkUserCheckin[0].endDate !== null) {
+                throw new APIError({
+                    code: 422,
+                    message: 'Sudah melakukan checkout'
+                })
+            }
+        }
 
         const data = {
             endDate: date,

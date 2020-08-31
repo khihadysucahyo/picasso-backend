@@ -5,6 +5,7 @@ services:
     build:
       context: ./service-golang
     command: "satuankerja"
+    restart: always
     networks:
       - satuankerja
     env_file: 
@@ -14,6 +15,7 @@ services:
     build:
       context: ./service-golang
     command: "jabatan"
+    restart: always
     networks:
       - jabatan
     env_file: 
