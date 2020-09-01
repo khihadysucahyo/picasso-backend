@@ -42,15 +42,15 @@ func checkoutAttendance() {
 			panic(err)
 		}
 		tm := time.Unix(i, 0)
-		endDate := time.Unix(tm.Unix(), 0).Add(time.Hour*time.Duration(8) +
-			time.Minute*time.Duration(30) +
+		endDate := time.Unix(tm.Unix(), 0).Add(time.Hour*time.Duration(9) +
+			time.Minute*time.Duration(0) +
 			time.Second*time.Duration(0))
 
 		// db update attendaces
 		filter := bson.D{{"_id", id}}
 		update := bson.D{{"$set",
 			bson.D{
-				{"officeHours", 8.5},
+				{"officeHours", 9},
 				{"endDate", endDate},
 			},
 		}}
