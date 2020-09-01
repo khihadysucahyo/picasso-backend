@@ -30,7 +30,7 @@ func main() {
 	router := newRouter(configuration)
 	var port string
 	port = ":" + utils.GetEnv("SATUANKERJA_PORT")
-	if len(port) > 0 {
+	if len(port) < 2 {
 		port = ":80"
 	}
 	if err := http.ListenAndServe(port, auth.AuthMiddleware(router)); err != nil {

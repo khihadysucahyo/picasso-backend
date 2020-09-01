@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/jabardigitalservice/picasso-backend/service-golang/utils"
 	"github.com/gorilla/mux"
+	"github.com/jabardigitalservice/picasso-backend/service-golang/utils"
 )
 
 func newRouter(config *ConfigDB) (router *mux.Router) {
@@ -28,7 +28,7 @@ func main() {
 	router := newRouter(configuration)
 	var port string
 	port = ":" + utils.GetEnv("DEVICE_TOKEN_PORT")
-	if len(port) > 0 {
+	if len(port) < 2 {
 		port = ":80"
 	}
 	if err := http.ListenAndServe(port, router); err != nil {
