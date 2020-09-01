@@ -31,10 +31,10 @@ func main() {
 	router := newRouter(configuration)
 	var port string
 	port = ":" + utils.GetEnv("JABATAN_PORT")
-	if len(port) > 0 {
+	if len(port) < 2 {
 		port = ":80"
 	}
-	if err := http.ListenAndServe(":8302", auth.AuthMiddleware(router)); err != nil {
+	if err := http.ListenAndServe(port, auth.AuthMiddleware(router)); err != nil {
 		log.Fatal(err)
 	}
 }
