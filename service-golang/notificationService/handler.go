@@ -16,10 +16,10 @@ import (
 
 func (config *ConfigDB) sendToAll(w http.ResponseWriter, r *http.Request) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	// headerCtx := r.Context().Value("user")
-	// sessionUser := headerCtx.(*jwt.Token).Claims.(jwt.MapClaims)
-	// delete(sessionUser, "exp")
-	// delete(sessionUser, "iat")
+	headerCtx := r.Context().Value("user")
+	sessionUser := headerCtx.(*jwt.Token).Claims.(jwt.MapClaims)
+	delete(sessionUser, "exp")
+	delete(sessionUser, "iat")
 	nameDB := utils.GetEnv("MONGO_DB_MESSAGE_NOTIFICATION")
 	collection := config.db.Collection(nameDB)
 	decoder := json.NewDecoder(r.Body)
@@ -40,8 +40,8 @@ func (config *ConfigDB) sendToAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	create := models.MessageNotification{
-		Message: payload.Message,
-		// CreatedBy: sessionUser,
+		Message:   payload.Message,
+		CreatedBy: sessionUser,
 		CreatedAt: time.Now(),
 	}
 
