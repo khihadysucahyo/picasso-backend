@@ -27,6 +27,8 @@ module.exports = async (req, res, next) => {
             end_date
         } = req.query
 
+        const dueDate = moment(end_date).add(1,'days').format('YYYY-MM-DD')
+
         if (!userId) throw new APIError(errors.serverError)
 
         const rules = [{
@@ -34,7 +36,7 @@ module.exports = async (req, res, next) => {
                     'createdBy._id': userId,
                     'dateTask': {
                         $gte: new Date(start_date),
-                        $lt: new Date(end_date)
+                        $lt: new Date(dueDate)
                     }
                 },
             },
